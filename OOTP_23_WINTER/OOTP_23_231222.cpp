@@ -67,7 +67,6 @@ private:
 
 	int home_team_hitter_record[17][20] = { 0, };
 	int away_team_pitcher_record[13][20] = { 0, };
-	int away_team_pitcher_record[13][20] = { 0, };
 
 	string stadium[1][9] = { " 잠실 야구장 ", " 대구 삼성 라이온즈 파크 ", " 기아 챔피언스 필드 ", " 사직 야구장 ", " 대전 이글스 파크 ", " 수원 야구장 "
 	, " 고척 스카이돔 ", " 인천 야구장", " NC 다이노스 파크" };
@@ -124,7 +123,7 @@ public:
 		return now_hitter;
 	}
 
-	int Set_now_hitter(int num)
+	void Set_now_hitter(int num)
 	{
 		now_hitter += num;
 	}
@@ -420,7 +419,7 @@ public:
 
 	}
 
-	int Set_pitcher_stat(int col, int result[])
+	void Set_pitcher_stat(int col, int result[])
 	{
 		pitcher_stat[now_pitcher][col] = result[col];
 	}
