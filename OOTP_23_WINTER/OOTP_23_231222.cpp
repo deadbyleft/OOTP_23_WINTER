@@ -68,11 +68,19 @@ private:
 	int home_team_hitter_record[17][20] = { 0, };
 	int away_team_pitcher_record[13][20] = { 0, };
 
+	int home_pitching_num = 0;
+	int away_pitching_num = 0;
+
 	string stadium[1][9] = { " 잠실 야구장 ", " 대구 삼성 라이온즈 파크 ", " 기아 챔피언스 필드 ", " 사직 야구장 ", " 대전 이글스 파크 ", " 수원 야구장 "
 	, " 고척 스카이돔 ", " 인천 야구장", " NC 다이노스 파크" };
 	bool extend = true; // 9회 종료/12회 종료
 
 public:
+	void Initialize_var()
+	{
+
+	}
+
 	void Print_Scoreboard()
 	{
 
@@ -173,7 +181,7 @@ public:
 		Update_hitter_condition();
 	}
 	 
-	int Set_hitter_stat(int col, int result[])
+	void Set_hitter_stat(int col, int result[])
 	{
 		hitter_stat[now_hitter][col] = result[col];
 	}
@@ -243,10 +251,10 @@ public:
 			{
 				if (show_num && j == 0)
 				{
-					if (i % 30 < 9) cout << " [ " << i + 1 << " 번 ] ";
-					else cout << " [ 후보 ] ";
+					if (i % 30 < 9) cout << " [  " << i + 1 << " 번  ] ";
+					else cout << " [  후보  ] ";
 				}
-				if (show_name && j == 0) cout << "   " << hitter[i].first << "       ";
+				if (show_name && j == 0) cout << "   " << hitter[i].first << "      ";
 				if (show_direction && j == 0)
 					if (hitter[i].second) cout << " 우타 ";
 					else cout << " 좌타 ";
@@ -364,10 +372,10 @@ public:
 			{
 				if (show_num && j == 0)
 				{			
-					cout << " [ "; Show_pitcher_position(team_signum * 30 + i); cout << " ] ";
+					cout << " ["; Show_pitcher_position(team_signum * 30 + i); cout << "] ";
 				}
 
-				if (show_name && j == 0) cout << "   " << pitcher[i].first << "     ";
+				if (show_name && j == 0) cout << "   " << pitcher[i].first << "      ";
 				if (show_direction && j == 0)
 					if (pitcher[i].second) cout << " 우투 ";
 					else cout << " 좌투 ";
@@ -504,18 +512,79 @@ int sel(int a, int b, int c, int d) //몇열부터 시작할지, 행값, 한번에 몇 칸씩 떨
 
 // battle 결과 반영할 함수 (기록 반영)
 
+int battle_hit_result(int result, int Save_hitter_index[], int Save_pitcher_index[])
+{
+
+}
+
+int battle_result(int result, int Save_hitter_index[], int Save_pitcher_index[])
+{
+	if (result == 0)
+	{
+
+	}
+
+	if (result == 1)
+	{
+
+	}
+
+	return result;
+}
+
 int battle(team attack_team, team defence_team)
 {
 	int Save_hitter_index[10];
 	int Save_pitcher_index[10];
+
+	int hitting_ability = 0;
+	int pitching_ability = 0;
+
+	int strike = 0;
+	int ball = 0;
 
 	for (int i = 0; i < 10; i++)
 	{
 		Save_hitter_index[i] = attack_team.Get_hitter_stat(attack_team.Get_now_hitter(), i);
 		Save_pitcher_index[i] = defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), i);
 	}
-		
 
+
+	while (1)
+	{
+		pitching_ability = 50 + rand()% Save_pitcher_index[2] + 1;
+		hitting_ability = 30 + rand()% Save_hitter_index[2] + 1;
+
+		if (hitting_ability + 50 < pitching_ability) // 헛스윙
+			strike++;
+
+		else if (hitting_ability > pitching_ability) // 타격
+			battle_result(2, &Save_hitter_index[10], &Save_pitcher_index[10]);
+
+		else// 지켜봄
+		{
+			pitching_ability = rand() % Save_pitcher_index[2] + 1;
+			hitting_ability = rand() % Save_hitter_index[2] + 1;
+
+			if (hitting_ability < pitching_ability) 
+				strike++;
+			else 
+				ball++;
+		}
+
+		if (strike == 3)
+		{
+			battle_result(0, &Save_hitter_index[10], &Save_pitcher_index[10]); 
+			break;
+		}
+			
+		else if (ball == 4)
+		{
+			battle_result(1, &Save_hitter_index[10], &Save_pitcher_index[10]); 
+			break;
+		}
+			
+	}
 
 	attack_team.Set_now_hitter(1);
 
@@ -525,6 +594,7 @@ int battle(team attack_team, team defence_team)
 		defence_team.Set_pitcher_stat(i, Save_pitcher_index);
 	}
 		
+	return true; // 아웃 여부
 }
 
 void playball(team home_team, team away_team, scoreboard Scoreboard) // 홈팀 경기인가 아닌가
@@ -573,20 +643,20 @@ void show_team_manage(int num, team& selected_team)
 
 	if (num == 1)
 	{
-		cout << "   [ 이 름 ]   [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 오버롤 ]  [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
+		cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 오버롤 ]  [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_hitter_stat(1, true, true, true);
 	}
 		
 	else if (num == 2)	
-		cout << "   [ 이 름 ]   [ 타  석 ]  [ 타 수 ]  [ 안  타 ]   [ 2루타 ]  [ 3루타 ]   [ 홈  런 ]  [ 볼 넷 ]  [ 삼  진 ]  [ 도  루 ]  [ 도루사 ]  [ OPS ]" << '\n' << '\n';
+		cout << "     [ 이 름 ]  [ 타  석 ]  [ 타  수 ]  [ 안  타 ]   [ 2루타 ]  [ 3루타 ]   [ 홈  런 ]  [ 볼 넷 ]  [ 삼  진 ]  [ 도  루 ]  [ 도루사 ]  [ OPS ]" << '\n' << '\n';
 
 	else if (num == 3)
-		cout << "   [ 이 름 ]   [ 출  장 ]  [ 타 석 ]  [ 타  수 ]  [ 타  율 ]  [ 출루율 ]  [ 장타율 ]  [  OPS  ]  [ 득점권 ]  [ 실  책 ]" << '\n' << '\n';
-
+		cout << "     [ 이 름 ]  [ 출  장 ]  [ 타  석 ]  [ 타  수 ]  [ 타  율 ]  [ 출루율 ]  [ 장타율 ]  [  OPS  ]  [ 득점권 ]  [ 실  책 ]" << '\n' << '\n';
+	  
 	else if (num == 4)
 	{
-		cout << "      [ 이 름 ]  [ 투  타 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 오버롤 ]  [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
+		cout << "     [ 이 름 ]  [ 투  타 ]  [ 컨디션 ]  [ 제  구 ]  [ 구  위 ]  [ 체  력 ]  [ 멘  탈 ]  [ 구  속 ]  [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_pitcher_stat(1, true, true, true);
 	}
@@ -622,8 +692,8 @@ void change_hitter(team& selected_team)
 {
 	cur(1, 40); cout << "[ 취소 ]";
 
-	int hitter_1 = sel(11, 6, 2, 18) - 1; if (hitter_1 == 17) return;
-	int hitter_2 = sel(11, 6, 2, 18) - 1; if (hitter_2 == 17) return;
+	int hitter_1 = sel(13, 6, 2, 18) - 1; if (hitter_1 == 17) return;
+	int hitter_2 = sel(13, 6, 2, 18) - 1; if (hitter_2 == 17) return;
 
 	if (hitter_1 == hitter_2) return;
 	
@@ -638,8 +708,8 @@ void change_pitcher(team& selected_team)
 {
 	cur(1, 32); cout << "[   취소   ]";
 
-	int pitcher_1 = sel(14, 6, 2, 14) - 1; if (pitcher_1 == 13) return;
-	int pitcher_2 = sel(14, 6, 2, 14) - 1; if (pitcher_2 == 13) return;
+	int pitcher_1 = sel(13, 6, 2, 14) - 1; if (pitcher_1 == 13) return;
+	int pitcher_2 = sel(13, 6, 2, 14) - 1; if (pitcher_2 == 13) return;
 
 	if (selected_team.IsStarter(pitcher_1) != selected_team.IsStarter(pitcher_2)) return;
 
