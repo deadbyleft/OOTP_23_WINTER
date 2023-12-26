@@ -94,6 +94,10 @@ private:
 	int home_pitching_value = 0;
 	int away_pitching_value = 0;
 
+	vector <pair<bool, int>> base_1;
+	vector <pair<bool, int>> base_2;
+	vector <pair<bool, int>> base_3;
+
 	string stadium[1][9] = { " 잠실 야구장 ", " 대구 삼성 라이온즈 파크 ", " 기아 챔피언스 필드 ", " 사직 야구장 ", " 대전 이글스 파크 ", " 수원 야구장 "
 	, " 고척 스카이돔 ", " 인천 야구장", " NC 다이노스 파크" };
 	bool extend = true; // 9회 종료/12회 종료
@@ -581,44 +585,67 @@ int get_pitcher_rand_stat(int value, int selected_stat, int Save_pitcher_index[]
 
 
 
-int battle_hit_run_result(bool hit, bool inside_field, int Save_hitter_index[], int Save_pitcher_index[])
+int battle_hit_run_result(bool hit, int type, int Save_hitter_index[], int Save_pitcher_index[])
 {
-	if (inside_field)
-		if (hit)
-			return 21;
-		else
-			return 22;
-	else
-		return 31;
+	// 타자 : 0 포지션 1 컨디션 2 선구안 3 정확도 4 파워 5 스피드 6 수비 7 오버롤
+	// 투수 : 0 포지션 1 컨디션 2 제  구 3 구  위 4 체  력 5 구  속 6 멘  탈 7 오버롤
+
+	// 0 파울 1 삼진 2 볼넷
+
+	// 1 1루타 2 2루타 3 3루타 4 홈런 5 땅볼 6 뜬공 7 번트 8 실책 9 도루
+	// 0 주자 진루 실패 1 주자 진루 성공 2 병살 3 삼중살
+
+	
+
+	int hitter_speed = get_hitter_rand_stat(0, 5, Save_hitter_index) + get_hitter_rand_stat(0, 5, Save_hitter_index); // 상대 수비수의 수비력은 차후 추가
+
+	if (type == 2)
+		if (hitter_speed > 60) return 30;
+
 }
 
-int hit_result(int Save_hitter_index[], int Save_pitcher_index[])
+int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_index[])
 {
-	if (get_pitcher_rand_stat(0, 4, Save_hitter_index) > get_pitcher_rand_stat(0, 4, Save_hitter_index))
-		return battle_hit_run_result(true, true, Save_hitter_index, Save_pitcher_index);
+	int result = get_hitter_rand_stat(0, 4, Save_hitter_index) - get_pitcher_rand_stat(0, 3, Save_hitter_index);
+
+	if (hit)
+	{
+		if (result > 30) return 40;
+		else if (result > 20) return battle_hit_run_result(hit, 2, Save_hitter_index, Save_pitcher_index);
+		else if (result > 0) return battle_hit_run_result(hit, 1, Save_hitter_index, Save_pitcher_index);
+	}
+	
 	else
-		return battle_hit_run_result(true, false, Save_hitter_index, Save_pitcher_index);
+	{
+		if (result > 0) 
+			return battle_hit_run_result(hit, 6, Save_hitter_index, Save_pitcher_index);
+		else 
+			return battle_hit_run_result(hit, 5, Save_hitter_index, Save_pitcher_index);
+	}
+
+
 }
 
 int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[])
 {
-	if (get_pitcher_rand_stat(0, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_hitter_index)) return 0; // 파울
+	int compare_value = get_pitcher_rand_stat(0, 3, Save_hitter_index) - get_pitcher_rand_stat(0, 3, Save_hitter_index);
+
+	if (compare_value > 0) return 0; // 파울
 	
 	else
 	{
-		if (get_pitcher_rand_stat(0, 3, Save_hitter_index) > get_pitcher_rand_stat(0, 3, Save_hitter_index))
-			return hit_result(Save_hitter_index, Save_pitcher_index); // 안타 종류 반환
+		if (compare_value > 0)
+			return battle_hit_power_result(true, Save_hitter_index, Save_pitcher_index); // 안타 종류 반환
 
 		else
 		{
-			if (get_pitcher_rand_stat(0, 3, Save_hitter_index) > get_pitcher_rand_stat(0, 3, Save_hitter_index))
-				return battle_hit_run_result(false, true, Save_hitter_index, Save_pitcher_index);
+			if (compare_value > 0)
+				return battle_hit_power_result(false, Save_hitter_index, Save_pitcher_index);
 			else
-				return battle_hit_run_result(false, false, Save_hitter_index, Save_pitcher_index);
+				return battle_hit_power_result(false, Save_hitter_index, Save_pitcher_index);
 		}
 		
 	}
-	// 안타, 미안타
 }
 
 void show_result(int val)
@@ -751,7 +778,7 @@ void show_team_manage(int value, team& selected_team)
 	  
 	else if (value == 4)
 	{
-		cout << "     [ 이 름 ]  [ 투  타 ]  [ 컨디션 ]  [ 제  구 ]  [ 구  위 ]  [ 체  력 ]  [ 멘  탈 ]  [ 구  속 ]  [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
+		cout << "     [ 이 름 ]  [ 투  타 ]  [ 컨디션 ]  [ 제  구 ]  [ 구  위 ]  [ 체  력 ]  [ 구  속 ]  [ 멘  탈 ]  [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_pitcher_stat(1, true, true, true);
 	}
