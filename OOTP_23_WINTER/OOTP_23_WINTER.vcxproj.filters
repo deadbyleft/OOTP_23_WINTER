@@ -27,5 +27,8 @@
     <ClCompile Include="231222_TETRIS.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TETRIS.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

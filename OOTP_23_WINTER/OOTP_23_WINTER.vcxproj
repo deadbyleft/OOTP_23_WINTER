@@ -131,6 +131,7 @@
     <ClCompile Include="Adventure_final.cpp" />
     <ClCompile Include="OOTP_23_231222.cpp" />
     <ClCompile Include="OOTP_PREV.cpp" />
+    <ClCompile Include="TETRIS.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
