@@ -1,3 +1,5 @@
+/*
+
 
 #include <iostream>
 #include <iomanip> 
@@ -16,7 +18,7 @@ class Tetris_Inform
 private:
 	int type = 0;
 	int type_now_row = 0;
-	int type_now_col = 0;
+	int type_now_col = 5;
 	int row = 0;
 	int col = 0;
 	int level = 1;
@@ -34,17 +36,47 @@ public:
 	bool IsTurnable(int type) { 
 
 		switch(type) {
-			case 11:
-				if (!block[type_now_row-1][type_now_col-1] && )
+			case 11: case 13:
+				return (!block[type_now_row - 1][type_now_col - 1] && !block[type_now_row - 1][type_now_col] && !block[type_now_row][type_now_col + 1]);
+			case 12: case 14:
+				return (!block[type_now_row - 1][type_now_col + 1] && !block[type_now_row][type_now_col + 1] && !block[type_now_row + 1][type_now_col]);
+			case 21: case 23:
+				return (!block[type_now_row - 1][type_now_col + 1] && !block[type_now_row][type_now_col + 1] && !block[type_now_row + 1][type_now_col]);
+			case 22: case 24:
 				return true;
-			case 12:
+			case 31:
 				return true;
-			case 13:
+			case 32:
 				return true;
-			case 14:
+			case 33:
+				return true;
+			case 34:
+				return true;
+			case 41:
+				return true;
+			case 42:
+				return true;
+			case 43:
+				return true;
+			case 44:
+				return true;
+			case 51:
+				return true;
+			case 52:
+				return true;
+			case 53:
+				return true;
+			case 54:
+				return true;
+			case 61: case 62: case 63: case 64:
 				return true;
 		}
 		return type; 
+	}
+
+	void Show_now_block()
+	{
+		return;
 	}
 
 	bool Get_touched() { return touched; }
@@ -206,3 +238,5 @@ int main()
 	return 0;
 }
 
+
+*/
