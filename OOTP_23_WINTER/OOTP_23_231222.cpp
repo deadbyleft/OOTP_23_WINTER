@@ -12,24 +12,8 @@
 using namespace std;
 
 
-//void cur(short x, short y);
-//void CursorView(bool show);
 void Set_FontColor(int value);
-//int sel(int a, int b, int c, int d);
-//int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[]);
-//void show_result(int val);
-//int battle(team attack_team, team defence_team);
-//void playball(team home_team, team away_team, scoreboard Scoreboard);
-//int show_game_select();
-//void show_team_manage(int value, team& selected_team);
-//int show_mainmenu();
-//void change_hitter(team& selected_team);
-//void change_pitcher(team& selected_team);
-//void change_team();
-//void control_team_manage(team& selected_team);
-//void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector <pair<string, bool>>& All_pitcher_name);
-//void game_setting();
-//int main();
+
 
 
 // 포지션 컨디션 선구안 정확도 파워 스피드 수비 오버롤
@@ -355,7 +339,8 @@ public:
 				cout.precision(3);
 
 				cout << right << setw(10) << hitter_record[i][1] << setw(12) << hitter_record[i][2] << setw(12)
-					<< hitter_record[i][3] << setw(12) << hitter_record[i][4] << setw(12) << hitter_record[i][6];
+					<< hitter_record[i][3] << setw(12) << hitter_record[i][4] << setw(12) << hitter_record[i][5]
+					<< setw(12) << hitter_record[i][6] << setw(12) << hitter_record[i][7] << setw(12) << hitter_record[i][8];
 
 				cout << "\n\n";
 			}
@@ -604,14 +589,14 @@ int sel(int a, int b, int c, int d) //몇열부터 시작할지, 행값, 한번에 몇 칸씩 떨
 
 int get_hitter_rand_stat(int value, int selected_stat, int Save_hitter_index[])
 {	
-	double return_hitter_value = rand() % Save_hitter_index[selected_stat] + 1 + value;
+	double return_hitter_value = rand() % (Save_hitter_index[selected_stat] + 1 + value) * 1.5;
 
-	if (selected_stat == 2) return_hitter_value = 49.8 + (rand() % Save_hitter_index[selected_stat] + 1) / 15;
+	if (selected_stat == 2) return_hitter_value = 35 + (rand() % Save_hitter_index[selected_stat] + 1) / 3;
 
-	if (selected_stat == 3) return_hitter_value = 49.8 + (rand() % Save_hitter_index[selected_stat] + 1) / 15 +
-		(rand() % Save_hitter_index[selected_stat] + 1) / 3; // 정확이라면 선구안도 일부 반영
+	if (selected_stat == 3) return_hitter_value = 43 + (rand() % Save_hitter_index[selected_stat] + 1) / 8 +
+		(rand() % Save_hitter_index[selected_stat] + 1) / 16; // 정확이라면 선구안도 일부 반영
 
-	if (selected_stat == 4) return_hitter_value = (rand() % Save_hitter_index[selected_stat] + 1) * 1.2;
+	if (selected_stat == 4) return_hitter_value = (rand() % Save_hitter_index[selected_stat] + 1) * 1.5 - 10;
 
 	return return_hitter_value;
 }
@@ -757,33 +742,23 @@ int battle(team& attack_team, team& defence_team, int out_count)
 	{
 		pitching_value++;
 
-		if (get_hitter_rand_stat(50, 2, Save_hitter_index) < get_pitcher_rand_stat(30, 2, Save_pitcher_index)) // 헛스윙
+		if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(0, 2, Save_pitcher_index)) // 스트라이크
 			strike++;
+
+		else if (get_hitter_rand_stat(0, 2, Save_hitter_index) > get_pitcher_rand_stat(20, 2, Save_pitcher_index)) // 볼
+			ball++;
 
 		else if (get_hitter_rand_stat(50, 3, Save_hitter_index) > get_pitcher_rand_stat(30, 3, Save_pitcher_index)) // 타격
 		{
-			if (get_hitter_rand_stat(0, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_pitcher_index)) // 파울
-			{
-				if (strike != 2)
+			if (get_hitter_rand_stat(0, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_pitcher_index) && strike != 2) // 파울
 					strike++;
-			}
-				
+	
 			else // 파울 이외
 			{
 				update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), attack_team, defence_team);
-
 				break;
 			}
 
-		}
-			
-
-		else // 지켜봄
-		{
-			if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(0, 2, Save_pitcher_index))
-				strike++;
-			else 
-				ball++;
 		}
 
 		if (strike == 3)
@@ -796,7 +771,7 @@ int battle(team& attack_team, team& defence_team, int out_count)
 			break;
 		}
 			
-		else if (ball == 4)
+		if (ball == 4)
 		{
 			show_result(2, true, attack_team, defence_team);	
 			update_game_record(2, attack_team, defence_team);
@@ -816,12 +791,14 @@ int battle(team& attack_team, team& defence_team, int out_count)
 void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 경기인가 아닌가
 {
 	int out = 0;
-	int inning = 3;
+	int inning = 0;
 
 	while (out != 10000)
 	{
-		battle(home_team, away_team, out); out++;	
-		battle(away_team, home_team, out); out++;
+		if (battle(away_team, home_team, out)) out++;
+
+		if (battle(home_team, away_team, out)) out++;
+
 	}
 
 	home_team.Set_played_game(1);
@@ -1040,6 +1017,8 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 
 void game_setting()
 {
+	srand((unsigned)time(NULL));
+
 	team Samsung;
 	team Lotte;
 
