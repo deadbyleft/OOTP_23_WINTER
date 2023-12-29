@@ -750,7 +750,7 @@ void update_fuel(airplane& air_1, airplane& air_2, airplane& air_3, airplane& ai
 	if (air_5.check_flying()) air_5.using_fuel();
 	else air_5.engage_fuel();
 }
-
+//
 void test()
 {
 	int test_time = 0, initial_time = 0; // 실험 시간, 최초 시간
