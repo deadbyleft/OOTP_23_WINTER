@@ -769,7 +769,7 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 
 int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[])
 {
-	int compare_value = get_hitter_rand_stat(0, 3, Save_hitter_index) - get_pitcher_rand_stat(17, 3, Save_pitcher_index);
+	int compare_value = get_hitter_rand_stat(0, 3, Save_hitter_index) - get_pitcher_rand_stat(15, 3, Save_pitcher_index);
 
 	if (compare_value > 0)
 		return battle_hit_power_result(true, Save_hitter_index, Save_pitcher_index); // 안타 종류 반환
