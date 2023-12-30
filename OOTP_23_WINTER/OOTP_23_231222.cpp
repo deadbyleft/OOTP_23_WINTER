@@ -292,6 +292,7 @@ public:
 		}
 
 		Update_hitter_condition();
+		Update_pitcher_condition();
 	}
 
 	void Set_stat_FontColor(int value)
@@ -708,7 +709,20 @@ int get_hitter_rand_stat(int value, int selected_stat, int Save_hitter_index[])
 
 	if (selected_stat == 4) return_hitter_value = (rand() % Save_hitter_index[selected_stat] + 1) * 1.5 - 10;
 
-	return return_hitter_value;
+	switch (Save_hitter_index[1])
+	{
+	case 1:
+		return return_hitter_value * 1.2;
+	case 2: case 3:
+		return return_hitter_value * 1.1;
+	case 4: case 5: case 6: case 7:
+		return return_hitter_value * 1.0;
+	case 8: case 9:
+		return return_hitter_value * 0.9;
+	case 10:
+		return return_hitter_value * 0.8;
+	}
+
 }
 
 int get_pitcher_rand_stat(int value, int selected_stat, int Save_pitcher_index[])
@@ -769,7 +783,7 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 
 int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[])
 {
-	int compare_value = get_hitter_rand_stat(0, 3, Save_hitter_index) - get_pitcher_rand_stat(15, 3, Save_pitcher_index);
+	int compare_value = get_hitter_rand_stat(0, 3, Save_hitter_index) - get_pitcher_rand_stat(17, 3, Save_pitcher_index);
 
 	if (compare_value > 0)
 		return battle_hit_power_result(true, Save_hitter_index, Save_pitcher_index); // 안타 종류 반환
@@ -883,7 +897,7 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 				strike++;
 		}
 
-		else if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(17, 2, Save_pitcher_index)) // 스트라이크
+		else if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(14, 2, Save_pitcher_index)) // 스트라이크
 			strike++;
 
 		else // 타격
@@ -928,6 +942,9 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 
 	while (game < 144)
 	{
 		initialize = true;
+
+		home_team.Update_hitter_condition(); home_team.Update_pitcher_condition();
+		away_team.Update_hitter_condition(); away_team.Update_pitcher_condition();
 
 		for (int i = 0; i < 9; i++)
 		{
