@@ -78,18 +78,27 @@ private:
 	int home_pitching_value = 0;
 	int away_pitching_value = 0;
 
+	bool base_1 = false; int base_1_spd = 0;
+	bool base_2 = false; int base_2_spd = 0;
+	bool base_3 = false; int base_3_spd = 0;
 
 	string stadium[1][9] = { " 잠실 야구장 ", " 대구 삼성 라이온즈 파크 ", " 기아 챔피언스 필드 ", " 사직 야구장 ", " 대전 이글스 파크 ", " 수원 야구장 "
 	, " 고척 스카이돔 ", " 인천 야구장", " NC 다이노스 파크" };
 	bool extend = true; // 9회 종료/12회 종료
 
 public:
-
+	void Initialize_base()
+	{
+		base_1 = false; base_1_spd = 0;
+		base_2 = false; base_2_spd = 0;
+		base_3 = false; base_3_spd = 0;
+	}
 
 	void Update_base()
 	{
 
 	}
+
 	void Initialize_var()
 	{
 
@@ -124,6 +133,9 @@ private:
 	int now_hitter = 0;
 	int now_pitcher = 0;
 
+	int dominated_hitter = 0;
+	int domanated_pitcher = 0;
+
 	int team_sigvalue = 0;
 	int playground = 0;
 
@@ -137,7 +149,7 @@ private:
 	// At_game At_plate At_bat hit_1 hit_2 hit_3 hr bb so avg obp slg ops 
 	// r rbi clu stl stl_fail err
 	// 출장경기 타석 타수 안타 2루타 3루타 홈런 볼넷 삼진 타율 출루율 장타율 ops (13개)
-	// 득점 타점 득타율 도루 도루실패 실책 (6개)
+	// 득점 타점 득타율 도루 도루실패 실책 경기출전여부 (7개)
 
 
 public:
@@ -176,6 +188,11 @@ public:
 		return true;
 	}
 
+	bool Isdominated(int value)
+	{
+		return (value == dominated_hitter);
+	}
+
 	void Initialize_member(int signalvalue, vector <pair<string, bool>>& All_hitter_name, vector <pair<string, bool>>& All_pitcher_name)
 	{
 		team_sigvalue = signalvalue;
@@ -195,7 +212,7 @@ public:
 		{
 			hitter[i].first = All_hitter_name[i].first;
 			for (int j = 0; j < 10; j++)
-				hitter_stat[i][j] = All_hitter_stat[i][j];
+				hitter_stat[i][j] = All_hitter_stat[i][j];			
 
 			hitter_stat[i][7] = (hitter_stat[i][2] + hitter_stat[i][3] + hitter_stat[i][4] + hitter_stat[i][5] + hitter_stat[i][6]) / 5;
 		}
@@ -210,28 +227,39 @@ public:
 		Update_hitter_condition();
 	}
 	 
-
+	void Set_stat_FontColor(int value)
+	{
+		if (value >= 90) Set_FontColor(12);
+		else if (value >= 80) Set_FontColor(9);
+		else if (value >= 70) Set_FontColor(10);
+		else if (value <= 50) Set_FontColor(8);
+	}
 
 	void Show_hitter_position(int row)
 	{
+		if (Isdominated(row))
+		{
+			Set_FontColor(14); cout << " 지  명 ";  Set_FontColor(15); return;
+		}
+
 		switch (hitter_stat[row][0])
 		{
 		case 2:
-			cout << " 포  수 ";  break;
+			Set_FontColor(12); cout << " 포  수 ";  Set_FontColor(15); break;
 		case 3:
-			cout << "  1루수 ";  break;
+			Set_FontColor(9); cout << "  1루수 ";  Set_FontColor(15); break;
 		case 4:
-			cout << "  2루수 ";  break;
+			Set_FontColor(9); cout << "  2루수 ";  Set_FontColor(15); break;
 		case 5:
-			cout << "  3루수 ";  break;
+			Set_FontColor(9); cout << "  3루수 ";  Set_FontColor(15); break;
 		case 6:
-			cout << " 유격수 ";  break;
+			Set_FontColor(9); cout << " 유격수 ";  Set_FontColor(15); break;
 		case 7:
-			cout << " 좌익수 ";  break;
+			Set_FontColor(10); cout << " 좌익수 ";  Set_FontColor(15); break;
 		case 8:
-			cout << " 중견수 ";  break;
+			Set_FontColor(10); cout << " 중견수 ";  Set_FontColor(15); break;
 		case 9:
-			cout << " 우익수 ";  break;
+			Set_FontColor(10); cout << " 우익수 ";  Set_FontColor(15); break;
 		}
 	}
 
@@ -297,9 +325,16 @@ public:
 					}
 						
 
-					else 
-						if (j==2) cout << right << setw(10) << hitter_stat[i][j];
+					else
+					{
+						Set_stat_FontColor(hitter_stat[i][j]);
+
+						if (j == 2) cout << right << setw(10) << hitter_stat[i][j];
 						else cout << right << setw(12) << hitter_stat[i][j];
+
+						Set_FontColor(15);
+					}
+						
 						
 				}
 
@@ -338,9 +373,11 @@ public:
 				cout << fixed;
 				cout.precision(3);
 
-				cout << right << setw(10) << hitter_record[i][1] << setw(12) << hitter_record[i][2] << setw(12)
-					<< hitter_record[i][3] << setw(12) << hitter_record[i][4] << setw(12) << hitter_record[i][5]
-					<< setw(12) << hitter_record[i][6] << setw(12) << hitter_record[i][7] << setw(12) << hitter_record[i][8];
+				cout << right << setw(10);
+
+				for (int j = 1; j <= 8 ; j++)
+					cout << hitter_record[i][j] << setw(12);
+
 
 				cout << "\n\n";
 			}
