@@ -26,7 +26,7 @@ int All_hitter_stat[300][10] = {
 {6, 3, 70, 70, 70, 70, 70, 60, 60, 60},
 {7, 3, 80, 80, 80, 80, 80, 60, 60, 60},
 {8, 3, 90, 90, 90, 90, 90, 60, 60, 60},
-{9, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{9, 3, 70, 50, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -94,9 +94,76 @@ public:
 		base_3 = false; base_3_spd = 0;
 	}
 
-	void Update_base()
+	bool Get_Isfull_1()
+	{
+		return base_1;
+	}
+
+	bool Get_Isfull_2()
+	{
+		return base_2;
+	}
+
+	bool Get_Isfull_3()
+	{
+		return base_3;
+	}
+
+	void Set_Isfull_1(bool value)
+	{
+		base_1 = value;
+	}
+
+	void Set_Isfull_2(bool value)
+	{
+		base_2 = value;
+	}
+
+	void Set_Isfull_3(bool value)
+	{
+		base_3 = value;
+	}
+
+	void Set_Base_spd(int base, int spd)
 	{
 
+	}
+
+	void Update_base(int value)
+	{
+		switch (value)
+		{
+		case 2:
+			if (Get_Isfull_1())
+			{
+				if (Get_Isfull_2())
+				{
+					Set_Base_spd(1, 0);
+					Set_Base_spd(2, base_1_spd);
+					Set_Base_spd(3, base_2_spd);
+
+					//if (Get_Isfull_3())
+						//RBI(타점) 추가
+				}
+
+			}
+
+			else
+			{
+				Set_Isfull_1(true);
+				Set_Base_spd(1, 0);
+			}
+
+			break;
+
+		case 10:
+			break;
+		case 20:
+			break;
+		case 40:
+			// 홈런 개수만큼 RBI 추가 후 Initialize_base();
+			break;
+		}
 	}
 
 	void Initialize_var()
@@ -345,7 +412,7 @@ public:
 				if (hitter_record[i][2] == 0)
 					cout << setw(15) << "0.000";
 				else
-					cout << setw(15) << ((hitter_record[i][3] + hitter_record[i][4] + hitter_record[i][6]) / (double)hitter_record[i][2]);
+					cout << setw(15) << (hitter_record[i][3] / (double)hitter_record[i][2]);
 
 				cout << right << setw(10) << hitter_record[i][6] << "        ";
 
@@ -378,6 +445,12 @@ public:
 				for (int j = 1; j <= 8 ; j++)
 					cout << hitter_record[i][j] << setw(12);
 
+				// 출장경기 타석 타수 안타 2루타 3루타 홈런 볼넷 삼진 타율 출루율 장타율 ops (13개)
+
+				cout << (hitter_record[i][3] / (double)hitter_record[i][2]) << setw(12);
+				cout << ((hitter_record[i][3] + hitter_record[i][7]) / (double)hitter_record[i][1]) << setw(12);
+				cout << ((hitter_record[i][3] + hitter_record[i][4] + hitter_record[i][6] * 3) / (double)hitter_record[i][2]) << setw(12);
+	
 
 				cout << "\n\n";
 			}
@@ -674,7 +747,7 @@ int battle_hit_run_result(bool hit, int type, int Save_hitter_index[], int Save_
 
 int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_index[])
 {
-	int result = get_hitter_rand_stat(0, 4, Save_hitter_index) - get_pitcher_rand_stat(0, 3, Save_pitcher_index);
+	int result = get_hitter_rand_stat(0, 4, Save_hitter_index) - get_pitcher_rand_stat(10, 3, Save_pitcher_index);
 
 	if (hit)
 	{
@@ -696,7 +769,7 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 
 int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[])
 {
-	int compare_value = get_hitter_rand_stat(0, 3, Save_hitter_index) - get_pitcher_rand_stat(0, 3, Save_pitcher_index);
+	int compare_value = get_hitter_rand_stat(0, 3, Save_hitter_index) - get_pitcher_rand_stat(17, 3, Save_pitcher_index);
 
 	if (compare_value > 0)
 		return battle_hit_power_result(true, Save_hitter_index, Save_pitcher_index); // 안타 종류 반환
@@ -706,8 +779,10 @@ int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[])
 			
 }
 
-void update_game_record(int value, team& attack_team, team& defence_team)
+int update_game_record(int value, team& attack_team, team& defence_team)
 {
+	int out = false;
+
 	// 출장경기 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
 
 	// 0 파울 1 삼진 2 볼넷
@@ -718,20 +793,22 @@ void update_game_record(int value, team& attack_team, team& defence_team)
 	switch (value)
 	{
 	case 1:
-		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 1, 0, 0, 0, 0, 0); break;
+		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 1, 0, 0, 0, 0, 0); out = true; break;
 	case 2:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 0, 0, 0, 0, 0, /**/  1, 0, 0, 0, 0, 0, 0); break;
 	case 5:
-		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0); break;
+		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0); out = true; break;
 	case 6:
-		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0); break;
+		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0); out = true; break;
 	case 10:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0); break;
 	case 20:
-		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 1, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0); break;
+		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 1, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0); break;
 	case 40:
-		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 1, /**/  0, 0, 0, 0, 0, 0, 0); break;
+		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 0, 1, /**/  0, 0, 0, 0, 0, 0, 0); break;
 	}
+
+	return out;
 }
 
 
@@ -760,7 +837,8 @@ int battle(team& attack_team, team& defence_team, int out_count)
 	int strike = 0;
 	int ball = 0;
 	int pitching_value = 0;
-
+	
+	bool out = false;
 	bool update_record = true;
 
 	static int now_hitter = 0;
@@ -779,29 +857,26 @@ int battle(team& attack_team, team& defence_team, int out_count)
 	{
 		pitching_value++;
 
-		if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(0, 2, Save_pitcher_index)) // 스트라이크
-			strike++;
-
-		else if (get_hitter_rand_stat(0, 2, Save_hitter_index) > get_pitcher_rand_stat(20, 2, Save_pitcher_index)) // 볼
+		if (get_hitter_rand_stat(0, 2, Save_hitter_index) > get_pitcher_rand_stat(22, 2, Save_pitcher_index)) // 볼
 			ball++;
 
-		else if (get_hitter_rand_stat(50, 3, Save_hitter_index) > get_pitcher_rand_stat(30, 3, Save_pitcher_index)) // 타격
-		{
-			if (get_hitter_rand_stat(0, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_pitcher_index) && strike != 2) // 파울
-					strike++;
-	
-			else // 파울 이외
-			{
-				update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), attack_team, defence_team);
-				break;
-			}
+		else if (get_hitter_rand_stat(0, 3, Save_hitter_index) < get_pitcher_rand_stat(10, 3, Save_pitcher_index) && strike < 2) // 파울
+			strike++;
 
+		else if (get_hitter_rand_stat(10, 2, Save_hitter_index) < get_pitcher_rand_stat(10, 2, Save_pitcher_index)) // 스트라이크
+			strike++;
+
+		else // 타격
+		{
+			out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), attack_team, defence_team);
+			break;
 		}
+
 
 		if (strike == 3)
 		{
 			show_result(1, true, attack_team, defence_team);
-			update_game_record(1, attack_team, defence_team);
+			out = update_game_record(1, attack_team, defence_team);
 
 			// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
 			// 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
@@ -811,7 +886,7 @@ int battle(team& attack_team, team& defence_team, int out_count)
 		if (ball == 4)
 		{
 			show_result(2, true, attack_team, defence_team);	
-			update_game_record(2, attack_team, defence_team);
+			out = update_game_record(2, attack_team, defence_team);
 			break;
 		}		
 	}
@@ -822,20 +897,42 @@ int battle(team& attack_team, team& defence_team, int out_count)
 		defence_team.Set_pitcher_stat(i, Save_pitcher_index);
 	}
 		
-	return true; // 아웃 여부
+	return out; // 아웃 여부
 }
 
 void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 경기인가 아닌가
 {
 	int out = 0;
 	int inning = 0;
+	int game = 0;
 
-	while (out != 10000)
+	while (game < 144)
 	{
-		if (battle(away_team, home_team, out)) out++;
+		for (int i = 0; i < 9; i++)
+		{
 
-		if (battle(home_team, away_team, out)) out++;
+			while (out != 3)
+				if (battle(away_team, home_team, out))
+				{
+					out++;
+					inning++;
+				}
 
+			out = 0;
+
+			while (out != 3)
+				if (battle(home_team, away_team, out))
+				{
+					out++;
+					inning++;
+				}
+
+			out = 0;
+		}
+		
+
+		game++;
+		
 	}
 
 	home_team.Set_played_game(1);
