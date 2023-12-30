@@ -15,6 +15,7 @@ using namespace std;
 void Set_FontColor(int value);
 
 
+
 // 포지션 컨디션 선구안 정확도 파워 스피드 수비 오버롤
 
 int All_hitter_stat[300][10] = {
@@ -33,46 +34,8 @@ int All_hitter_stat[300][10] = {
 {6, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {7, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{9, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{9, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-
-{9, 3, 30, 30, 30, 30, 30, 60, 60, 60},
-{3, 3, 40, 40, 40, 40, 40, 60, 60, 60},
-{4, 3, 50, 50, 50, 50, 50, 60, 60, 60},
-{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{6, 3, 70, 70, 70, 70, 70, 60, 60, 60},
-{7, 3, 80, 80, 80, 80, 80, 60, 60, 60},
-{8, 3, 90, 90, 90, 90, 90, 60, 60, 60},
-{9, 3, 70, 50, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{4, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{6, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{7, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{9, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{9, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -82,53 +45,7 @@ int All_hitter_stat[300][10] = {
 0,
 };
 
-
-
-
-
-
-int All_pitcher_stat[300][10] = { 
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-
+int All_pitcher_stat[300][10] = { {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -330,7 +247,7 @@ public:
 	{
 		return played_game % 2;
 	}
-	
+
 
 	bool IsStarter(int row)
 	{
@@ -358,26 +275,25 @@ public:
 
 		Initialize_member(Team_sigvalue, All_hitter_name, All_pitcher_name);
 
-		for (int i = 0; i < hitter.size(); i++)
+		for (int i = team_sigvalue * 30; i < team_sigvalue * 30 + hitter.size(); i++)
 		{
-			hitter[i].first = All_hitter_name[team_sigvalue * 30 + i].first;
+			hitter[i].first = All_hitter_name[i].first;
 			for (int j = 0; j < 10; j++)
-				hitter_stat[i][j] = All_hitter_stat[team_sigvalue * 30 + i][j];
+				hitter_stat[i][j] = All_hitter_stat[i][j];
 
 			hitter_stat[i][7] = (hitter_stat[i][2] + hitter_stat[i][3] + hitter_stat[i][4] + hitter_stat[i][5] + hitter_stat[i][6]) / 5;
 		}
 
-		for (int i = 0; i < pitcher.size(); i++)
+		for (int i = team_sigvalue * 30; i < team_sigvalue * 30 + pitcher.size(); i++)
 		{
-			pitcher[i].first = All_pitcher_name[team_sigvalue * 30 + i].first;
+			pitcher[i].first = All_pitcher_name[i].first;
 			for (int j = 0; j < 10; j++)
-				pitcher_stat[i][j] = All_pitcher_stat[team_sigvalue * 30 + i][j];
+				pitcher_stat[i][j] = All_pitcher_stat[i][j];
 		}
 
 		Update_hitter_condition();
-		Update_pitcher_condition();
 	}
-	 
+
 	void Set_stat_FontColor(int value)
 	{
 		if (value >= 90) Set_FontColor(12);
@@ -416,8 +332,13 @@ public:
 
 	void Update_hitter_condition()
 	{
-		for (int i = 0; i < hitter.size(); i++)			
-			hitter_stat[i][1] = rand() % 10 + 1;
+		int condition_rand = rand() % 5 + 1;
+
+		for (int i = 0; i < hitter.size(); i++)
+		{
+			condition_rand = rand() % 10 + 1;
+			hitter_stat[i][1] = condition_rand;
+		}
 	}
 
 	void Show_hitter_condition(int row)
@@ -426,7 +347,7 @@ public:
 		{
 		case 1:
 			Set_FontColor(10); cout << " 최상 ";  Set_FontColor(15); break;
-		case 2: case 3: 
+		case 2: case 3:
 			Set_FontColor(10); cout << " 좋음 ";  Set_FontColor(15); break;
 		case 4: case 5: case 6: case 7:
 			cout << " 보통 ";  break;
@@ -440,7 +361,7 @@ public:
 	void Show_hitter_stat(int situation, bool show_name, bool show_direction, bool show_value)
 	{
 
-		
+
 
 		if (situation == 1)
 		{
@@ -461,15 +382,15 @@ public:
 					if (j == 0)
 					{
 						cout << right << setw(13);
-						Show_hitter_position(i);
+						Show_hitter_position(team_sigvalue * 30 + i);
 					}
 
 					else if (j == 1)
 					{
-						cout << right << setw(11); 
-						Show_hitter_condition(i);
+						cout << right << setw(11);
+						Show_hitter_condition(team_sigvalue * 30 + i);
 					}
-						
+
 
 					else
 					{
@@ -480,13 +401,13 @@ public:
 
 						Set_FontColor(15);
 					}
-						
-						
+
+
 				}
 
 				cout.precision(3);
 				cout << fixed;
-				
+
 
 				if (hitter_record[i][2] == 0)
 					cout << setw(15) << "0.000";
@@ -501,8 +422,8 @@ public:
 
 			return;
 		}
-			
-			
+
+
 
 		if (situation == 2)
 		{
@@ -521,7 +442,7 @@ public:
 
 				cout << right << setw(10);
 
-				for (int j = 1; j <= 8 ; j++)
+				for (int j = 1; j <= 8; j++)
 					cout << hitter_record[i][j] << setw(12);
 
 				// 출장경기 타석 타수 안타 2루타 3루타 홈런 볼넷 삼진 타율 출루율 장타율 ops (13개)
@@ -529,7 +450,7 @@ public:
 				cout << (hitter_record[i][3] / (double)hitter_record[i][2]) << setw(12);
 				cout << ((hitter_record[i][3] + hitter_record[i][7]) / (double)hitter_record[i][1]) << setw(12);
 				cout << ((hitter_record[i][3] + hitter_record[i][4] + hitter_record[i][6] * 3) / (double)hitter_record[i][2]) << setw(12);
-	
+
 
 				cout << "\n\n";
 			}
@@ -550,8 +471,8 @@ public:
 
 		for (int i = 0; i < 10; i++)
 			Save_index[i] = hitter_stat[hitter_1][i];
-			
-			
+
+
 
 		memcpy(hitter_stat[hitter_1], hitter_stat[hitter_2], sizeof(Save_index));
 		memcpy(hitter_stat[hitter_2], Save_index, sizeof(Save_index));
@@ -562,10 +483,10 @@ public:
 		hitter[hitter_2].first = Save_hitter[0].first;
 		hitter[hitter_2].second = Save_hitter[0].second;
 
-		
+
 	}
 
-	void Set_hitter_record(int row, int stat_1, int stat_2, int stat_3, int stat_4, int stat_5, int stat_6, 
+	void Set_hitter_record(int row, int stat_1, int stat_2, int stat_3, int stat_4, int stat_5, int stat_6,
 		int stat_7, int stat_8, int stat_9, int stat_10, int stat_11, int stat_12, int stat_13, int stat_14)
 	{
 		hitter_record[row][0] += stat_1; hitter_record[row][1] += stat_2;
@@ -576,22 +497,23 @@ public:
 		hitter_record[row][10] += stat_11; hitter_record[row][11] += stat_12;
 		hitter_record[row][12] += stat_13; hitter_record[row][13] += stat_14;
 
-	// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
-	// 출장경기 타석 타수 안타 2루타 3루타 홈런 볼넷 삼진 득점 (10개)
-	// 타점 도루 도루실패 실책 (4개)
+		// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
+		// 출장경기 타석 타수 안타 2루타 3루타 홈런 볼넷 삼진 득점 (10개)
+		// 타점 도루 도루실패 실책 (4개)
 	}
 
 
 	void Show_pitcher_position(int row)
 	{
-		
-		switch (row % 30 + 1)
+
+		switch (row % 14 + 1)
 		{
 		case 1: case 2: case 3: case 4: case 5:
-			cout << " " << row % 5 + 1 << " 선발 "; break;
+			if (row % 30 < 5) cout << " " << row + 1 << " 선발 ";
+			else cout << "  선발  ";  break;
 		case 6: case 7:
 			cout << " 필승조 ";  break;
-		case 8: case 9: 
+		case 8: case 9:
 			cout << " 추격조 ";  break;
 		case 10:
 			cout << "  셋업  ";  break;
@@ -604,13 +526,18 @@ public:
 
 	void Update_pitcher_condition()
 	{
+		int condition_rand = rand() % 5 + 1;
+
 		for (int i = 0; i < pitcher.size(); i++)
-			pitcher_stat[i][1] = rand() % 10 + 1;
+		{
+			condition_rand = rand() % 10 + 1;
+			pitcher_stat[i][1] = condition_rand;
+		}
 	}
 
 	void Show_pitcher_condition(int row)
 	{
-		switch (pitcher_stat[row][1])
+		switch (hitter_stat[row][1])
 		{
 		case 1:
 			Set_FontColor(10); cout << " 최상 ";  Set_FontColor(15); break;
@@ -633,8 +560,8 @@ public:
 			for (int j = 0; j < 7; j++)
 			{
 				if (show_value && j == 0)
-				{			
-					cout << " ["; Show_pitcher_position(i); cout << "] ";
+				{
+					cout << " ["; Show_pitcher_position(team_sigvalue * 30 + i); cout << "] ";
 				}
 
 				if (show_name && j == 0) cout << "   " << pitcher[i].first << "      ";
@@ -645,7 +572,7 @@ public:
 				else if (j == 1)
 				{
 					cout << "      ";
-					Show_pitcher_condition(i);
+					Show_pitcher_condition(team_sigvalue * 30 + i);
 					cout << "        ";
 				}
 
@@ -771,24 +698,24 @@ int sel(int a, int b, int c, int d) //몇열부터 시작할지, 행값, 한번에 몇 칸씩 떨
 
 
 int get_hitter_rand_stat(int value, int selected_stat, int Save_hitter_index[])
-{	
+{
 	double return_hitter_value = rand() % (Save_hitter_index[selected_stat] + 1 + value) * 1.5;
 
-	if (selected_stat == 2) return_hitter_value = 35 + (rand() % (Save_hitter_index[selected_stat] + 1)) / 3;
+	if (selected_stat == 2) return_hitter_value = 35 + (rand() % Save_hitter_index[selected_stat] + 1) / 3;
 
-	if (selected_stat == 3) return_hitter_value = 43 + (rand() % (Save_hitter_index[selected_stat] + 1)) / 8 +
-		(rand() % (Save_hitter_index[selected_stat] + 1)) / 16; // 정확이라면 선구안도 일부 반영
+	if (selected_stat == 3) return_hitter_value = 43 + (rand() % Save_hitter_index[selected_stat] + 1) / 8 +
+		(rand() % Save_hitter_index[selected_stat] + 1) / 16; // 정확이라면 선구안도 일부 반영
 
-	if (selected_stat == 4) return_hitter_value = (rand() % (Save_hitter_index[selected_stat] + 1)) * 1.5 - 10;
+	if (selected_stat == 4) return_hitter_value = (rand() % Save_hitter_index[selected_stat] + 1) * 1.5 - 10;
 
 	return return_hitter_value;
 }
 
 int get_pitcher_rand_stat(int value, int selected_stat, int Save_pitcher_index[])
 {
-	int return_pitcher_value = rand() % (Save_pitcher_index[selected_stat] + value + 1);
+	int return_pitcher_value = rand() % Save_pitcher_index[selected_stat] + 1 + value;
 
-	if (selected_stat == 3) return_pitcher_value += (rand() % (Save_pitcher_index[selected_stat] + 1)) / 3; // 구위라면 제구도 일부 반영
+	if (selected_stat == 3) return_pitcher_value += (rand() % Save_pitcher_index[selected_stat] + 1) / 3; // 구위라면 제구도 일부 반영
 
 	return return_pitcher_value;
 }
@@ -828,7 +755,7 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 		if (result > 10) return 20;
 		return 10;
 	}
-	
+
 	else
 	{
 		if (result > 0)
@@ -849,12 +776,12 @@ int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[])
 
 	else
 		return battle_hit_power_result(false, Save_hitter_index, Save_pitcher_index);
-			
+
 }
 
 int update_game_record(int value, team& attack_team, team& defence_team)
 {
-	bool out = false;
+	int out = false;
 
 	// 출장경기 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
 
@@ -892,7 +819,7 @@ void show_result(int value, bool update_value, team& attack_team, team& defence_
 
 
 	// 0 파울 1 삼진 2 볼넷
-	
+
 	// 1 1루타 2 2루타 3 3루타 4 홈런 5 땅볼 6 뜬공 7 번트 8 실책 9 도루
 	// 0 주자 진루 실패 1 주자 진루 성공 2 병살 3 삼중살
 
@@ -906,18 +833,18 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 {
 	int Save_hitter_index[10] = { 0, };
 	int Save_pitcher_index[10] = { 0, };
-	 
+
 	int strike = 0;
 	int ball = 0;
 	int pitching_value = 0;
-	
+
 	bool out = false;
 	bool update_record = true;
 
 	static int now_hitter_home = 0;
 	static int now_hitter_away = 0;
 
-	if (initialize) 
+	if (initialize)
 	{
 		now_hitter_home = 0;
 		now_hitter_away = 0;
@@ -935,7 +862,7 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 		now_hitter_away++;
 	}
 
-	
+
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -950,11 +877,11 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 		if (get_hitter_rand_stat(0, 2, Save_hitter_index) > get_pitcher_rand_stat(22, 2, Save_pitcher_index)) // 볼
 			ball++;
 
-		if (get_hitter_rand_stat(10, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_pitcher_index)) // 파울
+		else if (get_hitter_rand_stat(10, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_pitcher_index)) // 파울
 		{
 			if (strike < 2)
 				strike++;
-		}	
+		}
 
 		else if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(17, 2, Save_pitcher_index)) // 스트라이크
 			strike++;
@@ -974,13 +901,13 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 			// 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
 			break;
 		}
-			
+
 		if (ball == 4)
 		{
-			show_result(2, true, attack_team, defence_team);	
+			show_result(2, true, attack_team, defence_team);
 			out = update_game_record(2, attack_team, defence_team);
 			break;
-		}		
+		}
 	}
 
 	for (int i = 0; i < 10; i++)
@@ -988,7 +915,7 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 		attack_team.Set_hitter_stat(i, Save_hitter_index);
 		defence_team.Set_pitcher_stat(i, Save_pitcher_index);
 	}
-		
+
 	return out; // 아웃 여부
 }
 
@@ -1011,7 +938,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 
 					out++;
 
 				initialize = false;
-			}				
+			}
 
 			out = 0;
 
@@ -1019,14 +946,14 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 
 			{
 				if (battle(home_team, away_team, initialize, false))
 					out++;
-			}				
+			}
 
 			out = 0;
 		}
-		
+
 
 		game++;
-		
+
 	}
 
 	home_team.Set_played_game(1);
@@ -1077,14 +1004,14 @@ void show_team_manage(int value, team& selected_team)
 		cur(0, 6);
 		selected_team.Show_hitter_stat(1, true, true, true);
 	}
-		
+
 	else if (value == 2)
 	{
 		cout << "     [ 이 름 ]  [ 타  석 ]  [ 타  수 ]  [ 안  타 ]   [ 2루타 ]  [ 3루타 ]   [ 홈  런 ]  [ 볼 넷 ]  [ 삼  진 ]   [ 도  루 ]  [ 도루사 ]  [  OPS  ]" << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_hitter_stat(2, true, false, true);
 	}
-		
+
 
 	else if (value == 3)
 	{
@@ -1092,21 +1019,21 @@ void show_team_manage(int value, team& selected_team)
 		cur(0, 6);
 		selected_team.Show_hitter_stat(3, true, true, true);
 	}
-		
-	  
+
+
 	else if (value == 4)
 	{
 		cout << "     [ 이 름 ]  [ 투  타 ]  [ 컨디션 ]  [ 제  구 ]  [ 구  위 ]  [ 체  력 ]  [ 구  속 ]  [ 멘  탈 ]  [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_pitcher_stat(1, true, true, true);
 	}
-		
+
 
 	// At_game At_plate At_bat hit_1 hit_2 hit_3 hr bb so avg obp slg ops 
 	// r rbi clu stl err
 	// 출장경기 타석 타수 안타 2루타 3루타 홈런 볼넷 삼진 타율 출루율 장타율 ops (13개)
 	// 득점 타점 득타율 도루 도루실패 실책 (5개)
-		
+
 }
 
 int show_mainmenu()
@@ -1139,11 +1066,11 @@ void change_hitter(team& selected_team)
 	if ((hitter_1 >= 9 || hitter_2 >= 9) && selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0))
 		if (!(selected_team.Isdominated(hitter_1) || selected_team.Isdominated(hitter_2)))
 			return;
-	
+
 	int Save_index[10] = { 0, };
-	
+
 	selected_team.Change_hitter_stat(hitter_1, hitter_2);
-	
+
 }
 
 void change_pitcher(team& selected_team)
@@ -1160,7 +1087,7 @@ void change_pitcher(team& selected_team)
 	int Save_index[10] = { 0, };
 
 	selected_team.Change_pitcher_stat(pitcher_1, pitcher_2);
-	
+
 }
 
 void change_team()
@@ -1188,13 +1115,13 @@ void control_team_manage(team& selected_team)
 				change_pitcher(selected_team);
 				show_team_manage(prev_key - 48, selected_team);
 			}
-				
+
 			else if (key == 54 && prev_key >= 49 && prev_key <= 56)
 			{
 				change_hitter(selected_team);
 				show_team_manage(prev_key - 48, selected_team);
 			}
-			
+
 		if (key != 54)
 			prev_key = key;
 	}
@@ -1245,42 +1172,6 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 
 
 
-
-
-	All_hitter_name[30].first = "안권수";
-	All_hitter_name[31].first = "안치홍";
-	All_hitter_name[32].first = "외국인";
-	All_hitter_name[33].first = "전준우";
-	All_hitter_name[34].first = "정  훈";
-	All_hitter_name[35].first = "한동희";
-	All_hitter_name[36].first = "유강남";
-	All_hitter_name[37].first = "김민수";
-	All_hitter_name[38].first = "이학주";
-	All_hitter_name[39].first = "황성빈";
-	All_hitter_name[40].first = "이재찬";
-	All_hitter_name[41].first = "박병준";
-	All_hitter_name[42].first = "이승형";
-	All_hitter_name[43].first = "고스트";
-	All_hitter_name[44].first = "히드라";
-	All_hitter_name[45].first = "드라군";
-	All_hitter_name[46].first = "메운디";
-
-	All_pitcher_name[30].first = "뷰캐넌";
-	All_pitcher_name[31].first = "원태인";
-	All_pitcher_name[32].first = "수아레";
-	All_pitcher_name[33].first = "백정현";
-	All_pitcher_name[34].first = "최채흥";
-	All_pitcher_name[35].first = "이승현";
-	All_pitcher_name[36].first = "우규민";
-	All_pitcher_name[37].first = "최충연";
-	All_pitcher_name[38].first = "양창섭";
-	All_pitcher_name[39].first = "김대우";
-	All_pitcher_name[40].first = "장필준";
-	All_pitcher_name[41].first = "황동재";
-	All_pitcher_name[42].first = "오승환";
-
-
-	
 }
 
 void game_setting()
@@ -1303,8 +1194,8 @@ void game_setting()
 	Initialize_member_name(All_hitter_name, All_pitcher_name);
 
 	Samsung.Initialize_teamset(0, All_hitter_name, All_pitcher_name);
-	Lotte.Initialize_teamset(1, All_hitter_name, All_pitcher_name);
-	
+	Lotte.Initialize_teamset(0, All_hitter_name, All_pitcher_name);
+
 
 	while (1)
 	{
@@ -1323,4 +1214,3 @@ int main()
 	game_setting();
 	return 0;
 }
-
