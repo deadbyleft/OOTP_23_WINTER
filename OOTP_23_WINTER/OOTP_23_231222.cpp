@@ -19,7 +19,7 @@ void Set_FontColor(int value);
 // 포지션 컨디션 선구안 정확도 파워 스피드 수비 오버롤
 
 int All_hitter_stat[300][10] = {
-{2, 3, 30, 30, 30, 30, 30, 60, 60, 60},
+{9, 3, 30, 30, 30, 30, 30, 60, 60, 60},
 {3, 3, 40, 40, 40, 40, 40, 60, 60, 60},
 {4, 3, 50, 50, 50, 50, 50, 60, 60, 60},
 {5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -28,12 +28,12 @@ int All_hitter_stat[300][10] = {
 {8, 3, 90, 90, 90, 90, 90, 60, 60, 60},
 {9, 3, 70, 50, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{4, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{6, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{7, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -968,7 +968,7 @@ int show_game_select()
 
 	system("cls");
 	cur(col + 8, row);
-	cout << " [ 메뉴 ]"; row += 3; cur(col, row);
+	cout << " [    메 뉴    ]"; row += 3; cur(col, row);
 	cout << " [ 1 ] 단일 경기"; row += 3; cur(col, row);
 	cout << " [ 2 ] 리그 경기"; row += 3; cur(col, row);
 	cout << " [ 3 ] 친선 경기"; row += 3; cur(col, row);
@@ -1062,6 +1062,10 @@ void change_hitter(team& selected_team)
 	int hitter_2 = sel(13, 6, 2, 18) - 1; if (hitter_2 == 17) return;
 
 	if (hitter_1 == hitter_2) return;
+
+	if ((hitter_1 >= 9 || hitter_2 >= 9) && selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0))
+		if (!(selected_team.Isdominated(hitter_1) || selected_team.Isdominated(hitter_2)))
+			return;
 	
 	int Save_index[10] = { 0, };
 	
@@ -1143,14 +1147,14 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 	All_hitter_name[6].first = "류지혁";
 	All_hitter_name[7].first = "김현준";
 	All_hitter_name[8].first = "이재현";
-	All_hitter_name[9].first = "이재현";
-	All_hitter_name[10].first = "이재현";
-	All_hitter_name[11].first = "이재현";
-	All_hitter_name[12].first = "이재현";
-	All_hitter_name[13].first = "이재현";
-	All_hitter_name[14].first = "이재현";
-	All_hitter_name[15].first = "이재현";
-	All_hitter_name[16].first = "이재현";
+	All_hitter_name[9].first = "엄재우";
+	All_hitter_name[10].first = "이재찬";
+	All_hitter_name[11].first = "박병준";
+	All_hitter_name[12].first = "이승형";
+	All_hitter_name[13].first = "고스트";
+	All_hitter_name[14].first = "히드라";
+	All_hitter_name[15].first = "드라군";
+	All_hitter_name[16].first = "메운디";
 
 	All_pitcher_name[0].first = "뷰캐넌";
 	All_pitcher_name[1].first = "원태인";
