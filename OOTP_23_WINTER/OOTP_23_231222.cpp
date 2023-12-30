@@ -829,7 +829,7 @@ void show_result(int value, bool update_value, team& attack_team, team& defence_
 	//cout << "제 X구 아웃";
 }
 
-int battle(team& attack_team, team& defence_team, int out_count)
+int battle(team& attack_team, team& defence_team, bool initialize, bool home_team)
 {
 	int Save_hitter_index[10] = { 0, };
 	int Save_pitcher_index[10] = { 0, };
@@ -841,11 +841,28 @@ int battle(team& attack_team, team& defence_team, int out_count)
 	bool out = false;
 	bool update_record = true;
 
-	static int now_hitter = 0;
+	static int now_hitter_home = 0;
+	static int now_hitter_away = 0;
 
-	attack_team.Set_now_hitter(now_hitter % 9);
+	if (initialize) 
+	{
+		now_hitter_home = 0;
+		now_hitter_away = 0;
+	}
 
-	now_hitter++;
+	if (home_team)
+	{
+		attack_team.Set_now_hitter(now_hitter_home % 9);
+		now_hitter_home++;
+	}
+
+	else
+	{
+		attack_team.Set_now_hitter(now_hitter_away % 9);
+		now_hitter_away++;
+	}
+
+	
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -860,10 +877,13 @@ int battle(team& attack_team, team& defence_team, int out_count)
 		if (get_hitter_rand_stat(0, 2, Save_hitter_index) > get_pitcher_rand_stat(22, 2, Save_pitcher_index)) // 볼
 			ball++;
 
-		else if (get_hitter_rand_stat(0, 3, Save_hitter_index) < get_pitcher_rand_stat(10, 3, Save_pitcher_index) && strike < 2) // 파울
-			strike++;
+		else if (get_hitter_rand_stat(10, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_pitcher_index)) // 파울
+		{
+			if (strike < 2)
+				strike++;
+		}	
 
-		else if (get_hitter_rand_stat(10, 2, Save_hitter_index) < get_pitcher_rand_stat(10, 2, Save_pitcher_index)) // 스트라이크
+		else if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(17, 2, Save_pitcher_index)) // 스트라이크
 			strike++;
 
 		else // 타격
@@ -871,7 +891,6 @@ int battle(team& attack_team, team& defence_team, int out_count)
 			out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), attack_team, defence_team);
 			break;
 		}
-
 
 		if (strike == 3)
 		{
@@ -903,29 +922,31 @@ int battle(team& attack_team, team& defence_team, int out_count)
 void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 경기인가 아닌가
 {
 	int out = 0;
-	int inning = 0;
 	int game = 0;
+	bool initialize = true;
 
 	while (game < 144)
 	{
+		initialize = true;
+
 		for (int i = 0; i < 9; i++)
 		{
 
 			while (out != 3)
-				if (battle(away_team, home_team, out))
-				{
+			{
+				if (battle(away_team, home_team, initialize, true))
 					out++;
-					inning++;
-				}
+
+				initialize = false;
+			}				
 
 			out = 0;
 
 			while (out != 3)
-				if (battle(home_team, away_team, out))
-				{
+			{
+				if (battle(home_team, away_team, initialize, false))
 					out++;
-					inning++;
-				}
+			}				
 
 			out = 0;
 		}
