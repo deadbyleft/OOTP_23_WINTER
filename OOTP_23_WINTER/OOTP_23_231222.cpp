@@ -626,7 +626,20 @@ public:
 	}
 
 
+	void Update_team_result()
+	{
 
+	}
+
+};
+
+class option
+{
+private:
+	bool show_result = false;
+
+public:
+	bool Get_show_result() { return show_result; }
 
 };
 
@@ -825,10 +838,24 @@ int update_game_record(int value, team& attack_team, team& defence_team)
 	return out;
 }
 
-
-
-void show_result(int value, bool update_value, team& attack_team, team& defence_team)
+void show_result()
 {
+
+}
+
+void update_result(int value, bool update_value, bool Isshow_result, team& attack_team, team& defence_team)
+{
+	if (update_value)
+	{
+		attack_team.Update_team_result();
+		defence_team.Update_team_result();
+	}
+
+	if (Isshow_result)
+	{
+		show_result();
+	}
+
 	// 0 포지션 1 컨디션 2 선구안 3 정확도 4 파워 5 스피드 6 수비 7 오버롤
 
 
@@ -843,7 +870,7 @@ void show_result(int value, bool update_value, team& attack_team, team& defence_
 	//cout << "제 X구 아웃";
 }
 
-int battle(team& attack_team, team& defence_team, bool initialize, bool home_team)
+int battle(team& attack_team, team& defence_team, option Option, bool initialize, bool home_team)
 {
 	int Save_hitter_index[10] = { 0, };
 	int Save_pitcher_index[10] = { 0, };
@@ -908,7 +935,7 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 
 		if (strike == 3)
 		{
-			show_result(1, true, attack_team, defence_team);
+			update_result(1, true, Option.Get_show_result(), attack_team, defence_team);
 			out = update_game_record(1, attack_team, defence_team);
 
 			// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
@@ -918,7 +945,7 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 
 		if (ball == 4)
 		{
-			show_result(2, true, attack_team, defence_team);
+			update_result(2, true, Option.Get_show_result(), attack_team, defence_team);
 			out = update_game_record(2, attack_team, defence_team);
 			break;
 		}
@@ -933,7 +960,7 @@ int battle(team& attack_team, team& defence_team, bool initialize, bool home_tea
 	return out; // 아웃 여부
 }
 
-void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 경기인가 아닌가
+void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option Option) // 홈팀 경기인가 아닌가
 {
 	int out = 0;
 	int game = 0;
@@ -951,7 +978,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 
 
 			while (out != 3)
 			{
-				if (battle(away_team, home_team, initialize, true))
+				if (battle(away_team, home_team, Option, initialize, true))
 					out++;
 
 				initialize = false;
@@ -961,7 +988,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 
 
 			while (out != 3)
 			{
-				if (battle(home_team, away_team, initialize, false))
+				if (battle(home_team, away_team, Option, initialize, false))
 					out++;
 			}
 
@@ -981,27 +1008,29 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard) // 홈팀 
 
 int show_game_select()
 {
-	int row = 8, col = 15;
+	int row = 15, col = 8, col_gap = 4, col_initial = 0;
+
+	col_initial = col + col_gap;
 
 	system("cls");
-	cur(col + 8, row);
-	cout << " [    메 뉴    ]"; row += 3; cur(col, row);
-	cout << " [ 1 ] 단일 경기"; row += 3; cur(col, row);
-	cout << " [ 2 ] 리그 경기"; row += 3; cur(col, row);
-	cout << " [ 3 ] 친선 경기"; row += 3; cur(col, row);
-	cout << " [ 4 ] 뒤로 가기"; row += 3; cur(col, row);
+	cur(row, col);
+	cout << " [    메 뉴    ]"; col += col_gap; cur(row, col);
+	cout << " [ 1 ] 리그 경기"; col += col_gap; cur(row, col);
+	cout << " [ 2 ] 친선 경기"; col += col_gap; cur(row, col);
+	cout << " [ 3 ] 단판 경기"; col += col_gap; cur(row, col);
+	cout << " [ 5 ] 뒤로 가기"; col += col_gap; cur(row, col);
 
-	return sel(45, 11, 3, 4);
+	return sel(row + 25, col_initial, 4, 4);
 }
 
-void game_select(int value, team& home_team, team& away_team, scoreboard& Scoreboard)
+void game_select(int value, team& home_team, team& away_team, scoreboard& Scoreboard, option Option)
 {
 	if (value == 1)
 	{
 		if (home_team.IsHomeTeam())
-			playball(home_team, away_team, Scoreboard);
+			playball(home_team, away_team, Scoreboard, Option);
 		else
-			playball(away_team, home_team, Scoreboard);
+			playball(away_team, home_team, Scoreboard, Option);
 	}
 
 }
@@ -1055,20 +1084,20 @@ void show_team_manage(int value, team& selected_team)
 
 int show_mainmenu()
 {
-	int row = 8, col = 15;
+	int row = 15, col = 8, col_gap = 4, col_initial = 0;
+
+	col_initial = col + col_gap;
 
 	system("cls");
-	cur(col, row);
-	cout << " [    메 뉴    ]"; row += 3; cur(col, row);
-	cout << " [ 1 ] 경기 시작"; row += 3; cur(col, row);
-	cout << " [ 2 ] 선수 관리"; row += 3; cur(col, row);
-	cout << " [ 3 ] 기록 확인"; row += 3; cur(col, row);
-	cout << " [ 4 ] 선수 영입"; row += 3; cur(col, row);
-	cout << " [ 5 ] 팀 변경"; row += 3; cur(col, row);
-	cout << " [ 6 ] 게임 설정"; row += 3; cur(col, row);
-	cout << " [ 7 ] 게임 종료"; row += 3; cur(col, row);
+	cur(row, col);
+	cout << " [    메 뉴    ]"; col += col_gap; cur(row, col);
+	cout << " [ 1 ] 경기 시작"; col += col_gap; cur(row, col);
+	cout << " [ 2 ] 선수 관리"; col += col_gap; cur(row, col);
+	cout << " [ 3 ] 선수 영입"; col += col_gap; cur(row, col);
+	cout << " [ 4 ] 게임 설정"; col += col_gap; cur(row, col);
+	cout << " [ 5 ] 게임 종료"; col += col_gap; cur(row, col);
 
-	return sel(40, 11, 3, 7);
+	return sel(row + 25, col_initial, 4, 5);
 }
 
 void change_hitter(team& selected_team)
@@ -1146,7 +1175,6 @@ void control_team_manage(team& selected_team)
 
 }
 
-
 void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector <pair<string, bool>>& All_pitcher_name)
 {
 	for (int i = 0; i < 300; i++)
@@ -1200,6 +1228,8 @@ void game_setting()
 
 	scoreboard Scoreboard;
 
+	option Option;
+
 	int menu_choice = 0;
 
 	CursorView(false);
@@ -1217,10 +1247,10 @@ void game_setting()
 	while (1)
 	{
 		menu_choice = show_mainmenu();
-		if (menu_choice == 1) game_select(show_game_select(), Samsung, Lotte, Scoreboard);
+		if (menu_choice == 1) game_select(show_game_select(), Samsung, Lotte, Scoreboard, Option);
 		else if (menu_choice == 2) control_team_manage(Samsung);
-		else if (menu_choice == 3) control_team_manage(Lotte);
-		else if (menu_choice == 7) break;
+		else if (menu_choice == 4) control_team_manage(Lotte);
+		else if (menu_choice == 5) break;
 	}
 
 }
