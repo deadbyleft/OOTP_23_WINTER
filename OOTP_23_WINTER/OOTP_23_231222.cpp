@@ -77,7 +77,7 @@ private:
 	int home_pitching_value = 0;
 	int away_pitching_value = 0;
 
-	int now_board = 0;
+	int now_inning = 0;
 	int out_count = 0;
 
 	bool Ishome = false;
@@ -96,6 +96,17 @@ public:
 		base_1 = false; base_1_spd = 0;
 		base_2 = false; base_2_spd = 0;
 		base_3 = false; base_3_spd = 0;
+	}
+
+	void Initialize_scoreboard()
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 12; j++)
+			{
+				board[i][j] = 0;
+			}
+		}
 	}
 
 	bool Get_Isfull_1()
@@ -138,6 +149,36 @@ public:
 		return value;
 	}
 
+	int Get_now_inning()
+	{
+		return now_inning;
+	}
+
+	int Get_home_score()
+	{
+		int value = 0;
+
+		for (int i = 0; i < 9; i++)
+			value += board[1][i];
+
+		return value;
+	}
+
+	int Get_away_score()
+	{
+		int value = 0;
+
+		for (int i = 0; i < 9; i++)
+			value += board[0][i];
+
+		return value;
+	}
+	
+	void Set_now_inning(int value)
+	{
+		now_inning = value;
+	}
+
 	void Set_Ishome(bool value)
 	{
 		Ishome = value;
@@ -171,9 +212,9 @@ public:
 		}
 	}
 
-	int Set_now_board(int score) // 몇 회인지 업데이트
+	int Set_now_scoreboard(int score) // 몇 회인지 업데이트
 	{
-		board[Ishome][now_board] += score; 
+		board[Ishome][now_inning] += score; 
 		return score;
 	}
 
@@ -192,7 +233,7 @@ public:
 					Set_Base_spd(3, base_2_spd);
 
 					if (Get_Isfull_3())
-						RBI += Set_now_board(1);
+						RBI += Set_now_scoreboard(1);
 				}
 			}
 
@@ -207,7 +248,7 @@ public:
 		case 10:
 			if (Get_Isfull_3())
 			{
-				RBI += Set_now_board(1);
+				RBI += Set_now_scoreboard(1);
 				Set_Isfull_3(false);
 			}				
 
@@ -232,14 +273,14 @@ public:
 		case 20:
 			if (Get_Isfull_3())
 			{
-				RBI += Set_now_board(1);
+				RBI += Set_now_scoreboard(1);
 				Set_Isfull_3(false);
 				Set_Base_spd(3, 0);
 			}
 
 			if (Get_Isfull_2())
 			{
-				RBI += Set_now_board(1);
+				RBI += Set_now_scoreboard(1);
 				Set_Isfull_2(false);
 				Set_Base_spd(2, 0);
 			}
@@ -257,10 +298,10 @@ public:
 
 			break;
 		case 40:
-			RBI += Set_now_board(1);
-			if (Get_Isfull_1()) RBI += Set_now_board(1);
-			if (Get_Isfull_2()) RBI += Set_now_board(1);
-			if (Get_Isfull_3()) RBI += Set_now_board(1);
+			RBI += Set_now_scoreboard(1);
+			if (Get_Isfull_1()) RBI += Set_now_scoreboard(1);
+			if (Get_Isfull_2()) RBI += Set_now_scoreboard(1);
+			if (Get_Isfull_3()) RBI += Set_now_scoreboard(1);
 
 			Set_Isfull_1(false);
 			Set_Isfull_2(false);
@@ -268,12 +309,32 @@ public:
 			break;
 		}
 
+		Update_scoreboard(Ishome, RBI);
+
 		return RBI;
 	}
 
-	int Update_scoreboard(int Ishome)
+	int Update_scoreboard(int Ishome, int RBI)
 	{
+		return 0;
+	}
 
+	void Show_result_test()
+	{
+		int value = 0;
+
+		for (int i = 0; i < 9; i++)
+			value += board[0][i];
+
+		cout << "원정팀 : " << value << " 점 ";
+
+		value = 0;
+
+		for (int i = 0; i < 9; i++)
+			value += board[1][i];
+
+		cout << "홈팀 : " << value << " 점 ";
+			
 	}
 
 	void Initialize_var()
@@ -321,6 +382,10 @@ private:
 
 	int played_game = 0;
 
+	int win = 0;
+	int lose = 0;
+	int draw = 0;
+
 	vector <pair<bool, int>> base;
 
 	// At_game At_plate At_bat hit_1 hit_2 hit_3 hr bb so avg obp slg ops 
@@ -335,6 +400,11 @@ public:
 	int Get_now_pitcher() { return now_pitcher; }
 	int Get_hitter_stat(int row, int col) { return hitter_stat[row][col]; }
 
+	void team_result_test()
+	{
+		cout << win << "승 " << draw << "무 " << lose << "패";
+	}
+	
 	void Set_now_hitter(int value) { now_hitter = value; }
 	void Set_hitter_stat(int col, int result[]) { hitter_stat[now_hitter][col] = result[col]; }
 
@@ -348,6 +418,24 @@ public:
 		played_game += value;
 	}
 
+	void Set_game_result(bool Ishome, int away_score, int home_score) 
+	{ 
+		if (Ishome)
+		{
+			if (home_score > away_score) win++;
+			else if (home_score < away_score) lose++;
+			else draw++;
+		}
+
+		else
+		{
+			if (home_score < away_score) win++;
+			else if (home_score > away_score) lose++;
+			else draw++;
+		}
+
+	}
+
 	int Get_pitcher_stat(int row, int col)
 	{
 		return pitcher_stat[row][col];
@@ -357,7 +445,6 @@ public:
 	{
 		return played_game % 2;
 	}
-
 
 	bool IsStarter(int row)
 	{
@@ -472,8 +559,6 @@ public:
 	void Show_hitter_stat(int situation, bool show_name, bool show_direction, bool show_value)
 	{
 
-
-
 		if (situation == 1)
 		{
 			for (int i = 0; i < hitter.size(); i++)
@@ -563,8 +648,12 @@ public:
 				cout << ((hitter_record[i][3] + hitter_record[i][7]) / (double)hitter_record[i][1]) << setw(12);
 				cout << ((hitter_record[i][3] + hitter_record[i][4] + hitter_record[i][6] * 3) / (double)hitter_record[i][2]) << setw(12);
 
+				
+
 				cout << "\n\n";
 			}
+
+			team_result_test();
 
 			return;
 		}
@@ -747,7 +836,7 @@ class option
 {
 private:
 	bool show_result = true;
-	bool recording = true;
+	bool recording = false;
 
 public:
 	bool Get_show_result() { return show_result; }
@@ -1089,6 +1178,8 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 	int inning = 1;
 	bool initialize = true;
 
+	system("cls");
+
 	while (game < 144)
 	{
 		initialize = true;
@@ -1102,6 +1193,8 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 		{
 			Scoreboard.Initialize_base();
 			Scoreboard.Set_Ishome(false);
+
+			Scoreboard.Set_now_inning(inning);
 
 			while (out != 3)
 			{
@@ -1124,9 +1217,15 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 			out = 0;
 			inning++;
+
+
 		}
 
+		home_team.Set_game_result(true, Scoreboard.Get_away_score(), Scoreboard.Get_home_score());
+		away_team.Set_game_result(false, Scoreboard.Get_away_score(), Scoreboard.Get_home_score());
+		Scoreboard.Initialize_scoreboard();
 
+		
 
 		game++;
 
@@ -1178,7 +1277,7 @@ void show_team_manage(int value, team& selected_team)
 
 	if (value == 1)
 	{
-		cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
+		cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_hitter_stat(1, true, true, true);
 	}
