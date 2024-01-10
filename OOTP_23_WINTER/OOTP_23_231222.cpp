@@ -15,7 +15,6 @@ using namespace std;
 void Set_FontColor(int value);
 
 
-
 // 포지션 컨디션 선구안 정확도 파워 스피드 수비 오버롤
 
 int All_hitter_stat[300][10] = {
@@ -78,6 +77,11 @@ private:
 	int home_pitching_value = 0;
 	int away_pitching_value = 0;
 
+	int now_board = 0;
+	int out_count = 0;
+
+	bool Ishome = false;
+
 	bool base_1 = false; int base_1_spd = 0;
 	bool base_2 = false; int base_2_spd = 0;
 	bool base_3 = false; int base_3_spd = 0;
@@ -109,6 +113,36 @@ public:
 		return base_3;
 	}
 
+	bool Get_Ishome()
+	{
+		return Ishome;
+	}
+
+	int Get_base_1_spd()
+	{
+		return base_1_spd;
+	}
+
+	int Get_base_2_spd()
+	{
+		return base_2_spd;
+	}
+
+	int Get_base_3_spd()
+	{
+		return base_3_spd;
+	}
+
+	int Get_RBI_point(int value)
+	{
+		return value;
+	}
+
+	void Set_Ishome(bool value)
+	{
+		Ishome = value;
+	}
+
 	void Set_Isfull_1(bool value)
 	{
 		base_1 = value;
@@ -126,44 +160,120 @@ public:
 
 	void Set_Base_spd(int base, int spd)
 	{
-
+		switch (base)
+		{
+		case 1:
+			base_1_spd = spd; break;
+		case 2:
+			base_2_spd = spd; break;
+		case 3:
+			base_3_spd = spd; break;
+		}
 	}
 
-	void Update_base(int value)
+	int Set_now_board(int score) // 몇 회인지 업데이트
 	{
+		board[Ishome][now_board] += score; 
+		return score;
+	}
+
+	int Update_base(int value, int now_hitter, int now_hitter_spd)
+	{
+		int RBI = 0;
+
 		switch (value)
 		{
 		case 2:
-			if (Get_Isfull_1())
+			if (Get_Isfull_1()) // 1루가 차있다면
 			{
-				if (Get_Isfull_2())
+				if (Get_Isfull_2()) // 2루가 차있다면
 				{
-					Set_Base_spd(1, 0);
 					Set_Base_spd(2, base_1_spd);
 					Set_Base_spd(3, base_2_spd);
 
-					//if (Get_Isfull_3())
-						//RBI(타점) 추가
+					if (Get_Isfull_3())
+						RBI += Set_now_board(1);
 				}
-
 			}
 
-			else
+			else // 1루가 차있지 않다면
 			{
 				Set_Isfull_1(true);
-				Set_Base_spd(1, 0);
+				Set_Base_spd(1, now_hitter_spd);
 			}
 
 			break;
 
 		case 10:
+			if (Get_Isfull_3())
+			{
+				RBI += Set_now_board(1);
+				Set_Isfull_3(false);
+			}				
+
+			if (Get_Isfull_2()) // 2루가 차있다면
+			{
+				Set_Base_spd(3, base_2_spd);
+				Set_Isfull_2(false);
+				Set_Isfull_3(true);
+			}				
+
+			if (Get_Isfull_1())
+			{
+				Set_Base_spd(2, base_1_spd);
+				Set_Isfull_1(false);
+				Set_Isfull_2(true);
+			}
+				
+			Set_Base_spd(1, now_hitter_spd);
+			Set_Isfull_1(true);
+
 			break;
 		case 20:
+			if (Get_Isfull_3())
+			{
+				RBI += Set_now_board(1);
+				Set_Isfull_3(false);
+				Set_Base_spd(3, 0);
+			}
+
+			if (Get_Isfull_2())
+			{
+				RBI += Set_now_board(1);
+				Set_Isfull_2(false);
+				Set_Base_spd(2, 0);
+			}
+
+			if (Get_Isfull_1())
+			{
+				Set_Base_spd(3, base_1_spd);
+				Set_Isfull_1(false);
+				Set_Isfull_3(true);
+				Set_Base_spd(1, 0);
+			}
+
+			Set_Base_spd(2, now_hitter_spd);
+			Set_Isfull_2(true);
+
 			break;
 		case 40:
-			// 홈런 개수만큼 RBI 추가 후 Initialize_base();
+			RBI += Set_now_board(1);
+			if (Get_Isfull_1()) RBI += Set_now_board(1);
+			if (Get_Isfull_2()) RBI += Set_now_board(1);
+			if (Get_Isfull_3()) RBI += Set_now_board(1);
+
+			Set_Isfull_1(false);
+			Set_Isfull_2(false);
+			Set_Isfull_3(false);
 			break;
 		}
+
+		return RBI;
+	}
+
+	int Update_scoreboard(int Ishome)
+	{
+
 	}
 
 	void Initialize_var()
@@ -417,6 +527,7 @@ public:
 
 				cout << right << setw(10) << hitter_record[i][6] << "        ";
 
+				cout << hitter_record[i][15];
 
 				cout << "\n\n";
 			}
@@ -451,7 +562,6 @@ public:
 				cout << (hitter_record[i][3] / (double)hitter_record[i][2]) << setw(12);
 				cout << ((hitter_record[i][3] + hitter_record[i][7]) / (double)hitter_record[i][1]) << setw(12);
 				cout << ((hitter_record[i][3] + hitter_record[i][4] + hitter_record[i][6] * 3) / (double)hitter_record[i][2]) << setw(12);
-
 
 				cout << "\n\n";
 			}
@@ -626,9 +736,9 @@ public:
 	}
 
 
-	void Update_team_result()
+	void Update_team_result(int RBI)
 	{
-
+		hitter_record[now_hitter][15] += RBI;
 	}
 
 };
@@ -636,11 +746,12 @@ public:
 class option
 {
 private:
-	bool show_result = false;
+	bool show_result = true;
+	bool recording = true;
 
 public:
 	bool Get_show_result() { return show_result; }
-
+	bool Get_recording() { return recording; }
 };
 
 void cur(short x, short y) {
@@ -747,8 +858,6 @@ int get_pitcher_rand_stat(int value, int selected_stat, int Save_pitcher_index[]
 	return return_pitcher_value;
 }
 
-
-
 int battle_hit_run_result(bool hit, int type, int Save_hitter_index[], int Save_pitcher_index[])
 {
 	// 타자 : 0 포지션 1 컨디션 2 선구안 3 정확도 4 파워 5 스피드 6 수비 7 오버롤
@@ -806,7 +915,38 @@ int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[])
 
 }
 
-int update_game_record(int value, team& attack_team, team& defence_team)
+void show_result()
+{
+
+}
+
+void update_result(int value, bool update_value, option Option, team& attack_team, team& defence_team, scoreboard& Scoreboard)
+{
+	if (update_value)
+		attack_team.Update_team_result(Scoreboard.Update_base(value, attack_team.Get_now_hitter(), 5));	
+	else
+		Scoreboard.Update_base(value, attack_team.Get_now_hitter(), 5);
+
+	//if (Option.Get_show_result())
+	show_result();
+
+	
+
+	// 0 포지션 1 컨디션 2 선구안 3 정확도 4 파워 5 스피드 6 수비 7 오버롤
+
+
+	// 0 파울 1 삼진 2 볼넷
+
+	// 1 1루타 2 2루타 3 3루타 4 홈런 5 땅볼 6 뜬공 7 번트 8 실책 9 도루
+	// 0 주자 진루 실패 1 주자 진루 성공 2 병살 3 삼중살
+
+	return;
+
+
+	//cout << "제 X구 아웃";
+}
+
+int update_game_record(int value, bool update_value, option Option, team& attack_team, team& defence_team, scoreboard& Scoreboard)
 {
 	int out = false;
 
@@ -835,42 +975,24 @@ int update_game_record(int value, team& attack_team, team& defence_team)
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 0, 1, /**/  0, 0, 0, 0, 0, 0, 0); break;
 	}
 
+	update_result(value, true, Option, attack_team, defence_team, Scoreboard);
+
 	return out;
 }
 
-void show_result()
+void test(team& attack_team, team& defence_team, option Option, scoreboard& Scoreboard, bool initialize)
 {
+	system("cls");
+
+	if (Scoreboard.Get_Isfull_1()) cout << "1루 참"; else cout << "1루 안 참"; cout << '\n';
+	if (Scoreboard.Get_Isfull_2()) cout << "2루 참"; else cout << "2루 안 참"; cout << '\n';
+	if (Scoreboard.Get_Isfull_3()) cout << "3루 참"; else cout << "3루 안 참"; cout << '\n';
+
+	Sleep(10);
 
 }
 
-void update_result(int value, bool update_value, bool Isshow_result, team& attack_team, team& defence_team)
-{
-	if (update_value)
-	{
-		attack_team.Update_team_result();
-		defence_team.Update_team_result();
-	}
-
-	if (Isshow_result)
-	{
-		show_result();
-	}
-
-	// 0 포지션 1 컨디션 2 선구안 3 정확도 4 파워 5 스피드 6 수비 7 오버롤
-
-
-	// 0 파울 1 삼진 2 볼넷
-
-	// 1 1루타 2 2루타 3 3루타 4 홈런 5 땅볼 6 뜬공 7 번트 8 실책 9 도루
-	// 0 주자 진루 실패 1 주자 진루 성공 2 병살 3 삼중살
-
-	return;
-
-
-	//cout << "제 X구 아웃";
-}
-
-int battle(team& attack_team, team& defence_team, option Option, bool initialize, bool home_team)
+int battle(team& attack_team, team& defence_team, option Option, scoreboard& Scoreboard, bool inning)
 {
 	int Save_hitter_index[10] = { 0, };
 	int Save_pitcher_index[10] = { 0, };
@@ -885,13 +1007,13 @@ int battle(team& attack_team, team& defence_team, option Option, bool initialize
 	static int now_hitter_home = 0;
 	static int now_hitter_away = 0;
 
-	if (initialize)
+	if (Option.Get_recording())
 	{
 		now_hitter_home = 0;
 		now_hitter_away = 0;
 	}
 
-	if (home_team)
+	if (Scoreboard.Get_Ishome())
 	{
 		attack_team.Set_now_hitter(now_hitter_home % 9);
 		now_hitter_home++;
@@ -929,14 +1051,13 @@ int battle(team& attack_team, team& defence_team, option Option, bool initialize
 
 		else // 타격
 		{
-			out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), attack_team, defence_team);
+			out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), true, Option, attack_team, defence_team, Scoreboard);
 			break;
 		}
 
 		if (strike == 3)
-		{
-			update_result(1, true, Option.Get_show_result(), attack_team, defence_team);
-			out = update_game_record(1, attack_team, defence_team);
+		{			
+			out = update_game_record(1, true, Option, attack_team, defence_team, Scoreboard);
 
 			// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
 			// 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
@@ -944,9 +1065,8 @@ int battle(team& attack_team, team& defence_team, option Option, bool initialize
 		}
 
 		if (ball == 4)
-		{
-			update_result(2, true, Option.Get_show_result(), attack_team, defence_team);
-			out = update_game_record(2, attack_team, defence_team);
+		{			
+			out = update_game_record(2, true, Option, attack_team, defence_team, Scoreboard);
 			break;
 		}
 	}
@@ -957,6 +1077,8 @@ int battle(team& attack_team, team& defence_team, option Option, bool initialize
 		defence_team.Set_pitcher_stat(i, Save_pitcher_index);
 	}
 
+	//test(attack_team, defence_team, Option, Scoreboard, initialize);
+
 	return out; // 아웃 여부
 }
 
@@ -964,21 +1086,26 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 {
 	int out = 0;
 	int game = 0;
+	int inning = 1;
 	bool initialize = true;
 
 	while (game < 144)
 	{
 		initialize = true;
 
+		inning = 1;
+
 		home_team.Update_hitter_condition(); home_team.Update_pitcher_condition();
 		away_team.Update_hitter_condition(); away_team.Update_pitcher_condition();
 
 		for (int i = 0; i < 9; i++)
 		{
+			Scoreboard.Initialize_base();
+			Scoreboard.Set_Ishome(false);
 
 			while (out != 3)
 			{
-				if (battle(away_team, home_team, Option, initialize, true))
+				if (battle(away_team, home_team, Option, Scoreboard, inning))
 					out++;
 
 				initialize = false;
@@ -986,14 +1113,19 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 			out = 0;
 
+			Scoreboard.Initialize_base();
+			Scoreboard.Set_Ishome(true);
+
 			while (out != 3)
 			{
-				if (battle(home_team, away_team, Option, initialize, false))
+				if (battle(home_team, away_team, Option, Scoreboard, inning))
 					out++;
 			}
 
 			out = 0;
+			inning++;
 		}
+
 
 
 		game++;
@@ -1018,7 +1150,7 @@ int show_game_select()
 	cout << " [ 1 ] 리그 경기"; col += col_gap; cur(row, col);
 	cout << " [ 2 ] 친선 경기"; col += col_gap; cur(row, col);
 	cout << " [ 3 ] 단판 경기"; col += col_gap; cur(row, col);
-	cout << " [ 5 ] 뒤로 가기"; col += col_gap; cur(row, col);
+	cout << " [ 4 ] 뒤로 가기"; col += col_gap; cur(row, col);
 
 	return sel(row + 25, col_initial, 4, 4);
 }
@@ -1249,7 +1381,7 @@ void game_setting()
 		menu_choice = show_mainmenu();
 		if (menu_choice == 1) game_select(show_game_select(), Samsung, Lotte, Scoreboard, Option);
 		else if (menu_choice == 2) control_team_manage(Samsung);
-		else if (menu_choice == 4) control_team_manage(Lotte);
+		else if (menu_choice == 3) control_team_manage(Lotte);
 		else if (menu_choice == 5) break;
 	}
 
