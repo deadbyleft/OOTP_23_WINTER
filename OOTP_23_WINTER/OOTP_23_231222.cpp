@@ -617,6 +617,8 @@ public:
 				cout << "\n\n";
 			}
 
+			team_result_test();
+
 			return;
 		}
 
@@ -653,7 +655,7 @@ public:
 				cout << "\n\n";
 			}
 
-			team_result_test();
+			
 
 			return;
 		}
@@ -684,6 +686,31 @@ public:
 		hitter[hitter_2].second = Save_hitter[0].second;
 
 
+	}
+
+	void Change_hitter_record(int hitter_1, int hitter_2)
+	{
+		int Save_index[20] = { 0, };
+		vector <pair<string, bool>> Save_hitter;
+
+		Save_hitter.push_back(make_pair("Å¸ÀÚ", 0));
+
+		Save_hitter[0].first = hitter[hitter_1].first;
+		Save_hitter[0].second = hitter[hitter_1].second;
+
+		for (int i = 0; i < 20; i++)
+			Save_index[i] = hitter_record[hitter_1][i];
+
+
+
+		memcpy(hitter_record[hitter_1], hitter_record[hitter_2], sizeof(Save_index));
+		memcpy(hitter_record[hitter_2], Save_index, sizeof(Save_index));
+
+		hitter[hitter_1].first = hitter[hitter_2].first;
+		hitter[hitter_1].second = hitter[hitter_2].second;
+
+		hitter[hitter_2].first = Save_hitter[0].first;
+		hitter[hitter_2].second = Save_hitter[0].second;
 	}
 
 	void Set_hitter_record(int row, int stat_1, int stat_2, int stat_3, int stat_4, int stat_5, int stat_6,
@@ -835,12 +862,21 @@ public:
 class option
 {
 private:
-	bool show_result = true;
 	bool recording = false;
+	bool music = true;
+	bool condition = true;
+	bool auto_play = true;
 
 public:
-	bool Get_show_result() { return show_result; }
-	bool Get_recording() { return recording; }
+	bool Get_Onauto_play() { return auto_play; }
+	bool Get_Onrecording() { return recording; }
+	bool Get_Oncondition() { return condition; }
+	bool Get_Onmusic() { return music; }
+
+	bool Set_Onauto_play(bool value) { auto_play = value; }
+	bool Set_Onrecording(bool value) { recording = value; }
+	bool Set_Oncondition(bool value) { condition = value; }
+	bool Set_Onmusic(bool value) { music = value; }
 };
 
 void cur(short x, short y) {
@@ -1096,7 +1132,7 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 	static int now_hitter_home = 0;
 	static int now_hitter_away = 0;
 
-	if (Option.Get_recording())
+	if (Option.Get_Onrecording())
 	{
 		now_hitter_home = 0;
 		now_hitter_away = 0;
@@ -1225,8 +1261,6 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 		away_team.Set_game_result(false, Scoreboard.Get_away_score(), Scoreboard.Get_home_score());
 		Scoreboard.Initialize_scoreboard();
 
-		
-
 		game++;
 
 	}
@@ -1347,6 +1381,7 @@ void change_hitter(team& selected_team)
 	int Save_index[10] = { 0, };
 
 	selected_team.Change_hitter_stat(hitter_1, hitter_2);
+	selected_team.Change_hitter_record(hitter_1, hitter_2);
 
 }
 
@@ -1485,7 +1520,6 @@ void game_setting()
 	}
 
 }
-
 
 int main()
 {
