@@ -74,6 +74,9 @@ int All_hitter_stat[300][10] = {
 
 
 
+
+
+
 int All_pitcher_stat[300][10] = {
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -665,7 +668,7 @@ public:
 						if (i % 30 < 9) cout << " [  " << i + 1 << " 번  ] ";
 						else cout << " [  후보  ] ";
 					}
-					if (show_name && j == 0) cout << "   " << hitter[i].first << "      ";
+					if (show_name && j == 0) cout << right << setw(9) << hitter[i].first << "      ";
 					if (show_direction && j == 0)
 						if (hitter[i].second) cout << " 우타 ";
 						else cout << " 좌타 ";
@@ -673,13 +676,13 @@ public:
 					if (j == 0)
 					{
 						cout << right << setw(13);
-						Show_hitter_position(team_sigvalue * 30 + i);
+						Show_hitter_position(i);
 					}
 
 					else if (j == 1)
 					{
 						cout << right << setw(11);
-						Show_hitter_condition(team_sigvalue * 30 + i);
+						Show_hitter_condition(i);
 					}
 
 
@@ -842,7 +845,7 @@ public:
 		switch (row % 30 + 1)
 		{
 		case 1: case 2: case 3: case 4: case 5:
-			if (row % 30 < 5) cout << " " << row + 1 << " 선발 ";
+			if (row % 30 < 5) cout << " " << row % 30 + 1 << " 선발 ";
 			else cout << "  선발  ";  break;
 		case 6: case 7:
 			cout << " 필승조 ";  break;
@@ -894,10 +897,10 @@ public:
 			{
 				if (show_value && j == 0)
 				{
-					cout << " ["; Show_pitcher_position(team_sigvalue * 30 + i); cout << "] ";
+					cout << " ["; Show_pitcher_position(i); cout << "] ";
 				}
 
-				if (show_name && j == 0) cout << "   " << pitcher[i].first << "      ";
+				if (show_name && j == 0) cout << right << setw(9) << pitcher[i].first << "      ";
 				if (show_direction && j == 0)
 					if (pitcher[i].second) cout << " 우투 ";
 					else cout << " 좌투 ";
@@ -905,7 +908,7 @@ public:
 				else if (j == 1)
 				{
 					cout << "      ";
-					Show_pitcher_condition(team_sigvalue * 30 + i);
+					Show_pitcher_condition(i);
 					cout << "        ";
 				}
 
