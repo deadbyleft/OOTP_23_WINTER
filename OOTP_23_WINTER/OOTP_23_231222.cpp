@@ -78,11 +78,11 @@ int All_hitter_stat[300][10] = {
 
 
 int All_pitcher_stat[300][10] = {
+{1, 3, 60, 60, 90, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 80, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 70, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 50, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -108,12 +108,12 @@ int All_pitcher_stat[300][10] = {
 {2, 3, 50, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 30, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 90, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 90, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 80, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 70, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 50, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -485,7 +485,7 @@ public:
 
 		used_pitcher.push_back(now_pitcher);
 
-		for (int i = 0; i < 300; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			if (!Isused_pitcher(rand_pitcher))
 			{
@@ -1305,7 +1305,7 @@ void test(team& attack_team, team& defence_team, int now_hp)
 	Sleep(100);
 }
 
-int battle(team& attack_team, team& defence_team, option Option, scoreboard& Scoreboard, bool inning, bool Isinitialize)
+int battle(team& attack_team, team& defence_team, option Option, scoreboard& Scoreboard, bool inning, bool Isinitialize, bool Ishome)
 {
 	int Save_hitter_index[10] = { 0, };
 	int Save_pitcher_index[10] = { 0, };
@@ -1318,18 +1318,23 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 
 	static int now_hitter_home = 0;
 	static int now_hitter_away = 0;
-	static int now_pitcher_hp = 0;
+	static int now_pitcher_home_hp = 0;
+	static int now_pitcher_away_hp = 0;
 
 	if (Isinitialize)
 	{
 		now_hitter_home = 0;
 		now_hitter_away = 0;
-		now_pitcher_hp = defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), 4) * 2;
+		now_pitcher_home_hp = defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), 4) * 2;
+		now_pitcher_away_hp = attack_team.Get_pitcher_stat(attack_team.Get_now_pitcher(), 4) * 2;
 		return 0;
 	}
 
-	if (now_pitcher_hp <= 0)
-		now_pitcher_hp = defence_team.Change_now_pitcher();
+	if (now_pitcher_away_hp <= 0)
+		now_pitcher_away_hp = defence_team.Change_now_pitcher();
+
+	if (now_pitcher_home_hp <= 0)
+		now_pitcher_home_hp = defence_team.Change_now_pitcher();
 
 	if (Scoreboard.Get_Ishome())
 	{
@@ -1369,14 +1374,19 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 
 		else // 타격
 		{
-			out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), true, now_pitcher_hp,
+			if (Ishome) out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), true, now_pitcher_away_hp,
 				Option, attack_team, defence_team, Scoreboard);
+
+			else out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), true, now_pitcher_home_hp,
+				Option, attack_team, defence_team, Scoreboard);
+
 			break;
 		}
 
 		if (strike == 3)
 		{
-			out = update_game_record(1, true, now_pitcher_hp, Option, attack_team, defence_team, Scoreboard);
+			if (Ishome) out = update_game_record(1, true, now_pitcher_away_hp, Option, attack_team, defence_team, Scoreboard);
+			else out = update_game_record(1, true, now_pitcher_home_hp, Option, attack_team, defence_team, Scoreboard);
 
 			// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
 			// 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
@@ -1385,7 +1395,8 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 
 		if (ball == 4)
 		{
-			out = update_game_record(2, true, now_pitcher_hp, Option, attack_team, defence_team, Scoreboard);
+			if (Ishome) out = update_game_record(2, true, now_pitcher_away_hp, Option, attack_team, defence_team, Scoreboard);
+			else out = update_game_record(2, true, now_pitcher_home_hp, Option, attack_team, defence_team, Scoreboard);
 			break;
 		}
 	}
@@ -1396,9 +1407,11 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 		defence_team.Set_pitcher_stat(i, Save_pitcher_index);
 	}
 
-	now_pitcher_hp -= pitching_value;
+	if (Ishome) now_pitcher_away_hp -= pitching_value;
+	else now_pitcher_home_hp -= pitching_value;
 
-	//test(attack_team, defence_team, now_pitcher_hp);
+	//if (Ishome) test(attack_team, defence_team, now_pitcher_away_hp);
+	//else test(attack_team, defence_team, now_pitcher_home_hp);
 
 	return out; // 아웃 여부
 }
@@ -1427,7 +1440,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 		home_team.Update_hitter_condition(); home_team.Update_pitcher_condition();
 		away_team.Update_hitter_condition(); away_team.Update_pitcher_condition();
 
-		battle(away_team, home_team, Option, Scoreboard, inning, true);
+		battle(away_team, home_team, Option, Scoreboard, inning, true, 0);
 
 		for (int i = 0; i < 9; i++)
 		{
@@ -1438,7 +1451,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 			while (out != 3)
 			{
-				if (battle(away_team, home_team, Option, Scoreboard, inning, false))
+				if (battle(away_team, home_team, Option, Scoreboard, inning, false, false))
 					out++;
 
 				initialize = false;
@@ -1451,7 +1464,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 			while (out != 3)
 			{
-				if (battle(home_team, away_team, Option, Scoreboard, inning, false))
+				if (battle(home_team, away_team, Option, Scoreboard, inning, false, true))
 					out++;
 			}
 
