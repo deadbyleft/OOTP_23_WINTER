@@ -77,15 +77,15 @@ int All_pitcher_stat[300][10] = {
 {2, 3, 80, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 90, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 50, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 30, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 30, 60, 10, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 10, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 50, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -284,7 +284,7 @@ public:
 					Set_Base_spd(3, base_2_spd);
 
 					if (Get_Isfull_3())
-						RBI += Set_now_scoreboard(1);
+						Set_now_scoreboard(1);
 				}
 			}
 
@@ -459,6 +459,26 @@ public:
 	void Set_now_hitter(int value) { now_hitter = value; }
 	void Set_hitter_stat(int col, int result[]) { hitter_stat[now_hitter][col] = result[col]; }
 
+	int Change_now_pitcher()
+	{
+		int rand_pitcher = rand() % 7 + 6;
+
+		used_pitcher.push_back(now_pitcher);
+
+		for (int i = 0; i < 100; i++)
+		{
+			if (!Isused_pitcher(rand_pitcher))
+			{
+				now_pitcher = rand_pitcher;
+				return pitcher_stat[now_pitcher][4];
+			}
+
+			rand_pitcher = rand() % 7 + 6;
+		}
+
+		return 100;
+	}
+
 	void Set_pitcher_stat(int col, int result[])
 	{
 		pitcher_stat[now_pitcher][col] = result[col];
@@ -485,11 +505,6 @@ public:
 			else draw++;
 		}
 
-	}
-
-	void Set_used_pitcher(int value)
-	{
-		used_pitcher.push_back(value);
 	}
 
 	bool Isused_pitcher(int value)
@@ -801,6 +816,10 @@ public:
 		// 타점 도루 도루실패 실책 (4개)
 	}
 
+	void Show_pitcher_name(int value)
+	{
+		cout << pitcher[value].first;
+	}
 
 	void Show_pitcher_position(int row)
 	{
@@ -924,7 +943,7 @@ public:
 	}
 
 
-	void Update_team_result(int RBI)
+	void Update_hitter_RBI(int RBI)
 	{
 		hitter_record[now_hitter][15] += RBI;
 	}
@@ -1094,7 +1113,7 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 	if (hit)
 	{
 		if (result > 30) return 40;
-		if (result > 10) return 20;
+		if (get_hitter_rand_stat(0, 4, Save_hitter_index) - get_pitcher_rand_stat(10, 3, Save_pitcher_index) >= 10) return 20;
 		return 10;
 	}
 
@@ -1128,10 +1147,15 @@ void show_result()
 
 void update_result(int value, bool update_value, option Option, team& attack_team, team& defence_team, scoreboard& Scoreboard)
 {
+	int RBI = Scoreboard.Update_base(value, attack_team.Get_now_hitter(), 5);
+
 	if (update_value)
-		attack_team.Update_team_result(Scoreboard.Update_base(value, attack_team.Get_now_hitter(), 5));
-	else
-		Scoreboard.Update_base(value, attack_team.Get_now_hitter(), 5);
+	{
+		attack_team.Update_hitter_RBI(RBI);
+		//defence_team.Update_pitcher_ERA(RBI);
+	}
+		
+
 
 	//if (Option.Get_show_result())
 	show_result();
@@ -1186,19 +1210,14 @@ int update_game_record(int value, bool update_value, int& now_pitcher_hp, option
 	return out;
 }
 
-int change_pitcher()
+void test(team& attack_team, team& defence_team)
 {
-	return 1;
+	defence_team.Show_pitcher_name(defence_team.Get_now_pitcher());
+	cout << '\n';
+	Sleep(1000);
 }
 
-void initialize_battle(int& now_hitter_home, int& now_hitter_away, int& now_pitcher_hp)
-{
-	now_hitter_home = 0;
-	now_hitter_away = 0;
-	now_pitcher_hp = 999;
-}
-
-int battle(team& attack_team, team& defence_team, option Option, scoreboard& Scoreboard, bool inning, bool initialize)
+int battle(team& attack_team, team& defence_team, option Option, scoreboard& Scoreboard, bool inning, bool Isinitialize)
 {
 	int Save_hitter_index[10] = { 0, };
 	int Save_pitcher_index[10] = { 0, };
@@ -1213,20 +1232,16 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 	static int now_hitter_away = 0;
 	static int now_pitcher_hp = 0;
 
-	//if (option.Get_Onrecording())
-	//{
-	//	now_hitter_home = 0;
-	//	now_hitter_away = 0;
-	//}
-
-	if (initialize)
+	if (Isinitialize)
 	{
-		initialize_battle(now_hitter_home, now_hitter_away, now_pitcher_hp);
+		now_hitter_home = 0;
+		now_hitter_away = 0;
+		now_pitcher_hp = defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), 4) * 2;
 		return 0;
 	}
 
-	if (now_pitcher_hp == 999 || now_pitcher_hp <= 0)
-		change_pitcher();
+	if (now_pitcher_hp <= 0)		
+		now_pitcher_hp = defence_team.Change_now_pitcher();		
 
 	if (Scoreboard.Get_Ishome())
 	{
@@ -1295,6 +1310,9 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 
 	now_pitcher_hp -= pitching_value;
 
+	test(attack_team, defence_team);
+	cout << "투수 체력 : " << now_pitcher_hp << '\n' << '\n';
+
 	return out; // 아웃 여부
 }
 
@@ -1325,6 +1343,8 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 			Scoreboard.Set_now_inning(inning);
 
+			cout << "초" << '\n';
+
 			while (out != 3)
 			{
 				if (battle(away_team, home_team, Option, Scoreboard, inning, false))
@@ -1337,6 +1357,8 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 			Scoreboard.Initialize_base();
 			Scoreboard.Set_Ishome(true);
+
+			cout << "말" << '\n';
 
 			while (out != 3)
 			{
