@@ -58,6 +58,13 @@ int All_hitter_stat[300][10] = {
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 0,
 };
 
@@ -98,6 +105,14 @@ int All_pitcher_stat[300][10] = {
 {2, 3, 50, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 30, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -552,20 +567,20 @@ public:
 
 		Initialize_member(Team_sigvalue, All_hitter_name, All_pitcher_name);
 
-		for (int i = team_sigvalue * 30; i < team_sigvalue * 30 + hitter.size(); i++)
+		for (int i = 0; i < hitter.size(); i++)
 		{
-			hitter[i].first = All_hitter_name[i].first;
+			hitter[i].first = All_hitter_name[i + team_sigvalue * 30].first;
 			for (int j = 0; j < 10; j++)
-				hitter_stat[i][j] = All_hitter_stat[i][j];
+				hitter_stat[i][j] = All_hitter_stat[i + team_sigvalue * 30][j];
 
 			hitter_stat[i][7] = (hitter_stat[i][2] + hitter_stat[i][3] + hitter_stat[i][4] + hitter_stat[i][5] + hitter_stat[i][6]) / 5;
 		}
 
-		for (int i = team_sigvalue * 30; i < team_sigvalue * 30 + pitcher.size(); i++)
+		for (int i = 0; i < pitcher.size(); i++)
 		{
-			pitcher[i].first = All_pitcher_name[i].first;
+			pitcher[i].first = All_pitcher_name[i + team_sigvalue * 30].first;
 			for (int j = 0; j < 10; j++)
-				pitcher_stat[i][j] = All_pitcher_stat[i][j];
+				pitcher_stat[i][j] = All_pitcher_stat[i + team_sigvalue * 30][j];
 		}
 
 		Update_hitter_condition();
@@ -824,7 +839,7 @@ public:
 	void Show_pitcher_position(int row)
 	{
 
-		switch (row % 14 + 1)
+		switch (row % 30 + 1)
 		{
 		case 1: case 2: case 3: case 4: case 5:
 			if (row % 30 < 5) cout << " " << row + 1 << " 선발 ";
@@ -1310,9 +1325,6 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 
 	now_pitcher_hp -= pitching_value;
 
-	//test(attack_team, defence_team);
-	//cout << "투수 체력 : " << now_pitcher_hp << '\n' << '\n';
-
 	return out; // 아웃 여부
 }
 
@@ -1343,8 +1355,6 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 			Scoreboard.Set_now_inning(inning);
 
-			//cout << "초" << '\n';
-
 			while (out != 3)
 			{
 				if (battle(away_team, home_team, Option, Scoreboard, inning, false))
@@ -1357,8 +1367,6 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 			Scoreboard.Initialize_base();
 			Scoreboard.Set_Ishome(true);
-
-			//cout << "말" << '\n';
 
 			while (out != 3)
 			{
@@ -1582,23 +1590,23 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 	All_hitter_name[15].first = "드라군";
 	All_hitter_name[16].first = "메운디";
 
-	All_hitter_name[30].first = "김지찬";
-	All_hitter_name[31].first = "김성윤";
-	All_hitter_name[32].first = "구자욱";
-	All_hitter_name[33].first = "피렐라";
-	All_hitter_name[34].first = "강민호";
-	All_hitter_name[35].first = "오재일";
-	All_hitter_name[36].first = "류지혁";
-	All_hitter_name[37].first = "김현준";
-	All_hitter_name[38].first = "이재현";
-	All_hitter_name[39].first = "엄재우";
-	All_hitter_name[40].first = "이재찬";
-	All_hitter_name[41].first = "박병준";
-	All_hitter_name[42].first = "이승형";
-	All_hitter_name[43].first = "고스트";
-	All_hitter_name[44].first = "히드라";
-	All_hitter_name[45].first = "드라군";
-	All_hitter_name[46].first = "메운디";
+	All_hitter_name[30].first = "김지찬2";
+	All_hitter_name[31].first = "김성윤2";
+	All_hitter_name[32].first = "구자욱2";
+	All_hitter_name[33].first = "피렐라2";
+	All_hitter_name[34].first = "강민호2";
+	All_hitter_name[35].first = "오재일2";
+	All_hitter_name[36].first = "류지혁2";
+	All_hitter_name[37].first = "김현준2";
+	All_hitter_name[38].first = "이재현2";
+	All_hitter_name[39].first = "엄재우2";
+	All_hitter_name[40].first = "이재찬2";
+	All_hitter_name[41].first = "박병준2";
+	All_hitter_name[42].first = "이승형2";
+	All_hitter_name[43].first = "고스트2";
+	All_hitter_name[44].first = "히드라2";
+	All_hitter_name[45].first = "드라군2";
+	All_hitter_name[46].first = "메운디2";
 
 	All_pitcher_name[0].first = "뷰캐넌";
 	All_pitcher_name[1].first = "원태인";
@@ -1614,19 +1622,19 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 	All_pitcher_name[11].first = "황동재";
 	All_pitcher_name[12].first = "오승환";
 
-	All_pitcher_name[30].first = "뷰캐넌";
-	All_pitcher_name[31].first = "원태인";
-	All_pitcher_name[32].first = "수아레";
-	All_pitcher_name[33].first = "백정현";
-	All_pitcher_name[34].first = "최채흥";
-	All_pitcher_name[35].first = "이승현";
-	All_pitcher_name[36].first = "우규민";
-	All_pitcher_name[37].first = "최충연";
-	All_pitcher_name[38].first = "양창섭";
-	All_pitcher_name[39].first = "김대우";
-	All_pitcher_name[40].first = "장필준";
-	All_pitcher_name[41].first = "황동재";
-	All_pitcher_name[42].first = "오승환";
+	All_pitcher_name[30].first = "뷰캐넌2";
+	All_pitcher_name[31].first = "원태인2";
+	All_pitcher_name[32].first = "수아레2";
+	All_pitcher_name[33].first = "백정현2";
+	All_pitcher_name[34].first = "최채흥2";
+	All_pitcher_name[35].first = "이승현2";
+	All_pitcher_name[36].first = "우규민2";
+	All_pitcher_name[37].first = "최충연2";
+	All_pitcher_name[38].first = "양창섭2";
+	All_pitcher_name[39].first = "김대우2";
+	All_pitcher_name[40].first = "장필준2";
+	All_pitcher_name[41].first = "황동재2";
+	All_pitcher_name[42].first = "오승환2";
 
 
 
@@ -1654,7 +1662,7 @@ void game_setting()
 	Initialize_member_name(All_hitter_name, All_pitcher_name);
 
 	Samsung.Initialize_teamset(0, All_hitter_name, All_pitcher_name);
-	Lotte.Initialize_teamset(0, All_hitter_name, All_pitcher_name);
+	Lotte.Initialize_teamset(1, All_hitter_name, All_pitcher_name);
 
 
 	while (1)
