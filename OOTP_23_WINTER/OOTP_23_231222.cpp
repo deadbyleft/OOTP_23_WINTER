@@ -1213,93 +1213,89 @@ int battle(team& attack_team, team& defence_team, option Option, scoreboard& Sco
 	static int now_hitter_away = 0;
 	static int now_pitcher_hp = 0;
 
-	<<<<<<< HEAD
-		//if (option.Get_Onrecording())
-		//{
-		//	now_hitter_home = 0;
-		//	now_hitter_away = 0;
-		//}
+	//if (option.Get_Onrecording())
+	//{
+	//	now_hitter_home = 0;
+	//	now_hitter_away = 0;
+	//}
 
-		if (initialize)
-			====== =
-			if (Option.Get_Onrecording())
-				>>>>>> > 4552fc7c60d4dff8e16e0fcecc317e02f7845b69
-			{
-				initialize_battle(now_hitter_home, now_hitter_away, now_pitcher_hp);
-				return 0;
-			}
+	if (initialize)
+	{
+		initialize_battle(now_hitter_home, now_hitter_away, now_pitcher_hp);
+		return 0;
+	}
 
-				if (now_pitcher_hp == 999 || now_pitcher_hp <= 0)
-					change_pitcher();
+	if (now_pitcher_hp == 999 || now_pitcher_hp <= 0)
+		change_pitcher();
 
-			if (Scoreboard.Get_Ishome())
-			{
-				attack_team.Set_now_hitter(now_hitter_home % 9);
-				now_hitter_home++;
-			}
+	if (Scoreboard.Get_Ishome())
+	{
+		attack_team.Set_now_hitter(now_hitter_home % 9);
+		now_hitter_home++;
+	}
 
-			else
-			{
-				attack_team.Set_now_hitter(now_hitter_away % 9);
-				now_hitter_away++;
-			}
+	else
+	{
+		attack_team.Set_now_hitter(now_hitter_away % 9);
+		now_hitter_away++;
+	}
 
 
 
-			for (int i = 0; i < 10; i++)
-			{
-				Save_hitter_index[i] = attack_team.Get_hitter_stat(attack_team.Get_now_hitter(), i);
-				Save_pitcher_index[i] = defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), i);
-			}
+	for (int i = 0; i < 10; i++)
+	{
+		Save_hitter_index[i] = attack_team.Get_hitter_stat(attack_team.Get_now_hitter(), i);
+		Save_pitcher_index[i] = defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), i);
+	}
 
-			while (1)
-			{
-				pitching_value++;
+	while (1)
+	{
+		pitching_value++;
 
-				if (get_hitter_rand_stat(0, 2, Save_hitter_index) > get_pitcher_rand_stat(22, 2, Save_pitcher_index)) // 볼
-					ball++;
+		if (get_hitter_rand_stat(0, 2, Save_hitter_index) > get_pitcher_rand_stat(22, 2, Save_pitcher_index)) // 볼
+			ball++;
 
-				else if (get_hitter_rand_stat(10, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_pitcher_index)) // 파울
-				{
-					if (strike < 2)
-						strike++;
-				}
+		else if (get_hitter_rand_stat(10, 3, Save_hitter_index) < get_pitcher_rand_stat(0, 3, Save_pitcher_index)) // 파울
+		{
+			if (strike < 2)
+				strike++;
+		}
 
-				else if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(14, 2, Save_pitcher_index)) // 스트라이크
-					strike++;
+		else if (get_hitter_rand_stat(0, 2, Save_hitter_index) < get_pitcher_rand_stat(14, 2, Save_pitcher_index)) // 스트라이크
+			strike++;
 
-				else // 타격
-				{
-					out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), true, now_pitcher_hp,
-						Option, attack_team, defence_team, Scoreboard);
-					break;
-				}
+		else // 타격
+		{
+			out = update_game_record(battle_hit_result(Save_hitter_index, Save_pitcher_index), true, now_pitcher_hp,
+				Option, attack_team, defence_team, Scoreboard);
+			break;
+		}
 
-				if (strike == 3)
-				{
-					out = update_game_record(1, true, now_pitcher_hp, Option, attack_team, defence_team, Scoreboard);
+		if (strike == 3)
+		{
+			out = update_game_record(1, true, now_pitcher_hp, Option, attack_team, defence_team, Scoreboard);
 
-					// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
-					// 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
-					break;
-				}
+			// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
+			// 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
+			break;
+		}
 
-				if (ball == 4)
-				{
-					out = update_game_record(2, true, now_pitcher_hp, Option, attack_team, defence_team, Scoreboard);
-					break;
-				}
-			}
+		if (ball == 4)
+		{
+			out = update_game_record(2, true, now_pitcher_hp, Option, attack_team, defence_team, Scoreboard);
+			break;
+		}
+	}
 
-			for (int i = 0; i < 10; i++)
-			{
-				attack_team.Set_hitter_stat(i, Save_hitter_index);
-				defence_team.Set_pitcher_stat(i, Save_pitcher_index);
-			}
+	for (int i = 0; i < 10; i++)
+	{
+		attack_team.Set_hitter_stat(i, Save_hitter_index);
+		defence_team.Set_pitcher_stat(i, Save_pitcher_index);
+	}
 
-			now_pitcher_hp -= pitching_value;
+	now_pitcher_hp -= pitching_value;
 
-			return out; // 아웃 여부
+	return out; // 아웃 여부
 }
 
 void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option Option) // 홈팀 경기인가 아닌가
