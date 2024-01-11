@@ -13,7 +13,7 @@ using namespace std;
 
 
 void Set_FontColor(int value);
-
+void cur(short x, short y);
 
 // 포지션 컨디션 선구안 정확도 파워 스피드 수비 오버롤
 
@@ -425,6 +425,7 @@ private:
 	vector <pair<string, bool>> pitcher;
 
 	string team_stadium = "야구장";
+	string team_name = "팀 이름";
 
 	bool use_condition = true;
 	bool data_save = true;
@@ -471,7 +472,7 @@ public:
 
 	void team_result_test()
 	{
-		cout << win << "승 " << draw << "무 " << lose << "패";
+		cout << left << setw(3) << win << "승 " << setw(3) << draw << "무 " << setw(3) << lose << "패";
 	}
 
 	void Set_now_hitter(int value) { now_hitter = value; }
@@ -567,7 +568,6 @@ public:
 
 	void Initialize_teamset(int Team_sigvalue, vector <pair<string, bool>>& All_hitter_name, vector <pair<string, bool>>& All_pitcher_name)
 	{
-
 		Initialize_member(Team_sigvalue, All_hitter_name, All_pitcher_name);
 
 		for (int i = 0; i < hitter.size(); i++)
@@ -624,6 +624,25 @@ public:
 		case 9:
 			Set_FontColor(10); cout << " 우익수 ";  Set_FontColor(15); break;
 		}
+	}
+
+	void show_lobby_record()
+	{
+		int row = 130, col = 20;
+
+		cur(row, col);
+
+		switch (team_sigvalue)
+		{
+		case 0: cout << " [ 삼성 라이온즈 ]"; break;
+		case 1: cout << " [ 롯데 자이언츠 ]"; break;
+		}
+
+		col += 2; cur(row, col);
+
+		team_result_test();
+
+
 	}
 
 	void Update_hitter_condition()
@@ -715,7 +734,7 @@ public:
 				cout << "\n\n";
 			}
 
-			team_result_test();
+			
 
 			return;
 		}
@@ -975,17 +994,20 @@ private:
 	bool music = true;
 	bool condition = true;
 	bool auto_play = true;
+	int my_team = 0;
 
 public:
 	bool Get_Onauto_play() { return auto_play; }
 	bool Get_Onrecording() { return recording; }
 	bool Get_Oncondition() { return condition; }
 	bool Get_Onmusic() { return music; }
+	int Get_my_team() { return my_team; }
 
 	bool Set_Onauto_play(bool value) { auto_play = value; }
 	bool Set_Onrecording(bool value) { recording = value; }
 	bool Set_Oncondition(bool value) { condition = value; }
 	bool Set_Onmusic(bool value) { music = value; }
+	void Set_my_team(int value) { my_team = value; }
 };
 
 void cur(short x, short y) {
@@ -1473,13 +1495,88 @@ void show_team_manage(int value, team& selected_team)
 
 }
 
-int show_mainmenu()
+void pixel_art(int my_team)
+{
+	int col = 1, row = 70;
+
+	int col2 = 5, row2 = 120;
+
+	col = 1; cur(row, col);
+
+	if (my_team == 0)
+	{
+		cur(row, col);
+
+
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+
+		cout << "                             .....                                    "; col++; cur(row, col);
+		cout << "                          ,~~-,,,-~-                                  "; col++; cur(row, col);
+		cout << "                        ,---,--~--,--,                                "; col++; cur(row, col);
+		cout << "                       ~,-~----~----,-,                               "; col++; cur(row, col);
+		cout << "                     .~,-----,--,------,                              "; col++; cur(row, col);
+		cout << "                     -,-----.~ .~,-----~                              "; col++; cur(row, col);
+		cout << "                    ,,--------  ~---~,,~                              "; col++; cur(row, col);
+		cout << "                    ~-------~-  ~---,--.                              "; col++; cur(row, col);
+		cout << "                   .~,--------  ~,-~,                                 "; col++; cur(row, col);
+		cout << "                   .~-------.-   -.                                   "; col++; cur(row, col);
+		cout << "                   .---------~                    .                   "; col++; cur(row, col);
+		cout << "                   .~--------,-                 ,-~                   "; col++; cur(row, col);
+		cout << "                    ~,---------,              ,-- -                   "; col++; cur(row, col);
+		cout << "                    ~-----------.          .-~,--,,                   "; col++; cur(row, col);
+		cout << "                     ----------,~.       .---,---~.                   "; col++; cur(row, col);
+		cout << "                     -,--------~ ~     .~-.------~                    "; col++; cur(row, col);
+		cout << "                     .~,-----------  ,-,----------                    "; col++; cur(row, col);
+		cout << "                      .----------,--~-,--~-----~,.                    "; col++; cur(row, col);
+		cout << "                       --~---------,--,-.--------                     "; col++; cur(row, col);
+		cout << "                        -,----------,--~,------.-                     "; col++; cur(row, col);
+		cout << "                         ~,--------.-  ~------~,-                     "; col++; cur(row, col);
+		cout << "                         ----------.- .~--------.                     "; col++; cur(row, col);
+		cout << "                       -~-.,--------~ ,--------~                      "; col++; cur(row, col);
+		cout << "                    ,--,--,~--------~ ,.-------~                      "; col++; cur(row, col);
+		cout << "                 .---,--,--~-------.- ~,------.,                      "; col++; cur(row, col);
+		cout << "               -~,,---,~-. ..------.- ---------.                      "; col++; cur(row, col);
+		cout << "               ~,------.   ..-------,,,------,-                       "; col++; cur(row, col);
+		cout << "               ~----~.     ,,------~ ~-------,-                       "; col++; cur(row, col);
+		cout << "               ,,~--.-     ~-----,-. ~,-------,                       "; col++; cur(row, col);
+		cout << "                -,-----. .--------- .~--------                        "; col++; cur(row, col);
+		cout << "                ,-----,---,----,--  ..~------~                        "; col++; cur(row, col);
+		cout << "                 --,----------,-,   -.------.,        ..              "; col++; cur(row, col);
+		cout << "                  ,~,,-~~~-,,~~.    ~------~,.       .~~~             "; col++; cur(row, col);
+		cout << "                    ,-------,.      -------,~.      --,,-             "; col++; cur(row, col);
+		cout << "                                   ---------~   .,~~,-~,.             "; col++; cur(row, col);
+		cout << "                                   -,-------~---,,------              "; col++; cur(row, col);
+		cout << "                                   ~,------,-,,-~-----.-              "; col++; cur(row, col);
+		cout << "                                  ,,~--------------~-,-,              "; col++; cur(row, col);
+		cout << "                                 -------------~--------               "; col++; cur(row, col);
+		cout << "                                -,---------~-,.-~~-.                  "; col++; cur(row, col);
+		cout << "                                ~-----~-,,----,.                      "; col++; cur(row, col);
+		cout << "                                ~,----,,~~-.                          "; col++; cur(row, col);
+		cout << "                               ,-,,-~-,.                              "; col++; cur(row, col);
+		cout << "                               ,---,                                  "; col++; cur(row, col);
+		cout << "                               ,                                      "; col++; cur(row, col);
+
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+	}
+
+}
+
+void show_lobby_inf(int value, team Samsung, team Lotte)
+{
+	switch (value)
+	{
+	case 0: Samsung.show_lobby_record(); break;
+	case 1: Lotte.show_lobby_record(); break;
+	}
+
+}
+
+int show_mainmenu(option Option, team Samsung, team Lotte)
 {
 	int row = 15, col = 8, col_gap = 4, col_initial = 0;
 
 	col_initial = col + col_gap;
 
-	system("cls");
 	cur(row, col);
 	cout << " [    메 뉴    ]"; col += col_gap; cur(row, col);
 	cout << " [ 1 ] 경기 시작"; col += col_gap; cur(row, col);
@@ -1488,8 +1585,20 @@ int show_mainmenu()
 	cout << " [ 4 ] 게임 설정"; col += col_gap; cur(row, col);
 	cout << " [ 5 ] 게임 종료"; col += col_gap; cur(row, col);
 
+
 	return sel(row + 25, col_initial, 4, 5);
 }
+
+int setting_mainmenu(option Option, team Samsung, team Lotte)
+{
+	system("cls");
+	pixel_art(Option.Get_my_team());
+	show_lobby_inf(Option.Get_my_team(), Samsung, Lotte);
+	return show_mainmenu(Option, Samsung, Lotte);
+
+}
+
+
 
 void change_hitter(team& selected_team)
 {
@@ -1643,6 +1752,8 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 
 }
 
+
+
 void game_setting()
 {
 	srand((unsigned)time(NULL));
@@ -1667,10 +1778,9 @@ void game_setting()
 	Samsung.Initialize_teamset(0, All_hitter_name, All_pitcher_name);
 	Lotte.Initialize_teamset(1, All_hitter_name, All_pitcher_name);
 
-
 	while (1)
-	{
-		menu_choice = show_mainmenu();
+	{		
+		menu_choice = setting_mainmenu(Option, Samsung, Lotte);
 		if (menu_choice == 1) game_select(show_game_select(), Samsung, Lotte, Scoreboard, Option);
 		else if (menu_choice == 2) control_team_manage(Samsung);
 		else if (menu_choice == 3) control_team_manage(Lotte);
