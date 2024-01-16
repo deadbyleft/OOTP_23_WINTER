@@ -1715,7 +1715,7 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 			return 6;
 		else
 		{
-			if (get_hitter_rand_stat(0, 4, Save_hitter_index) * 2 < rand() % 15 + 1 && Scoreboard.Get_Isfull_1() && (Scoreboard.Get_out_count() != 2))
+			if (get_hitter_rand_stat(0, 4, Save_hitter_index) * 2 < rand() % 23 + 1 && Scoreboard.Get_Isfull_1() && (Scoreboard.Get_out_count() != 2))
 				return 52;
 			else
 				return 5;
