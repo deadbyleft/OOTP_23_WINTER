@@ -2127,14 +2127,12 @@ void pixel_art(int my_team)
 	int col = 1, row = 70;
 
 	int col2 = 5, row2 = 120;
-
+	
 	col = 1; cur(row, col);
 
 	if (my_team == 0)
 	{
 		cur(row, col);
-
-
 		Set_FontColor(9);
 
 		cout << "                             .....                                    "; col++; cur(row, col);
@@ -2184,6 +2182,63 @@ void pixel_art(int my_team)
 		cout << "                               ,                                      "; col++; cur(row, col);
 
 		Set_FontColor(15);
+	}
+
+	else if (my_team == 1)
+	{
+		col = 70; row = 1;
+		cur(col, row);
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+
+		cout << "                            .........          "; row++; cur(col, row);
+		cout << "                       .,..          ..,..      "; row++; cur(col, row);
+		cout << "                   ...   ,~:;!****!!;~-.   ...  "; row++; cur(col, row);
+		cout << "                 ,.  .;$@@@@@@@@@@@@@@@@@=;, .  "; row++; cur(col, row);
+		cout << "              ... ,;$@@@$*;~-,.....,-~:!=#@@..  "; row++; cur(col, row);
+		cout << "             ,. -=@@@*~.                 .*@ .  "; row++; cur(col, row);
+		cout << "           ., -=@@=~                      =# .  "; row++; cur(col, row);
+		cout << "          ,. !@@*,                        #= .  "; row++; cur(col, row);
+		cout << "         , ,#@=,                          @* .  "; row++; cur(col, row);
+		cout << "        . ~@@:                           .@; .  "; row++; cur(col, row);
+		cout << "       , :@#.                            ,@: .  "; row++; cur(col, row);
+		cout << "      , :@$.                     ,,-~~~-,;@-.  "; row++; cur(col, row);
+		cout << "     , -@#                  .:*#@@@@@@@@@@@-.   "; row++; cur(col, row);
+		cout << "     ..#@,               -!#@@#$*!;:~~~:;;*..   "; row++; cur(col, row);
+		cout << "    . *@:              -$@@$:,.             ,   "; row++; cur(col, row);
+		cout << "   ..,@=             .*@#!.  ......     ...,.   "; row++; cur(col, row);
+		cout << "   , $@,            ,$@!. ...         .......   "; row++; cur(col, row);
+		cout << "  . -@*            .#@~ .,      ......   .. ,   "; row++; cur(col, row);
+		cout << "  . *@,           .#@- ,......     .-:;*$#* .   "; row++; cur(col, row);
+		cout << "  . @$            *@~ , .    .-;*#@@@@@@#@!     "; row++; cur(col, row);
+		cout << "   ~@~           -@! ,  . *$@@@@#$*!:-, ,@:     "; row++; cur(col, row);
+		cout << " . =@.           ## .   . @#!:-..       ~@-.    "; row++; cur(col, row);
+		cout << " , @=           -@; .   . @!            :@..    "; row++; cur(col, row);
+		cout << " .,@!           !@,.    ..@!            !@ .    "; row++; cur(col, row);
+		cout << " .~@~           $# ,    .,@:.,,         =# .    "; row++; cur(col, row);
+		cout << "  :@-          .#= .    .~@##@@,        $$ .    "; row++; cur(col, row);
+		cout << ". ;@,          .#! .     ~$=*$@         @* .    "; row++; cur(col, row);
+		cout << ". !@.          ,@! .   ..    *#         @! .    "; row++; cur(col, row);
+		cout << ". ;@,          .#* .    ,,.. $$        ,@:      "; row++; cur(col, row);
+		cout << "  :@-           $$ ,       . @!        -@~ .    "; row++; cur(col, row);
+		cout << " .~@~           *@,.       ..@:        :@-.     "; row++; cur(col, row);
+		cout << " .,@;           -@! ,       -@-        ;@,.     "; row++; cur(col, row);
+		cout << " , @=            *@: ..   . :@,        *#..     "; row++; cur(col, row);
+		cout << " . *@.            =@;. ...  *@.        =$ ,     "; row++; cur(col, row);
+		cout << "  ..@!            .=@#;~,-~!@$         $= .     "; row++; cur(col, row);
+		cout << "  . *@.             ~#@@@@@@#~        .#* .     "; row++; cur(col, row);
+		cout << "  ..,@=               -~::~,          ,@!       "; row++; cur(col, row);
+		cout << "   , !@;                              -@:       "; row++; cur(col, row);
+		cout << "    , =@:                             !@~       "; row++; cur(col, row);
+		cout << "    .. $@!                          -$@= .      "; row++; cur(col, row);
+		cout << "     .. *@$-                      -=@#: ..      "; row++; cur(col, row);
+		cout << "      .. :@@*,                  ~=@@!. ,        "; row++; cur(col, row);
+		cout << "        , .*@@$:.           .-!@@#!. .,         "; row++; cur(col, row);
+		cout << "         .. ,;#@@$*!:~~~:;*$@@@=:. ..           "; row++; cur(col, row);
+		cout << "           ,.  ,!#@@@@@@@@@#*~   ,,             "; row++; cur(col, row);
+		cout << "             ...   ,-~~~-,.  ....               "; row++; cur(col, row);
+		cout << "                 .,.......,..                   "; row++; cur(col, row);
+
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 	}
 
 }
