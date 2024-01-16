@@ -551,7 +551,7 @@ public:
 	void Set_now_pitcher(int value) { now_pitcher = value; }
 	void Set_hitter_stat(int col, int result[]) { hitter_stat[now_hitter][col] = result[col]; }
 	void Set_team_sigvalue(int value) { team_sigvalue = value; }
-	void Set_pitched_ball(int value) { pitched_ball += value; }
+	void Set_pitched_ball(int value) { if (value == 0) pitched_ball = 0; pitched_ball += value; }
 
 	int Change_now_pitcher()
 	{
@@ -563,8 +563,8 @@ public:
 		{
 			if (!Isused_pitcher(rand_pitcher))
 			{
-				now_pitcher = rand_pitcher;
 				Set_pitched_ball(0);
+				now_pitcher = rand_pitcher;				
 				return pitcher_stat[now_pitcher][4];
 			}
 
@@ -1145,6 +1145,7 @@ private:
 	bool condition = true;
 	bool auto_play = false;
 	int my_team = 0;
+	int sleep_time = 2;
 
 public:
 	bool Get_Onauto_play() { return auto_play; }
@@ -1152,12 +1153,14 @@ public:
 	bool Get_Oncondition() { return condition; }
 	bool Get_Onmusic() { return music; }
 	int Get_my_team() { return my_team; }
+	int Get_sleep_time() { return sleep_time; }
 
 	bool Set_Onauto_play(bool value) { auto_play = value; }
 	bool Set_Onrecording(bool value) { recording = value; }
 	bool Set_Oncondition(bool value) { condition = value; }
 	bool Set_Onmusic(bool value) { music = value; }
 	void Set_my_team(int value) { my_team = value; }
+	void Set_sleep_time(int value) { sleep_time = value; }
 };
 
 void cur(short x, short y) {
@@ -1356,12 +1359,12 @@ void show_hit_result(bool Initializing, bool Change_pitcher, bool Show_name, int
 	cur(60, line * 2 + 19);
 	switch (result) {	
 	case 1: cout << "  [ 삼진 ]"; 
-		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); cout << " [ 공수교대 ] "; } break;
+		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
 	case 2: cout << "  [ 볼넷 ]"; break;
 	case 5: cout << "  [ 땅볼 ]"; 
-		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); cout << " [ 공수교대 ] "; } break;
+		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
 	case 6: cout << "  [ 뜬공 ]"; 
-		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); cout << " [ 공수교대 ] "; } break;
+		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
 	case 10: cout << "  [ 안타 ]"; break;
 	case 20: cout << "  [ 2루타 ]"; break;
 	case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
@@ -1395,7 +1398,7 @@ void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team
 
 
 
-		cur(42, 8 + (away_team.Get_now_hitter()) * 2); cout << "  ";
+		cur(42, 8 + (away_team.Get_now_hitter()) * 2); cout << "  "; cur(42, 26); cout << "  ";
 		cur(42, 8 + (away_team.Get_now_hitter() + 1) * 2); cout << "◀";
 
 		cur(46, 14); cout << "                  □ = " << home_team.Get_pitched_ball();
@@ -1419,8 +1422,8 @@ void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team
 
 
 
-		cur(93, 8 + (home_team.Get_now_hitter()) * 2); cout << "  ";
-		cur(93, 8 + (home_team.Get_now_hitter() + 1) * 2); cout << "▶";
+		cur(93, 8 + (home_team.Get_now_hitter()) * 2); cout << "  "; cur(93, 26); cout << "  ";		
+		cur(93, 8 + (home_team.Get_now_hitter() + 1) * 2); cout << "▶"; 
 
 		cur(46, 14); cout << "                  □ = " << away_team.Get_pitched_ball();
 
