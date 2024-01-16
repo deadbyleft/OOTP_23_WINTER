@@ -276,7 +276,7 @@ public:
 		cur(row + 2, col); if (base_2) cout << "■"; else cout << "□";
 		cur(row, col + 1); if (base_3) cout << "■"; else cout << "□";
 		cur(row + 2, col + 2); cout << "□";
-		
+
 	}
 
 	void Show_scoreboard(bool Ishome, int inning) // 몇 회인지 업데이트
@@ -357,7 +357,7 @@ public:
 				Set_now_scoreboard(1);
 				break;
 			}
-				
+
 			if (Get_Isfull_1()) // 1루가 차있다면
 			{
 				if (Get_Isfull_2()) // 2루가 차있다면
@@ -536,7 +536,7 @@ public:
 	int Get_pitcher_stat(int row, int col) { return pitcher_stat[row][col]; }
 	int Get_team_sigvalue() { return team_sigvalue; }
 	int Get_pitched_ball() { return pitched_ball; }
-	
+
 
 	double Get_now_hitter_avg(int value = 10) {
 		if (value != 10) value = now_hitter;
@@ -1129,7 +1129,7 @@ private:
 	bool recording = false;
 	bool music = true;
 	bool condition = true;
-	bool auto_play = false;
+	bool auto_play = true;
 	int my_team = 0;
 	int sleep_time = 2;
 
@@ -1290,7 +1290,7 @@ void show_scoreboard_art(scoreboard& Scoreboard, team& home_team, team& away_tea
 
 	cur(33, 3);
 
-	
+
 
 	for (int i = 0; i < 12; i++)
 	{
@@ -1348,24 +1348,29 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 		return 0;
 	}
 
-	cur(60, line * 2 + 19);
-	switch (result) {	
-	case 1: cout << "  [ 삼진 ]"; 
-		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
-	case 2: cout << "  [ 볼넷 ]"; break;
-	case 5: cout << "  [ 땅볼 ]"; 
-		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
-	case 6: cout << "  [ 뜬공 ]"; 
-		if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
-	case 10: cout << "  [ 안타 ]"; break;
-	case 20: cout << "  [ 2루타 ]"; break;
-	case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
-	
+	if (!Option.Get_Onauto_play())
+	{
+		cur(60, line * 2 + 19);
+		switch (result) {
+		case 1: cout << "  [ 삼진 ]";
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
+		case 2: cout << "  [ 볼넷 ]"; break;
+		case 5: cout << "  [ 땅볼 ]";
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
+		case 6: cout << "  [ 뜬공 ]";
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
+		case 10: cout << "  [ 안타 ]"; break;
+		case 20: cout << "  [ 2루타 ]"; break;
+		case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
+
+		}
+
+
+		Sleep(300);
+		line++;
+
+		system("cls");
 	}
-
-	Sleep(300);
-
-	line++;
 
 	return 0;
 }
@@ -1404,7 +1409,7 @@ void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team
 		cout << fixed;
 
 		cout << " 현재 투수 : [ "; home_team.Show_pitcher_name(home_team.Get_now_pitcher()); cout << " ] [ 평균자책점 : " << " 0.00 " << " ] " << '\n' << '\n';
-		
+
 
 	}
 
@@ -1417,8 +1422,8 @@ void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team
 
 
 
-		cur(93, 8 + (home_team.Get_now_hitter()) * 2); cout << "  "; cur(93, 26); cout << "  ";		
-		cur(93, 8 + (home_team.Get_now_hitter() + 1) * 2); cout << "▶"; 
+		cur(93, 8 + (home_team.Get_now_hitter()) * 2); cout << "  "; cur(93, 26); cout << "  ";
+		cur(93, 8 + (home_team.Get_now_hitter() + 1) * 2); cout << "▶";
 
 		cur(46, 14); cout << "                  □ = " << away_team.Get_pitched_ball();
 
@@ -1628,7 +1633,7 @@ int update_game_record(int value, bool update_value, int& now_pitcher_hp, option
 	update_result(value, true, Option, attack_team, defence_team, Scoreboard);
 	show_hit_result(false, false, 0, value, Scoreboard, attack_team, Option);
 
-	
+
 
 	return out;
 }
@@ -1678,7 +1683,7 @@ void battle(team& attack_team, team& defence_team, option Option, scoreboard& Sc
 	{
 		now_pitcher_home_hp = defence_team.Change_now_pitcher(Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, Option));
 	}
-		
+
 
 	if (Scoreboard.Get_Ishome())
 	{
@@ -1776,7 +1781,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 1)
+	while (game < 144)
 	{
 		initialize = true;
 
@@ -1797,7 +1802,6 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 			Scoreboard.Initialize_out_count();
 			Scoreboard.Set_Ishome(false);
 			show_hit_result(true, false, 0, 0, Scoreboard, home_team, Option);
-			system("cls");
 
 			Scoreboard.Set_now_inning(i);
 
@@ -1811,7 +1815,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 			Scoreboard.Initialize_out_count();
 			Scoreboard.Set_Ishome(true);
 			show_hit_result(true, false, 0, 0, Scoreboard, home_team, Option);
-			system("cls");
+			
 
 			if (i == 8 && (Scoreboard.Get_home_score() > Scoreboard.Get_away_score()))
 				break;
