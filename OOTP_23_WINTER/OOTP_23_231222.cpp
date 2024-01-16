@@ -78,7 +78,7 @@ int All_hitter_stat[300][10] = {
 
 
 int All_pitcher_stat[300][10] = {
-{1, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 90, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 80, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 70, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -558,6 +558,7 @@ public:
 	void Set_played_game(int value) { played_game += value; }
 	void Set_team_sigvalue(int value) { team_sigvalue = value; }
 	void Set_pitched_ball(int value) { if (value == 0) pitched_ball = 0; pitched_ball += value; }
+	void Set_dominated_hitter(int value) { dominated_hitter = value; }
 
 	void Set_game_result(bool Ishome, int away_score, int home_score)
 	{
@@ -943,16 +944,10 @@ public:
 		for (int i = 0; i < 20; i++)
 			Save_index[i] = hitter_record[hitter_1][i];
 
-
-
 		memcpy(hitter_record[hitter_1], hitter_record[hitter_2], sizeof(Save_index));
 		memcpy(hitter_record[hitter_2], Save_index, sizeof(Save_index));
+		
 
-		hitter[hitter_1].first = hitter[hitter_2].first;
-		hitter[hitter_1].second = hitter[hitter_2].second;
-
-		hitter[hitter_2].first = Save_hitter[0].first;
-		hitter[hitter_2].second = Save_hitter[0].second;
 	}
 
 	void Set_hitter_record(int row, int stat_1, int stat_2, int stat_3, int stat_4, int stat_5, int stat_6,
@@ -1038,46 +1033,130 @@ public:
 
 	void Show_pitcher_stat(int situation, bool show_name, bool show_direction, bool show_value)
 	{
-
-		for (int i = 0; i < pitcher.size(); i++)
-		{
-			for (int j = 0; j < 7; j++)
-			{
-				if (show_value && j == 0)
-				{
-					cout << " ["; Show_pitcher_position(i); cout << "] ";
-				}
-
-				if (show_name && j == 0) cout << right << setw(9) << pitcher[i].first << "      ";
-				if (show_direction && j == 0)
-					if (pitcher[i].second) cout << " 우투 ";
-					else cout << " 좌투 ";
-
-				else if (j == 1)
-				{
-					cout << "      ";
-					Show_pitcher_condition(i);
-					cout << "        ";
-				}
-
-				else cout << pitcher_stat[i][j] << "          ";
-
-			}
-
-			for (int j = 1; j < 6; j++)
-			{
-				if (j == 1) cout << pitcher_record[i][j] / 3 << "." << pitcher_record[i][j] % 3 << "          ";
-				else cout << pitcher_record[i][j] << "          ";
-			}
-
-
-			cout << "\n\n";
-		}
-
-		if (situation == 0) return;
-
 		if (situation == 1)
 		{
+			for (int i = 0; i < pitcher.size(); i++)
+			{
+				if (show_value)
+					cout << " ["; Show_pitcher_position(i); cout << "] ";
+
+				for (int j = 0; j < 7; j++)
+				{
+					
+
+
+					if (show_name && j == 0) cout << right << setw(9) << pitcher[i].first << "      ";
+					if (show_direction && j == 0)
+						if (pitcher[i].second) cout << " 우투 ";
+						else cout << " 좌투 ";
+
+					else if (j == 1)
+					{
+						cout << right << setw(12);
+						Show_pitcher_condition(i);
+
+						
+					}
+
+					
+					else
+					{
+						if (j == 2) cout << right << setw(10);
+						else cout << right << setw(12);
+
+						Set_stat_FontColor(pitcher_stat[i][j]);
+						cout << pitcher_stat[i][j];						
+						Set_FontColor(15);
+					}
+						
+
+					
+				}
+
+				cout.precision(2); cout << fixed;
+
+				cout << right << setw(11); cout << pitcher_record[i][1] / 3 << "." << pitcher_record[i][1] % 3;					
+				cout << right << setw(12); cout << (pitcher_record[i][4] / (double)pitcher_record[i][1]) * 27;
+
+				cout.precision(3); cout << fixed;
+
+				cout << "\n\n";
+			}
+		}
+
+		if (situation == 2)
+		{
+
+			for (int i = 0; i < pitcher.size(); i++)
+			{
+				if (show_value)
+					cout << " ["; Show_pitcher_position(i); cout << "] ";
+
+				if (show_name) cout << right << setw(9) << pitcher[i].first;
+
+				cout << fixed;
+				cout.precision(3);
+
+				cout << right << setw(10);
+
+				for (int j = 0; j < 11; j++)
+					cout << pitcher_record[i][j] << setw(12);
+
+				// 출장경기 타석 타수 안타 2루타 3루타 홈런 볼넷 삼진 타율 출루율 장타율 ops (13개)
+
+
+				cout << "\n\n";
+			}
+			return;
+			
+		}
+
+		if (situation == 3)
+		{
+
+			for (int i = 0; i < pitcher.size(); i++)
+			{
+				if (show_value)
+					cout << " ["; Show_pitcher_position(i); cout << "] ";
+
+				if (show_name) cout << right << setw(9) << pitcher[i].first;
+
+				cout << fixed;
+				cout.precision(2);
+
+				cout << right << setw(10);
+
+				for (int j = 0; j < 6; j++)
+				{
+					if (j < 2)
+						cout << pitcher_record[i][j] << setw(12);
+
+					if (j == 2)
+						cout << (pitcher_record[i][7] + pitcher_record[i][3]) / (double)pitcher_record[i][1] * 3 << setw(12);
+
+					if (j == 3)
+						cout << (pitcher_record[i][2] / (double)pitcher_record[i][1]) * 27 << setw(12);
+
+					if (j == 4)
+						cout << (pitcher_record[i][3] / (double)pitcher_record[i][1]) * 27 << setw(12);
+
+					if (j == 5)
+					{
+						cout << fixed;
+						cout.precision(3);
+						cout << (pitcher_record[i][7] / (double)pitcher_record[i][1]) << setw(12);
+					}
+						
+					
+				}
+					
+
+				// 출장경기 이닝 삼진 볼넷 실점 땅볼 뜬공 / 피안타 피2루타 피3루타 피홈런 그러하다
+
+				cout << "\n\n";
+			}
+			return;
+
 		}
 	}
 
@@ -1567,6 +1646,7 @@ int battle_hit_result(int Save_hitter_index[], int Save_pitcher_index[])
 void update_result(int value, bool update_value, option Option, team& attack_team, team& defence_team, scoreboard& Scoreboard)
 {
 	int RBI = Scoreboard.Update_base(value, attack_team.Get_now_hitter(), 5);
+	defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 0, 0, 0, RBI, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
 
 	if (update_value)
 		attack_team.Update_hitter_RBI(RBI);
@@ -1591,7 +1671,7 @@ int update_game_record(int value, bool update_value, int& now_pitcher_hp, option
 	int out = false;
 
 	// 출장경기 타석 타수 안타 2루타 3루타 홈런 / 볼넷 삼진 득점 타점 도루 도루실패 실책
-	// 출장경기 이닝 삼진 볼넷 실점 데드볼 / 피안타 피2루타 피3루타 피홈런 땅볼 뜬공
+	// 출장경기 이닝 삼진 볼넷 실점 땅볼 뜬공 / 피안타 피2루타 피3루타 피홈런 그러하다
 
 	// 0 파울 1 삼진 2 볼넷
 
@@ -1610,11 +1690,11 @@ int update_game_record(int value, bool update_value, int& now_pitcher_hp, option
 		now_pitcher_hp -= 3; break;
 	case 5:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
-		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 1, 0, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 1, 0);
+		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 1, 0, 0, 0, 1, 0, /**/  0, 0, 0, 0, 0, 0, 0);
 		out = true; break;
 	case 6:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
-		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 1, 0, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 1);
+		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 1, 0, 0, 0, 0, 1, /**/  0, 0, 0, 0, 0, 0, 0);
 		out = true; break;
 	case 10:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
@@ -1880,7 +1960,7 @@ void show_team_manage(int value, team& selected_team)
 	system("cls");
 
 	cur(1, 1);
-	cout << "  [ Esc : 나가기 ] [ [1], [2], [3] : 타자 정보 ] [ [4], [5] : 투수 정보 ] [ [6] : 선수 교체 ] [ [7] : 트레이드 ]  [ [8], [9] : 팀 정보 ]";
+	cout << "  [ Esc : 나가기 ] [ [1], [2], [3] : 타자 정보 ] [ [4], [5], [6] : 투수 정보 ] [ [7] : 선수 교체 ] [ [8] : 트레이드 ] [ [9], [0] : 팀 정보 ] ";
 	cur(9, 4);
 
 
@@ -1909,11 +1989,26 @@ void show_team_manage(int value, team& selected_team)
 
 	else if (value == 4)
 	{
-		cout << "     [ 이 름 ]  [ 투  타 ]  [ 컨디션 ]  [ 제  구 ]  [ 구  위 ]  [ 체  력 ]  [ 구  속 ]  [ 멘  탈 ]  [ 타  율 ]  [ 홈  런 ]  [ 도  루 ] " << '\n' << '\n';
+		cout << "     [ 이 름 ]  [ 투  타 ]  [ 컨디션 ]  [ 제  구 ]  [ 구  위 ]  [ 체  력 ]  [ 구  속 ]  [ 멘  탈 ]  [ 이  닝 ]  [ 평자책 ]  [ 승  리 ]  [ 패  배 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_pitcher_stat(1, true, true, true);
 	}
 
+	else if (value == 5)
+	{
+		cout << "     [ 이 름 ]  [ 출  장 ]  [ 이  닝 ]  [ 삼  진 ]  [ 볼  넷 ]  [ 실  점 ]  [ 땅  볼 ]  [ 뜬  공 ]  [ 피안타 ]  [ 2 루타 ]  [ 3 루타 ]  [ 피홈런 ]  " << '\n' << '\n';
+		cur(0, 6);
+		selected_team.Show_pitcher_stat(2, true, true, true);
+	}
+
+	else if (value == 6)
+	{
+		cout << "     [ 이 름 ]  [ 출  장 ]  [ 이  닝 ]  [  WHIP  ]  [ K / 9 ]  [ B / 9 ]  [ 피안타율 ]  [ 피안타율 (득점권) ]  [ 홀  드 ]  [ 세이브 ]  " << '\n' << '\n';
+		cur(0, 6);
+		selected_team.Show_pitcher_stat(3, true, true, true);
+	}
+
+	// 출장경기 이닝 삼진 볼넷 실점 땅볼 뜬공 / 피안타 피2루타 피3루타 피홈런 그러하다
 
 	// At_game At_plate At_bat hit_1 hit_2 hit_3 hr bb so avg obp slg ops 
 	// r rbi clu stl err
@@ -2044,6 +2139,12 @@ void change_hitter(team& selected_team)
 
 	int Save_index[10] = { 0, };
 
+	if (hitter_1 < 9 && hitter_2 < 9)
+	{
+		if (selected_team.Isdominated(hitter_1)) selected_team.Set_dominated_hitter(hitter_2);
+		else if (selected_team.Isdominated(hitter_2)) selected_team.Set_dominated_hitter(hitter_1);
+	}
+
 	selected_team.Change_hitter_stat(hitter_1, hitter_2);
 	selected_team.Change_hitter_record(hitter_1, hitter_2);
 
@@ -2081,24 +2182,24 @@ void control_team_manage(team& selected_team)
 	while (key != 27) {
 		key = _getch();
 
-		if (key != prev_key || key == 54 || key == 55)
+		if (key != prev_key || key == 55 || key == 56)
 
-			if (key >= 49 && key <= 57 && key != 54 && key != 55)
+			if (key >= 49 && key <= 57 && key != 55 && key != 56)
 				show_team_manage(key - 48, selected_team);
 
-			else if (key == 54 && prev_key >= 52 && prev_key <= 56)
+			else if (key == 55 && prev_key >= 52 && prev_key <= 56)
 			{
 				change_pitcher(selected_team);
 				show_team_manage(prev_key - 48, selected_team);
 			}
 
-			else if (key == 54 && prev_key >= 49 && prev_key <= 56)
+			else if (key == 55 && prev_key >= 49 && prev_key <= 56)
 			{
 				change_hitter(selected_team);
 				show_team_manage(prev_key - 48, selected_team);
 			}
 
-		if (key != 54)
+		if (key != 55)
 			prev_key = key;
 	}
 
