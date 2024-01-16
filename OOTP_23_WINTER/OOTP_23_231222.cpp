@@ -78,7 +78,7 @@ int All_hitter_stat[300][10] = {
 
 
 int All_pitcher_stat[300][10] = {
-{1, 3, 60, 60, 90, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 10, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 80, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 70, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -414,6 +414,7 @@ public:
 			break;
 		case 20:
 			Set_now_hit(1);
+
 			if (Get_Isfull_3())
 			{
 				Set_now_scoreboard(1);
@@ -444,6 +445,7 @@ public:
 			break;
 		case 40:
 			Set_now_hit(1);
+			Set_now_scoreboard(1); RBI++;
 			if (Get_Isfull_1()) { Set_now_scoreboard(1); RBI++; }
 			if (Get_Isfull_2()) { Set_now_scoreboard(1); RBI++; }
 			if (Get_Isfull_3()) { Set_now_scoreboard(1); RBI++; }
@@ -531,8 +533,10 @@ public:
 	int Get_now_hitter() { return now_hitter; }
 	int Get_now_pitcher() { return now_pitcher; }
 	int Get_hitter_stat(int row, int col) { return hitter_stat[row][col]; }
+	int Get_pitcher_stat(int row, int col) { return pitcher_stat[row][col]; }
 	int Get_team_sigvalue() { return team_sigvalue; }
 	int Get_pitched_ball() { return pitched_ball; }
+	
 
 	double Get_now_hitter_avg(int value = 10) {
 		if (value != 10) value = now_hitter;
@@ -550,39 +554,10 @@ public:
 	void Set_now_hitter(int value) { now_hitter = value; }
 	void Set_now_pitcher(int value) { now_pitcher = value; }
 	void Set_hitter_stat(int col, int result[]) { hitter_stat[now_hitter][col] = result[col]; }
+	void Set_pitcher_stat(int col, int result[]) { pitcher_stat[now_pitcher][col] = result[col]; }
+	void Set_played_game(int value) { played_game += value; }
 	void Set_team_sigvalue(int value) { team_sigvalue = value; }
 	void Set_pitched_ball(int value) { if (value == 0) pitched_ball = 0; pitched_ball += value; }
-
-	int Change_now_pitcher()
-	{
-		int rand_pitcher = rand() % 8 + 5;
-
-		used_pitcher.push_back(now_pitcher);
-
-		for (int i = 0; i < 100; i++)
-		{
-			if (!Isused_pitcher(rand_pitcher))
-			{
-				Set_pitched_ball(0);
-				now_pitcher = rand_pitcher;				
-				return pitcher_stat[now_pitcher][4];
-			}
-
-			rand_pitcher = rand() % 8 + 5;
-		}
-
-		return 100;
-	}
-
-	void Set_pitcher_stat(int col, int result[])
-	{
-		pitcher_stat[now_pitcher][col] = result[col];
-	}
-
-	void Set_played_game(int value)
-	{
-		played_game += value;
-	}
 
 	void Set_game_result(bool Ishome, int away_score, int home_score)
 	{
@@ -602,6 +577,10 @@ public:
 
 	}
 
+	int IsHomeTeam() { return played_game % 2; }
+	bool IsStarter(int row) { if (pitcher_stat[row][0] == 2) return false; return true; }
+	bool Isdominated(int value) { return (value == dominated_hitter); }
+
 	bool Isused_pitcher(int value)
 	{
 		for (int i = 0; i < used_pitcher.size(); i++)
@@ -609,27 +588,6 @@ public:
 				return true;
 
 		return false;
-	}
-
-	int Get_pitcher_stat(int row, int col)
-	{
-		return pitcher_stat[row][col];
-	}
-
-	int IsHomeTeam()
-	{
-		return played_game % 2;
-	}
-
-	bool IsStarter(int row)
-	{
-		if (pitcher_stat[row][0] == 2) return false;
-		return true;
-	}
-
-	bool Isdominated(int value)
-	{
-		return (value == dominated_hitter);
 	}
 
 	void Initialize_member(int signalvalue, vector <pair<string, bool>>& All_hitter_name, vector <pair<string, bool>>& All_pitcher_name)
@@ -681,6 +639,7 @@ public:
 
 	void Show_hitter_name(int value) { cout << hitter[value].first; return; }
 	void Show_pitcher_name(int value) { cout << pitcher[value].first; return; }
+
 	void Show_now_hitter_avg(int value = -1) {
 		cout.precision(3);
 		if (value == -1) value = now_hitter;
@@ -911,6 +870,33 @@ public:
 		}
 
 
+	}
+
+	int Change_now_pitcher(bool Isauto, int col)
+	{
+		int rand_pitcher = rand() % 8 + 5;
+
+		used_pitcher.push_back(now_pitcher);
+
+		for (int i = 0; i < 100; i++)
+		{
+			if (!Isused_pitcher(rand_pitcher))
+			{
+				Set_pitched_ball(0);
+				if (!Isauto)
+				{
+					cur(48, col);
+					cout << "  [ 투수 교체 ] "; Show_pitcher_name(now_pitcher);
+					cout << " -> "; Show_pitcher_name(rand_pitcher);
+				}
+				now_pitcher = rand_pitcher;
+				return pitcher_stat[now_pitcher][4];
+			}
+
+			rand_pitcher = rand() % 8 + 5;
+		}
+
+		return 100;
 	}
 
 	void Change_hitter_stat(int hitter_1, int hitter_2)
@@ -1319,7 +1305,7 @@ void show_scoreboard_art(scoreboard& Scoreboard, team& home_team, team& away_tea
 	{
 		Scoreboard.Show_scoreboard(1, i); cout << "   ";
 		if (i == 8) cur(73, 4);
-		if (i >= 9 && Scoreboard.Get_scoreboard(0, i) < 10) cout << " ";
+		if (i >= 9 && Scoreboard.Get_scoreboard(1, i) < 10) cout << " ";
 	}
 
 	cur(42, 8 + (away_team.Get_now_hitter() + 1) * 2 - 2); cout << "  ";
@@ -1328,19 +1314,25 @@ void show_scoreboard_art(scoreboard& Scoreboard, team& home_team, team& away_tea
 
 }
 
-void show_hit_result(bool Initializing, bool Change_pitcher, bool Show_name, int result, scoreboard& Scoreboard, team& attack_team, option& Option)
+int show_hit_result(bool Initializing, bool Show_name, int change_line, int result, scoreboard& Scoreboard, team& attack_team, option& Option)
 {
 	int a = rand() % 3 + 0;
 	int b = rand() % 4 + 0;
 
 	static int line = 0;
 
+	if (change_line != 0)
+	{
+		line++;
+		return line * 2 + 17;
+	}
+
 	if (Show_name)
 	{
 		cur(50, line * 2 + 19);
 		cout << attack_team.Get_now_hitter() + 1 << ". "; attack_team.Show_hitter_name(attack_team.Get_now_hitter());
 		Sleep(300);
-		return;
+		return 0;
 	}
 
 	if (line > 9)
@@ -1353,7 +1345,7 @@ void show_hit_result(bool Initializing, bool Change_pitcher, bool Show_name, int
 	if (Initializing)
 	{
 		line = 0;
-		return;
+		return 0;
 	}
 
 	cur(60, line * 2 + 19);
@@ -1368,11 +1360,14 @@ void show_hit_result(bool Initializing, bool Change_pitcher, bool Show_name, int
 	case 10: cout << "  [ 안타 ]"; break;
 	case 20: cout << "  [ 2루타 ]"; break;
 	case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
+	
 	}
 
 	Sleep(300);
 
 	line++;
+
+	return 0;
 }
 
 
@@ -1502,8 +1497,8 @@ void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team
 		cout << '\n' << '\n' << "  ";
 	}
 
-	if (Ishome) show_hit_result(false, false, true, 0, Scoreboard, away_team, Option);
-	else show_hit_result(false, false, true, 0, Scoreboard, home_team, Option);
+	if (Ishome) show_hit_result(false, true, 0, 0, Scoreboard, away_team, Option);
+	else show_hit_result(false, true, 0, 0, Scoreboard, home_team, Option);
 
 }
 
@@ -1631,7 +1626,7 @@ int update_game_record(int value, bool update_value, int& now_pitcher_hp, option
 	}
 
 	update_result(value, true, Option, attack_team, defence_team, Scoreboard);
-	show_hit_result(false, false, false, value, Scoreboard, attack_team, Option);
+	show_hit_result(false, false, 0, value, Scoreboard, attack_team, Option);
 
 	
 
@@ -1674,10 +1669,16 @@ void battle(team& attack_team, team& defence_team, option Option, scoreboard& Sc
 	}
 
 	if (now_pitcher_away_hp <= 0)
-		now_pitcher_away_hp = defence_team.Change_now_pitcher();
+	{
+		now_pitcher_away_hp = defence_team.Change_now_pitcher(Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, Option));
+	}
+
 
 	if (now_pitcher_home_hp <= 0)
-		now_pitcher_home_hp = defence_team.Change_now_pitcher();
+	{
+		now_pitcher_home_hp = defence_team.Change_now_pitcher(Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, Option));
+	}
+		
 
 	if (Scoreboard.Get_Ishome())
 	{
@@ -1770,16 +1771,17 @@ void battle(team& attack_team, team& defence_team, option Option, scoreboard& Sc
 void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option Option) // 홈팀 경기인가 아닌가
 {
 	int game = 0;
+	static int acc_game = 0;
 	bool initialize = true;
 
 	system("cls");
 
-	while (game < 144)
+	while (game < 1)
 	{
 		initialize = true;
 
-		home_team.Set_now_pitcher(game % 5);
-		away_team.Set_now_pitcher(game % 5);
+		home_team.Set_now_pitcher(acc_game % 5);
+		away_team.Set_now_pitcher(acc_game % 5);
 
 		home_team.Initialize_used_pitcher();
 		away_team.Initialize_used_pitcher();
@@ -1794,7 +1796,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 			Scoreboard.Initialize_base();
 			Scoreboard.Initialize_out_count();
 			Scoreboard.Set_Ishome(false);
-			show_hit_result(true, false, false, 0, Scoreboard, home_team, Option);
+			show_hit_result(true, false, 0, 0, Scoreboard, home_team, Option);
 			system("cls");
 
 			Scoreboard.Set_now_inning(i);
@@ -1808,21 +1810,29 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 			Scoreboard.Initialize_base();
 			Scoreboard.Initialize_out_count();
 			Scoreboard.Set_Ishome(true);
-			show_hit_result(true, false, false, 0, Scoreboard, home_team, Option);
+			show_hit_result(true, false, 0, 0, Scoreboard, home_team, Option);
 			system("cls");
+
+			if (i == 8 && (Scoreboard.Get_home_score() > Scoreboard.Get_away_score()))
+				break;
 
 			while (Scoreboard.Get_out_count() != 3)
 			{
 				battle(home_team, away_team, Option, Scoreboard, i, false, true);
+				if (i == 8 && (Scoreboard.Get_home_score() > Scoreboard.Get_away_score()))
+					break;
 			}
 
 		}
 
 		home_team.Set_game_result(true, Scoreboard.Get_away_score(), Scoreboard.Get_home_score());
 		away_team.Set_game_result(false, Scoreboard.Get_away_score(), Scoreboard.Get_home_score());
+		home_team.Set_pitched_ball(0);
+		away_team.Set_pitched_ball(0);
 		Scoreboard.Initialize_scoreboard();
 
 		game++;
+		acc_game++;
 
 	}
 
