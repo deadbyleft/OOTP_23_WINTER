@@ -976,7 +976,7 @@ public:
 
 	}
 
-	int Change_now_pitcher(bool Isingame, bool Isauto, int col)
+	int Change_now_pitcher(bool Isingame, bool Isauto, int col, int change_pitcher_num)
 	{
 		int rand_pitcher = rand() % 8 + 5;
 
@@ -984,13 +984,14 @@ public:
 
 		if (Isingame)
 		{
-			if (!Isused_pitcher(col - 1) && col - 1)
-			{
-				now_pitcher = col;
-				return pitcher_stat[now_pitcher][4];
-				cur(48, col - 1);
+			if (!Isused_pitcher(change_pitcher_num + 1) && change_pitcher_num >= 4)
+			{			
+				cur(48, col);
 				cout << "  [ 투수 교체 ] "; Show_pitcher_name(now_pitcher);
-				cout << " -> "; Show_pitcher_name(col);
+				cout << " -> "; Show_pitcher_name(change_pitcher_num + 1);
+
+				now_pitcher = change_pitcher_num + 1;
+				return pitcher_stat[now_pitcher][4];
 			}
 			
 			else
@@ -1022,7 +1023,6 @@ public:
 	void Change_hitter_stat(int hitter_1, int hitter_2)
 	{
 		int Save_index_stat[10] = { 0, };
-		int Save_index_record[20] = { 0, };
 
 		vector <pair<string, bool>> Save_hitter;
 
@@ -1033,13 +1033,9 @@ public:
 
 		for (int i = 0; i < 10; i++)
 			Save_index_stat[i] = hitter_stat[hitter_1][i];
+
 		memcpy(hitter_stat[hitter_1], hitter_stat[hitter_2], sizeof(Save_index_stat));
 		memcpy(hitter_stat[hitter_2], Save_index_stat, sizeof(Save_index_stat));
-
-		for (int i = 0; i < 20; i++)
-			Save_index_record[i] = hitter_record[hitter_1][i];
-		memcpy(hitter_record[hitter_1], hitter_record[hitter_2], sizeof(Save_index_record));
-		memcpy(hitter_record[hitter_2], Save_index_record, sizeof(Save_index_record));
 
 		hitter[hitter_1].first = hitter[hitter_2].first;
 		hitter[hitter_1].second = hitter[hitter_2].second;
@@ -1335,7 +1331,7 @@ private:
 	bool recording = false;
 	bool music = true;
 	bool condition = true;
-	bool auto_play = false;
+	bool auto_play = true;
 	int my_team = 0;
 	int sleep_time = 2;
 
@@ -1424,6 +1420,7 @@ int sel(int a, int b, int c, int d) //몇열부터 시작할지, 행값, 한번에 몇 칸씩 떨
 
 void change_hitter(bool Isingame, team& selected_team)
 {
+
 	cur(1, 40); cout << "[  취소  ]";
 
 	int hitter_1 = sel(13, 6, 2, 18) - 1; if (hitter_1 == 17) return;
@@ -1531,8 +1528,8 @@ void show_scoreboard_art(scoreboard& Scoreboard, team& home_team, team& away_tea
 {
 	//system("cls");
 
-	cur(35, 46); cout << "[ 게임 스킵 : Esc | 타자 교체 : Backspace | 투수 교체 : Enter ]";
-	cur(35, 48); cout << "[  투수 교체는 자동으로 이루어지며, 교체는 1번만 가능합니다.  ]";
+	cur(32, 46); cout << "[ 게임 스킵 : Esc | 타자 교체 : [1] | 투수 교체 : [3] | 일시 정지 : Backspace ]";
+	cur(32, 48); cout << "[          투수 교체는 선수 체력이 0 이하일 때 자동으로 이루어집니다.         ]";
 
 	cur(45, 11); cout << "┌──────────────────────────────────────────┐ ";
 	cur(45, 12); cout << "│                                          │ ";
@@ -1590,6 +1587,13 @@ void show_team_manage(bool Isingame, int value, team& selected_team)
 
 	if (value == 1)
 	{
+		if (Isingame)
+		{
+			cur(1, 1);
+			cout << " [ Backspace : 나가기 ] [ [4] : 타자 교체 ] ";
+			cur(9, 4);
+		}
+			
 		cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_hitter_stat(1, true, true, true);
@@ -1613,6 +1617,13 @@ void show_team_manage(bool Isingame, int value, team& selected_team)
 
 	else if (value == 4)
 	{
+		if (Isingame)
+		{
+			cur(1, 1);
+			cout << " [ Backspace : 나가기 ] [ [4] : 투수 교체 ] ";
+			cur(9, 4);
+		}
+
 		cout << "     [ 이 름 ]  [ 투  타 ]  [ 컨디션 ]  [ 제  구 ]  [ 구  위 ]  [ 체  력 ]  [ 구  속 ]  [ 멘  탈 ]  [ 이  닝 ]  [ 평자책 ]  [ 승  리 ]  [ 패  배 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_pitcher_stat(1, true, true, true);
@@ -1843,7 +1854,7 @@ void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team
 		cout.precision(2);
 		cout << fixed;
 
-		cout << " " << " 현재 투수 : [ "; away_team.Show_pitcher_name(away_team.Get_now_pitcher()); cout << " ] [ 평균자책점 : ";
+		cout << " " << " 현재 투수 : [ "; home_team.Show_pitcher_name(home_team.Get_now_pitcher()); cout << " ] [ 평균자책점 : ";
 
 		if (home_team.Get_pitcher_record(home_team.Get_now_pitcher(), 1) != 0)
 			cout << (home_team.Get_pitcher_record(home_team.Get_now_pitcher(), 4) / (double)home_team.Get_pitcher_record(home_team.Get_now_pitcher(), 1)) * 27;
@@ -2133,24 +2144,26 @@ void battle(team& attack_team, team& defence_team, option Option, scoreboard& Sc
 	if (attack_team.Get_Ischange_pitcher())
 	{
 		attack_team.Set_Ischange_pitcher(false);
-		attack_team.Change_now_pitcher(true, Option.Get_Onauto_play(), attack_team.Get_change_pitcher_num() - 1);
+		attack_team.Change_now_pitcher(true, Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, attack_team, Option),
+			attack_team.Get_change_pitcher_num() - 1);
 	}
 
 	if (defence_team.Get_Ischange_pitcher())
 	{
 		defence_team.Set_Ischange_pitcher(false);
-		defence_team.Change_now_pitcher(true, Option.Get_Onauto_play(), defence_team.Get_change_pitcher_num() - 1);
+		defence_team.Change_now_pitcher(true, Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, attack_team, Option),
+			defence_team.Get_change_pitcher_num() - 1);
 	}
 
 	if (now_pitcher_away_hp <= 0)
 	{
-		now_pitcher_away_hp = defence_team.Change_now_pitcher(false, Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, attack_team, Option));
+		now_pitcher_away_hp = defence_team.Change_now_pitcher(false, Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, attack_team, Option), 0);
 	}
 
 
 	if (now_pitcher_home_hp <= 0)
 	{
-		now_pitcher_home_hp = defence_team.Change_now_pitcher(false, Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, attack_team, Option));
+		now_pitcher_home_hp = defence_team.Change_now_pitcher(false, Option.Get_Onauto_play(), show_hit_result(false, true, 1, 0, Scoreboard, defence_team, attack_team, Option), 0);
 	}
 
 
@@ -2509,9 +2522,6 @@ int setting_mainmenu(option Option, team Samsung, team Lotte)
 }
 
 
-
-
-
 void control_team_manage(team& selected_team)
 {
 	int key = 49;
@@ -2622,9 +2632,30 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 
 }
 
+void show_game_setting_menu()
+{
+	for (int i = 8; i < 50; i++)
+	{
+		cur(15, i);
+		cout << "                         "; 
+	}
 
+	int row = 15, col = 8, col_gap = 4, col_initial = 0;
 
-void game_setting()
+	col_initial = col + col_gap;
+
+	cur(row, col);
+	cout << " [    메 뉴    ]"; col += col_gap; cur(row, col);
+	cout << " [ 1 ] 경기 시작"; col += col_gap; cur(row, col);
+	cout << " [ 2 ] 선수 관리"; col += col_gap; cur(row, col);
+	cout << " [ 3 ] 선수 영입"; col += col_gap; cur(row, col);
+	cout << " [ 4 ] 게임 설정"; col += col_gap; cur(row, col);
+	cout << " [ 5 ] 게임 종료"; col += col_gap; cur(row, col);
+
+	system("PAUSE");
+}
+
+void Initialize_setting()
 {
 	srand((unsigned)time(NULL));
 
@@ -2654,6 +2685,7 @@ void game_setting()
 		if (menu_choice == 1) game_select(show_game_select(), Samsung, Lotte, Scoreboard, Option);
 		else if (menu_choice == 2) control_team_manage(Samsung);
 		else if (menu_choice == 3) control_team_manage(Lotte);
+		else if (menu_choice == 4) show_game_setting_menu();
 		else if (menu_choice == 5) break;
 	}
 
@@ -2661,6 +2693,6 @@ void game_setting()
 
 int main()
 {
-	game_setting();
+	Initialize_setting();
 	return 0;
 }
