@@ -128,20 +128,20 @@ int All_pitcher_stat[300][10] = {
 {2, 3, 50, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 30, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -1460,7 +1460,7 @@ private:
 	bool condition = true;
 	bool auto_play = false;
 	int my_team = 0;
-	int sleep_time = 3;
+	int sleep_time = 60;
 
 public:
 	bool Get_Onauto_play() { return auto_play; }
@@ -1992,7 +1992,7 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 }
 
 
-void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team, team& away_team, scoreboard& Scoreboard, option Option)
+void show_scoreboard(bool Ishome, int strike, int ball, int out, int now_pitcher_hp, team& home_team, team& away_team, scoreboard& Scoreboard, option Option)
 {
 	show_scoreboard_art(Scoreboard, home_team, away_team);
 
@@ -2017,7 +2017,8 @@ void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team
 		cur(42, 8 + (away_team.Get_now_hitter()) * 2); cout << "  "; cur(42, 26); cout << "  ";
 		cur(42, 8 + (away_team.Get_now_hitter() + 1) * 2); cout << "◀";
 
-		cur(46, 14); cout << "                  □ = " << home_team.Get_pitched_ball();
+		cur(46, 13); cout << "                  □ = " << home_team.Get_pitched_ball(); cout.precision(1);
+		cur(56, 15); cout << " 현재 체력 : " << (now_pitcher_hp / (double)home_team.Get_pitcher_stat(home_team.Get_now_pitcher(), 4)) * 100 << " % "; cout.precision(3);
 
 		cur(86, 8);
 
@@ -2054,7 +2055,8 @@ void show_scoreboard(bool Ishome, int strike, int ball, int out, team& home_team
 		cur(93, 8 + (home_team.Get_now_hitter()) * 2); cout << "  "; cur(93, 26); cout << "  ";
 		cur(93, 8 + (home_team.Get_now_hitter() + 1) * 2); cout << "▶";
 
-		cur(46, 14); cout << "                  □ = " << away_team.Get_pitched_ball();
+		cur(46, 13); cout << "                  □ = " << away_team.Get_pitched_ball(); cout.precision(1);
+		cur(56, 15); cout << " 현재 체력 : " << (now_pitcher_hp / (double)away_team.Get_pitcher_stat(away_team.Get_now_pitcher(), 4)) * 100 << " % "; cout.precision(3);
 
 		cur(82, 8);
 
@@ -2309,8 +2311,8 @@ void battle(team& attack_team, team& defence_team, option Option, scoreboard& Sc
 	{
 		now_hitter_home = 0;
 		now_hitter_away = 0;
-		now_pitcher_home_hp = defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), 4) * 2;
-		now_pitcher_away_hp = attack_team.Get_pitcher_stat(attack_team.Get_now_pitcher(), 4) * 2;
+		now_pitcher_home_hp = defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), 4);
+		now_pitcher_away_hp = attack_team.Get_pitcher_stat(attack_team.Get_now_pitcher(), 4);
 		return;
 	}
 
@@ -2362,8 +2364,8 @@ void battle(team& attack_team, team& defence_team, option Option, scoreboard& Sc
 
 	if (!Option.Get_Onauto_play())
 	{
-		if (!Ishome) show_scoreboard(Ishome, strike, ball, out, attack_team, defence_team, Scoreboard, Option);
-		else show_scoreboard(Ishome, strike, ball, out, defence_team, attack_team, Scoreboard, Option);
+		if (!Ishome) show_scoreboard(Ishome, strike, ball, out, now_pitcher_home_hp, attack_team, defence_team, Scoreboard, Option);
+		else show_scoreboard(Ishome, strike, ball, out, now_pitcher_away_hp, defence_team, attack_team, Scoreboard, Option);
 	}
 
 	while (1)
@@ -2420,6 +2422,8 @@ void battle(team& attack_team, team& defence_team, option Option, scoreboard& Sc
 	}
 
 	defence_team.Set_pitched_ball(pitching_value);
+
+	if (defence_team.Get_pitcher_stat(defence_team.Get_now_pitcher(), 0) == 1 && pitching_value > 1) pitching_value /= 2;
 
 	if (Ishome) now_pitcher_away_hp -= pitching_value;
 	else now_pitcher_home_hp -= pitching_value;
