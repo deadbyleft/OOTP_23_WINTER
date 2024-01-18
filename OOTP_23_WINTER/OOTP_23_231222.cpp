@@ -1458,7 +1458,7 @@ private:
 	bool recording = false;
 	bool music = true;
 	bool condition = true;
-	bool auto_play = false;
+	bool auto_play = true;
 	int my_team = 0;
 	int sleep_time = 60;
 
@@ -1867,12 +1867,7 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 		return 0;
 	}
 
-	if (line > 9)
-	{
-		line = 0;
-		for (int i = 19; i <= 50; i++) // Ä­ Áö¿ì±â
-			cur(44, i); cout << "                                              ";
-	}
+
 
 	if (Initializing)
 	{
@@ -1986,6 +1981,13 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 
 		line++;
 
+	}
+
+	if (line > 9)
+	{
+		line = 0;
+		for (int i = 19; i <= 50; i++) // Ä­ Áö¿ì±â
+			cur(44, i); cout << "                                              ";
 	}
 
 	return 0;
@@ -2440,7 +2442,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 14400)
+	while (game < 144)
 	{
 		initialize = true;
 
