@@ -17,37 +17,37 @@ void cur(short x, short y);
 
 // Æ÷Áö¼Ç ÄÁµð¼Ç ¼±±¸¾È Á¤È®µµ ÆÄ¿ö ½ºÇÇµå ¼öºñ ¿À¹ö·Ñ
 
+// 41 »ï¼º 71 ·Ôµ¥
 
-
-//All_hitter_name[30].first = "¾È±Ç¼ö"; 7
-//All_hitter_name[31].first = "±è¹Î¼®"; 8
-//All_hitter_name[32].first = "¾ÈÄ¡È«"; 4
-//All_hitter_name[33].first = "ÀüÁØ¿ì"; 8
-//All_hitter_name[34].first = "Á¤  ÈÆ"; 3
-//All_hitter_name[35].first = "À¯°­³²"; 2
-//All_hitter_name[36].first = "³ëÁøÇõ"; 6
-//All_hitter_name[37].first = "À±µ¿Èñ"; 9
-//All_hitter_name[38].first = "¹Ú½Â¿í"; 4
-//All_hitter_name[39].first = "°í½Â¹Î"; 3
-//All_hitter_name[40].first = "ÀÌÁ¤ÈÆ"; 2
-//All_hitter_name[41].first = "±¸µå·³"; 5
-//All_hitter_name[42].first = "È²¼ººó"; 7
-//All_hitter_name[43].first = "Á¤º¸±Ù"; 2
-//All_hitter_name[44].first = "¼Õ¼ººó"; 2
-//All_hitter_name[45].first = "ÀÌÇÐÁÖ"; 6
-//All_hitter_name[46].first = "±è¹Î¼ö"; 5
+//All_hitter_name[30].first = "¾È±Ç¼ö";
+//All_hitter_name[31].first = "±è¹Î¼®";
+//All_hitter_name[32].first = "¾ÈÄ¡È«";
+//All_hitter_name[33].first = "ÀüÁØ¿ì";
+//All_hitter_name[34].first = "Á¤  ÈÆ";
+//All_hitter_name[35].first = "±¸µå·³";
+//All_hitter_name[36].first = "À¯°­³²";
+//All_hitter_name[37].first = "³ëÁøÇõ";
+//All_hitter_name[38].first = "À±µ¿Èñ";
+//All_hitter_name[39].first = "¹Ú½Â¿í";
+//All_hitter_name[40].first = "°í½Â¹Î";
+//All_hitter_name[41].first = "ÀÌÁ¤ÈÆ";
+//All_hitter_name[42].first = "±¸µå·³";
+//All_hitter_name[43].first = "È²¼ººó";
+//All_hitter_name[44].first = "Á¤º¸±Ù";
+//All_hitter_name[45].first = "¼Õ¼ººó";
+//All_hitter_name[46].first = "ÀÌÇÐÁÖ";
 
 int All_hitter_stat[300][10] = {
-{4, 3, 75, 70, 40, 85, 60, 60, 60, 60},
+{4, 3, 75, 70, 40, 85, 60, 60, 60, 60}, // »ï¼º
 {9, 3, 46, 88, 52, 70, 60, 60, 60, 60},
-{9, 3, 68, 90, 68, 65, 60, 60, 60, 60},
-{7, 3, 56, 70, 74, 52, 60, 60, 60, 60},
-{2, 3, 71, 68, 70, 48, 60, 60, 60, 60},
-{3, 3, 53, 38, 78, 45, 60, 60, 60, 60},
-{5, 3, 57, 63, 47, 73, 60, 60, 60, 60},
-{8, 3, 48, 71, 53, 63, 69, 60, 60, 60},
-{6, 3, 62, 54, 66, 65, 60, 60, 60, 60},
-{2, 3, 71, 33, 55, 46, 60, 60, 60, 60},
+{9, 3, 68, 90, 63, 65, 60, 60, 60, 60},
+{7, 3, 56, 70, 66, 52, 60, 60, 60, 60},
+{2, 3, 71, 68, 67, 48, 60, 60, 60, 60},
+{3, 3, 53, 37, 78, 45, 60, 60, 60, 60},
+{5, 3, 57, 63, 45, 73, 60, 60, 60, 60},
+{8, 3, 48, 71, 50, 63, 69, 60, 60, 60},
+{6, 3, 62, 54, 65, 65, 60, 60, 60, 60},
+{2, 3, 71, 33, 55, 46, 60, 60, 60, 60}, // »ï¼º º¥Ä¡
 {7, 3, 50, 60, 67, 43, 60, 60, 60, 60},
 {8, 3, 36, 45, 60, 57, 60, 60, 60, 60},
 {5, 3, 51, 42, 45, 64, 60, 60, 60, 60},
@@ -68,23 +68,23 @@ int All_hitter_stat[300][10] = {
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {4, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {7, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{4, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{6, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{9, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{4, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{7, 3, 65, 60, 48, 60, 60, 60, 60, 60}, // ·Ôµ¥
+{8, 3, 45, 61, 53, 76, 60, 60, 60, 60},
+{4, 3, 74, 68, 58, 60, 60, 60, 60, 60},
+{8, 3, 72, 75, 66, 60, 60, 60, 60, 60},
+{3, 3, 67, 66, 67, 60, 60, 60, 60, 60},
+{5, 3, 63, 76, 56, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 62, 60, 60, 60, 60, 60},
+{6, 3, 64, 54, 63, 60, 60, 60, 60, 60},
+{9, 3, 50, 71, 51, 60, 60, 60, 60, 60},
+{4, 3, 60, 60, 60, 60, 60, 60, 60, 60}, // ·Ôµ¥ º¥Ä¡
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60}, 
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {7, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {6, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 0,
 };
 
@@ -1018,7 +1018,7 @@ public:
 		{
 			for (int i = 0; i < hitter.size(); i++)
 			{
-
+				
 				if (show_value)
 				{
 					if (i % 30 < 9) cout << " [  " << i + 1 << " ¹ø  ] ";
@@ -1051,6 +1051,8 @@ public:
 				cout << Get_hitter_stat(i, 7);
 				Set_FontColor(15);
 
+
+
 				// ÃâÀå°æ±â Å¸¼® Å¸¼ö ¾ÈÅ¸ 2·çÅ¸ 3·çÅ¸ È¨·± / º¼³Ý »ïÁø µæÁ¡ Å¸Á¡ µµ·ç º´»ì ½ÇÃ¥
 
 
@@ -1059,7 +1061,7 @@ public:
 
 			
 
-			cout << setw(23);
+			
 
 			return;
 		}
@@ -2721,13 +2723,13 @@ void control_team_manage(team& selected_team)
 			if (key >= 49 && key <= 57 && key != 55 && key != 56)
 				show_team_manage(false, key - 48, selected_team);
 
-			else if (key == 55 && prev_key >= 52 && prev_key <= 56)
+			else if (key == 55 && prev_key >= 52 && prev_key <= 54)
 			{
 				change_pitcher(false, selected_team);
 				show_team_manage(false, prev_key - 48, selected_team);
 			}
 
-			else if (key == 55 && prev_key >= 49 && prev_key <= 56)
+			else if (key == 55 && prev_key >= 49 && prev_key <= 51)
 			{
 				change_hitter(false, selected_team);
 				show_team_manage(false, prev_key - 48, selected_team);
@@ -2771,18 +2773,19 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 	All_hitter_name[32].first = "¾ÈÄ¡È«";
 	All_hitter_name[33].first = "ÀüÁØ¿ì";
 	All_hitter_name[34].first = "Á¤  ÈÆ";
-	All_hitter_name[35].first = "À¯°­³²";
-	All_hitter_name[36].first = "³ëÁøÇõ";
-	All_hitter_name[37].first = "À±µ¿Èñ";
-	All_hitter_name[38].first = "¹Ú½Â¿í";
-	All_hitter_name[39].first = "°í½Â¹Î";
-	All_hitter_name[40].first = "ÀÌÁ¤ÈÆ";
-	All_hitter_name[41].first = "±¸µå·³";
-	All_hitter_name[42].first = "È²¼ººó";
-	All_hitter_name[43].first = "Á¤º¸±Ù";
-	All_hitter_name[44].first = "¼Õ¼ººó";
-	All_hitter_name[45].first = "ÀÌÇÐÁÖ";
-	All_hitter_name[46].first = "±è¹Î¼ö";
+	All_hitter_name[35].first = "±¸µå·³";
+	All_hitter_name[36].first = "À¯°­³²";
+	All_hitter_name[37].first = "³ëÁøÇõ";
+	All_hitter_name[38].first = "À±µ¿Èñ";
+	All_hitter_name[39].first = "¹Ú½Â¿í";
+	All_hitter_name[40].first = "°í½Â¹Î";
+	All_hitter_name[41].first = "ÀÌÁ¤ÈÆ";
+	All_hitter_name[42].first = "±¸µå·³";
+	All_hitter_name[43].first = "È²¼ººó";
+	All_hitter_name[44].first = "Á¤º¸±Ù";
+	All_hitter_name[45].first = "¼Õ¼ººó";
+	All_hitter_name[46].first = "ÀÌÇÐÁÖ";
+
 
 	All_pitcher_name[0].first = "ºäÄ³³Í";
 	All_pitcher_name[1].first = "¿øÅÂÀÎ";
