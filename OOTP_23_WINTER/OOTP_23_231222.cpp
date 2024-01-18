@@ -563,6 +563,9 @@ private:
 	int hitter_record[17][20] = { 0, };
 	int pitcher_record[13][20] = { 0, };
 
+	int hitter_today_record[18][21] = { 0, };
+	int pitcher_today_record[13][20] = { 0, };
+
 	int team_hitter_record[20] = { 0, };
 	int team_pitcher_record[20] = { 0, };
 
@@ -578,8 +581,7 @@ private:
 	int team_sigvalue = 0;
 	int playground = 0;
 
-	int hitter_today_record[17][20] = { 0, };
-	int pitcher_today_record[13][20] = { 0, };
+
 
 	int played_game = 0;
 
@@ -607,6 +609,7 @@ public:
 	int Get_pitcher_stat(int row, int col) { return pitcher_stat[row][col]; }
 	int Get_hitter_record(int row, int col) { return hitter_record[row][col]; }
 	int Get_pitcher_record(int row, int col) { return pitcher_record[row][col]; }
+	int Get_hitter_today_record(int row, int col) { return hitter_today_record[row][col]; }
 	int Get_change_pitcher_num() { return change_pitcher_num; }
 	int Get_team_sigvalue() { return team_sigvalue; }
 	int Get_pitched_ball() { return pitched_ball; }
@@ -683,6 +686,17 @@ public:
 	void Initialize_used_pitcher()
 	{
 		used_pitcher.clear();
+	}
+
+	void Initialize_today_hitter_result()
+	{
+		for (int i = 0; i < 18; i++)
+		{
+			for (int j = 0; j < 21; j++)
+			{
+				hitter_today_record[i][j] = 0;
+			}
+		}
 	}
 
 	void Initialize_teamset(int Team_sigvalue, int dominated_num,
@@ -894,7 +908,7 @@ public:
 		
 	}
 
-	void Show_hitter_stat(int situation, bool show_name, bool show_direction, bool show_value)
+	void Show_hitter_stat(int situation, bool Isingame, bool show_name, bool show_direction, bool show_value)
 	{
 
 		if (situation == 1)
@@ -950,7 +964,9 @@ public:
 
 				cout << right << setw(10) << hitter_record[i][6] << setw(12);
 
-				cout << hitter_record[i][15];
+				cout << hitter_record[i][15] << setw(11);
+
+				if (Isingame) cout << hitter_today_record[i][3] << "  /  " << hitter_today_record[i][2];
 
 				cout << "\n\n";
 			}
@@ -1137,6 +1153,15 @@ public:
 		memcpy(hitter_record[hitter_1], hitter_record[hitter_2], sizeof(Save_index));
 		memcpy(hitter_record[hitter_2], Save_index, sizeof(Save_index));
 
+		for (int i = 0; i < 21; i++)
+			hitter_today_record[17][i] = hitter_today_record[hitter_1][i];
+		for (int i = 0; i < 21; i++)
+			hitter_today_record[hitter_1][i] = hitter_today_record[hitter_2][i];
+		for (int i = 0; i < 21; i++)
+			hitter_today_record[hitter_2][i] = hitter_today_record[17][i];
+
+		hitter_today_record[hitter_1][20] = -1;
+		hitter_today_record[hitter_2][20] = -1;
 
 	}
 
@@ -1158,6 +1183,14 @@ public:
 		team_hitter_record[8] += stat_9; team_hitter_record[9] += stat_10;
 		team_hitter_record[10] += stat_11; team_hitter_record[11] += stat_12;
 		team_hitter_record[12] += stat_13; team_hitter_record[13] += stat_14;
+
+		hitter_today_record[row][0] += stat_1; hitter_today_record[row][1] += stat_2;
+		hitter_today_record[row][2] += stat_3; hitter_today_record[row][3] += stat_4;
+		hitter_today_record[row][4] += stat_5; hitter_today_record[row][5] += stat_6;
+		hitter_today_record[row][6] += stat_7; hitter_today_record[row][7] += stat_8;
+		hitter_today_record[row][8] += stat_9; hitter_today_record[row][9] += stat_10;
+		hitter_today_record[row][10] += stat_11; hitter_today_record[row][11] += stat_12;
+		hitter_today_record[row][12] += stat_13; hitter_today_record[row][13] += stat_14;
 
 		// At_plate At_bat hit_1 hit_2 hit_3 hr bb so r rbi clu stl stl_fail err
 		// 출장경기 타석 타수 안타 2루타 3루타 홈런 볼넷 삼진 득점 (10개)
@@ -1426,7 +1459,7 @@ private:
 	bool condition = true;
 	bool auto_play = false;
 	int my_team = 0;
-	int sleep_time = 600;
+	int sleep_time = 30;
 
 public:
 	bool Get_Onauto_play() { return auto_play; }
@@ -1523,6 +1556,7 @@ void change_hitter(bool Isingame, team& selected_team)
 
 	if (hitter_1 == hitter_2) return;
 	if (hitter_1 < 9 && hitter_2 < 9 && Isingame) return;
+	if (Isingame && (selected_team.Get_hitter_today_record(hitter_1, 20) == -1 || selected_team.Get_hitter_today_record(hitter_2, 20))) return;
 
 	if ((selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0)) && (hitter_1 < 9 || hitter_2 < 9) && !(hitter_1 < 9 && hitter_2 < 9))
 	{
@@ -1688,6 +1722,11 @@ void show_scoreboard_art(scoreboard& Scoreboard, team& home_team, team& away_tea
 
 }
 
+void show_today_stat()
+{
+
+}
+
 void show_team_manage(bool Isingame, int value, team& selected_team)
 {
 	system("cls");
@@ -1704,18 +1743,20 @@ void show_team_manage(bool Isingame, int value, team& selected_team)
 			cur(1, 1);
 			cout << " [ Backspace : 나가기 ] [ [4] : 타자 교체 ] ";
 			cur(9, 4);
+			cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ]  [ 안타 / 타수 ] " << '\n' << '\n';
 		}
 
-		cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ] " << '\n' << '\n';
+		else
+			cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ] " << '\n' << '\n';
 		cur(0, 6);
-		selected_team.Show_hitter_stat(1, true, true, true);
+		selected_team.Show_hitter_stat(1, Isingame, true, true, true);
 	}
 
 	else if (value == 2)
 	{
 		cout << "     [ 이 름 ]  [ 타  석 ]  [ 타  수 ]  [ 안  타 ]   [ 2루타 ]  [ 3루타 ]   [ 홈  런 ]  [ 볼 넷 ]  [ 삼  진 ]   [ 도  루 ]  [ 병  살 ]  [  OPS  ]" << '\n' << '\n';
 		cur(0, 6);
-		selected_team.Show_hitter_stat(2, true, false, true);
+		selected_team.Show_hitter_stat(2, Isingame, true, false, true);
 	}
 
 
@@ -1723,7 +1764,7 @@ void show_team_manage(bool Isingame, int value, team& selected_team)
 	{
 		cout << "     [ 이 름 ]  [ 출  장 ]  [ 타  석 ]  [ 타  수 ]  [ 타  율 ]  [ 출루율 ]  [ 장타율 ]  [  OPS  ]  [ 득점권 ]   [ 병  살 ]  [ 오버롤 ]" << '\n' << '\n';
 		cur(0, 6);
-		selected_team.Show_hitter_stat(3, true, true, true);
+		selected_team.Show_hitter_stat(3, Isingame, true, true, true);
 	}
 
 
@@ -1834,17 +1875,17 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 		cur(60, line * 2 + 19);
 		switch (result) {
 		case 1: cout << "  [ 삼진 ]";
-			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time()); cout << " [ 공수교대 ] "; } break;
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time() * 15); cout << " [ 공수교대 ] "; } break;
 		case 2: cout << "  [ 볼넷 ]"; break;
 		case 5: cout << "  [ 땅볼 ]";
-			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time()); cout << " [ 공수교대 ] "; } break;
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time() * 15); cout << " [ 공수교대 ] "; } break;
 		case 6: cout << "  [ 뜬공 ]";
-			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time()); cout << " [ 공수교대 ] "; } break;
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time() * 15); cout << " [ 공수교대 ] "; } break;
 		case 10: cout << "  [ 안타 ]"; break;
 		case 20: cout << "  [ 2루타 ]"; break;
 		case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
 		case 52: cout << "  [ 병살 ]";
-			if (Scoreboard.Get_out_count() == 1) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time()); cout << " [ 공수교대 ] "; } break;
+			if (Scoreboard.Get_out_count() == 1) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time() * 15); cout << " [ 공수교대 ] "; } break;
 
 		}
 
@@ -2392,7 +2433,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 		home_team.Set_now_pitcher(acc_game % 5);
 		away_team.Set_now_pitcher(acc_game % 5);
 
-		home_team.Initialize_used_pitcher();
+		home_team.Initialize_used_pitcher(); home_team.Initialize_today_hitter_result();
 		away_team.Initialize_used_pitcher();
 
 		home_team.Update_hitter_condition(); home_team.Update_pitcher_condition();
