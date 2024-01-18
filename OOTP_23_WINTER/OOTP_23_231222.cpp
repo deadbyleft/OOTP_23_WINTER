@@ -97,7 +97,7 @@ int All_hitter_stat[300][10] = {
 
 
 
-int All_pitcher_stat[300][10] = {
+double All_pitcher_stat[300][10] = {
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -1559,37 +1559,37 @@ void change_hitter(bool Isingame, team& selected_team)
 	if (hitter_1 < 9 && hitter_2 < 9 && Isingame) return;
 	if (Isingame && (selected_team.Get_hitter_today_record(hitter_1, 20) == -1 || selected_team.Get_hitter_today_record(hitter_2, 20))) return;
 
-	if ((selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0)) && (hitter_1 < 9 || hitter_2 < 9) && !(hitter_1 < 9 && hitter_2 < 9))
+	if ((selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0)) && (hitter_1 < 9 || hitter_2 < 9))
 	{
-		if (hitter_1 < 9)
+		if (hitter_1 < 9 && hitter_2 >= 9)
 		{
 			if (selected_team.Get_hitter_stat(hitter_1, 0) == 3 && selected_team.Get_hitter_stat(hitter_2, 0) == 5) selected_team.Set_hitter_position(hitter_2, 3);
-			if (selected_team.Get_hitter_stat(hitter_1, 0) == 5 && selected_team.Get_hitter_stat(hitter_2, 0) == 3) selected_team.Set_hitter_position(hitter_2, 5);
+			else if (selected_team.Get_hitter_stat(hitter_1, 0) == 5 && selected_team.Get_hitter_stat(hitter_2, 0) == 3) selected_team.Set_hitter_position(hitter_2, 5);
 
-			if (selected_team.Get_hitter_stat(hitter_1, 0) == 4 && selected_team.Get_hitter_stat(hitter_2, 0) == 6) selected_team.Set_hitter_position(hitter_2, 4);
-			if (selected_team.Get_hitter_stat(hitter_1, 0) == 6 && selected_team.Get_hitter_stat(hitter_2, 0) == 4) selected_team.Set_hitter_position(hitter_2, 6);
+			else if (selected_team.Get_hitter_stat(hitter_1, 0) == 4 && selected_team.Get_hitter_stat(hitter_2, 0) == 6) selected_team.Set_hitter_position(hitter_2, 4);
+			else if (selected_team.Get_hitter_stat(hitter_1, 0) == 6 && selected_team.Get_hitter_stat(hitter_2, 0) == 4) selected_team.Set_hitter_position(hitter_2, 6);
 
-			if (selected_team.Get_hitter_stat(hitter_1, 0) == 7 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 7);
-			if (selected_team.Get_hitter_stat(hitter_1, 0) == 8 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 8);
-			if (selected_team.Get_hitter_stat(hitter_1, 0) == 9 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 9);
+			else if (selected_team.Get_hitter_stat(hitter_1, 0) == 7 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 7);
+			else if (selected_team.Get_hitter_stat(hitter_1, 0) == 8 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 8);
+			else if (selected_team.Get_hitter_stat(hitter_1, 0) == 9 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 9);
+
+			else return;
 		}
 
-		else if (hitter_2 < 9)
+		else if (hitter_2 < 9 && hitter_1 >= 9)
 		{
 			if (selected_team.Get_hitter_stat(hitter_2, 0) == 3 && selected_team.Get_hitter_stat(hitter_1, 0) == 5) selected_team.Set_hitter_position(hitter_1, 3);
-			if (selected_team.Get_hitter_stat(hitter_2, 0) == 5 && selected_team.Get_hitter_stat(hitter_1, 0) == 3) selected_team.Set_hitter_position(hitter_1, 5);
+			else if (selected_team.Get_hitter_stat(hitter_2, 0) == 5 && selected_team.Get_hitter_stat(hitter_1, 0) == 3) selected_team.Set_hitter_position(hitter_1, 5);
 
-			if (selected_team.Get_hitter_stat(hitter_2, 0) == 4 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 4);
-			if (selected_team.Get_hitter_stat(hitter_2, 0) == 6 && selected_team.Get_hitter_stat(hitter_1, 0) == 4) selected_team.Set_hitter_position(hitter_1, 6);
+			else if (selected_team.Get_hitter_stat(hitter_2, 0) == 4 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 4);
+			else if (selected_team.Get_hitter_stat(hitter_2, 0) == 6 && selected_team.Get_hitter_stat(hitter_1, 0) == 4) selected_team.Set_hitter_position(hitter_1, 6);
 
-			if (selected_team.Get_hitter_stat(hitter_2, 0) == 7 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 7);
-			if (selected_team.Get_hitter_stat(hitter_2, 0) == 8 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 8);
-			if (selected_team.Get_hitter_stat(hitter_2, 0) == 9 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 9);
-		}
+			else if (selected_team.Get_hitter_stat(hitter_2, 0) == 7 && selected_team.Get_hitter_stat(hitter_1, 0) > 6) selected_team.Set_hitter_position(hitter_1, 7);
+			else if (selected_team.Get_hitter_stat(hitter_2, 0) == 8 && selected_team.Get_hitter_stat(hitter_1, 0) > 6) selected_team.Set_hitter_position(hitter_1, 8);
+			else if (selected_team.Get_hitter_stat(hitter_2, 0) == 9 && selected_team.Get_hitter_stat(hitter_1, 0) > 6) selected_team.Set_hitter_position(hitter_1, 9);
 
-		else
-			return;
-		
+			else return;
+		}	
 	}
 
 	if (hitter_1 < 9 && hitter_2 < 9)
