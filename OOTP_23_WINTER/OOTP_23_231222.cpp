@@ -84,6 +84,7 @@ int All_hitter_stat[300][10] = {
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {6, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 0,
 };
 
@@ -97,11 +98,11 @@ int All_hitter_stat[300][10] = {
 
 
 int All_pitcher_stat[300][10] = {
-{1, 3, 60, 60, 99, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 99, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 99, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{1, 3, 60, 60, 50, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -112,9 +113,9 @@ int All_pitcher_stat[300][10] = {
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 10, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 10, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 10, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 50, 60, 60, 60, 60, 60, 60, 60},
 {1, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -127,12 +128,12 @@ int All_pitcher_stat[300][10] = {
 {2, 3, 50, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 30, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 90, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 90, 60, 60, 60, 60, 60},
-{3, 3, 60, 60, 80, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 70, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{2, 3, 60, 60, 50, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -1459,7 +1460,7 @@ private:
 	bool condition = true;
 	bool auto_play = false;
 	int my_team = 0;
-	int sleep_time = 30;
+	int sleep_time = 3;
 
 public:
 	bool Get_Onauto_play() { return auto_play; }
@@ -1567,6 +1568,10 @@ void change_hitter(bool Isingame, team& selected_team)
 
 			if (selected_team.Get_hitter_stat(hitter_1, 0) == 4 && selected_team.Get_hitter_stat(hitter_2, 0) == 6) selected_team.Set_hitter_position(hitter_2, 4);
 			if (selected_team.Get_hitter_stat(hitter_1, 0) == 6 && selected_team.Get_hitter_stat(hitter_2, 0) == 4) selected_team.Set_hitter_position(hitter_2, 6);
+
+			if (selected_team.Get_hitter_stat(hitter_1, 0) == 7 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 7);
+			if (selected_team.Get_hitter_stat(hitter_1, 0) == 8 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 8);
+			if (selected_team.Get_hitter_stat(hitter_1, 0) == 9 && selected_team.Get_hitter_stat(hitter_2, 0) > 6) selected_team.Set_hitter_position(hitter_2, 9);
 		}
 
 		else if (hitter_2 < 9)
@@ -1576,6 +1581,10 @@ void change_hitter(bool Isingame, team& selected_team)
 
 			if (selected_team.Get_hitter_stat(hitter_2, 0) == 4 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 4);
 			if (selected_team.Get_hitter_stat(hitter_2, 0) == 6 && selected_team.Get_hitter_stat(hitter_1, 0) == 4) selected_team.Set_hitter_position(hitter_1, 6);
+
+			if (selected_team.Get_hitter_stat(hitter_2, 0) == 7 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 7);
+			if (selected_team.Get_hitter_stat(hitter_2, 0) == 8 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 8);
+			if (selected_team.Get_hitter_stat(hitter_2, 0) == 9 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 9);
 		}
 
 		else
@@ -1741,7 +1750,8 @@ void show_team_manage(bool Isingame, int value, team& selected_team)
 		if (Isingame)
 		{
 			cur(1, 1);
-			cout << " [ Backspace : 나가기 ] [ [4] : 타자 교체 ] ";
+			cout << " [ Backspace : 나가기 ] [ [4] : 타자 교체 ]   [ 현재 타자 : " << selected_team.Get_now_hitter() + 1 << "번 타자 "; 
+			selected_team.Show_hitter_name(selected_team.Get_now_hitter()); cout << " ] ";
 			cur(9, 4);
 			cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ]  [ 안타 / 타수 ] " << '\n' << '\n';
 		}
@@ -2433,7 +2443,10 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 		home_team.Set_now_pitcher(acc_game % 5);
 		away_team.Set_now_pitcher(acc_game % 5);
 
-		home_team.Initialize_used_pitcher(); home_team.Initialize_today_hitter_result();
+		home_team.Initialize_today_hitter_result();
+		away_team.Initialize_today_hitter_result();
+
+		home_team.Initialize_used_pitcher();
 		away_team.Initialize_used_pitcher();
 
 		home_team.Update_hitter_condition(); home_team.Update_pitcher_condition();
