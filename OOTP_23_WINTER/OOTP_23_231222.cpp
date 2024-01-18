@@ -41,21 +41,20 @@ int All_hitter_stat[300][10] = {
 {4, 3, 75, 70, 40, 85, 60, 60, 60, 60},
 {9, 3, 46, 88, 52, 70, 60, 60, 60, 60},
 {9, 3, 68, 90, 68, 65, 60, 60, 60, 60},
-{7, 3, 56, 70, 74, 70, 60, 60, 60, 60},
+{7, 3, 56, 70, 74, 52, 60, 60, 60, 60},
 {2, 3, 71, 68, 70, 48, 60, 60, 60, 60},
 {3, 3, 53, 38, 78, 45, 60, 60, 60, 60},
 {5, 3, 57, 63, 47, 73, 60, 60, 60, 60},
 {8, 3, 48, 71, 53, 63, 69, 60, 60, 60},
 {6, 3, 62, 54, 66, 65, 60, 60, 60, 60},
-{2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{7, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{4, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{4, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
-{8, 3, 60, 60, 60, 60, 60, 60, 60, 60},
+{2, 3, 71, 33, 55, 46, 60, 60, 60, 60},
+{7, 3, 50, 60, 67, 43, 60, 60, 60, 60},
+{8, 3, 36, 45, 60, 57, 60, 60, 60, 60},
+{5, 3, 51, 42, 45, 64, 60, 60, 60, 60},
+{4, 3, 46, 63, 50, 66, 60, 60, 60, 60},
+{5, 3, 49, 35, 64, 58, 60, 60, 60, 60},
+{5, 3, 47, 53, 50, 62, 60, 60, 60, 60},
+{8, 3, 45, 44, 47, 54, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {9, 3, 30, 30, 30, 30, 30, 60, 60, 60},
 {3, 3, 40, 40, 40, 40, 40, 60, 60, 60},
@@ -630,6 +629,7 @@ public:
 	void Set_now_hitter(int value) { now_hitter = value; }
 	void Set_now_pitcher(int value) { now_pitcher = value; }
 	void Set_hitter_stat(int col, int result[]) { hitter_stat[now_hitter][col] = result[col]; }
+	void Set_hitter_position(int value, int num) { hitter_stat[value][0] = num; }
 	void Set_pitcher_stat(int col, int result[]) { pitcher_stat[now_pitcher][col] = result[col]; }
 	void Set_played_game(int value) { played_game += value; }
 	void Set_team_sigvalue(int value) { team_sigvalue = value; }
@@ -1424,9 +1424,9 @@ private:
 	bool recording = false;
 	bool music = true;
 	bool condition = true;
-	bool auto_play = true;
+	bool auto_play = false;
 	int my_team = 0;
-	int sleep_time = 2;
+	int sleep_time = 600;
 
 public:
 	bool Get_Onauto_play() { return auto_play; }
@@ -1516,19 +1516,38 @@ void change_hitter(bool Isingame, team& selected_team)
 
 	cur(1, 40); cout << "[  취소  ]";
 
+	int Save_index[10] = { 0, };
 	int hitter_1 = sel(12, 6, 2, 18) - 1; if (hitter_1 == 17) return;
 	int hitter_2 = sel(12, 6, 2, 18) - 1; if (hitter_2 == 17) return;
+
 
 	if (hitter_1 == hitter_2) return;
 	if (hitter_1 < 9 && hitter_2 < 9 && Isingame) return;
 
-	if ((hitter_1 >= 9 || hitter_2 >= 9) && selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0))
-		if (!(selected_team.Isdominated(hitter_1) || selected_team.Isdominated(hitter_2)))
+	if ((selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0)) && (hitter_1 < 9 || hitter_2 < 9) && !(hitter_1 < 9 && hitter_2 < 9))
+	{
+		if (hitter_1 < 9)
+		{
+			if (selected_team.Get_hitter_stat(hitter_1, 0) == 3 && selected_team.Get_hitter_stat(hitter_2, 0) == 5) selected_team.Set_hitter_position(hitter_2, 3);
+			if (selected_team.Get_hitter_stat(hitter_1, 0) == 5 && selected_team.Get_hitter_stat(hitter_2, 0) == 3) selected_team.Set_hitter_position(hitter_2, 5);
+
+			if (selected_team.Get_hitter_stat(hitter_1, 0) == 4 && selected_team.Get_hitter_stat(hitter_2, 0) == 6) selected_team.Set_hitter_position(hitter_2, 4);
+			if (selected_team.Get_hitter_stat(hitter_1, 0) == 6 && selected_team.Get_hitter_stat(hitter_2, 0) == 4) selected_team.Set_hitter_position(hitter_2, 6);
+		}
+
+		else if (hitter_2 < 9)
+		{
+			if (selected_team.Get_hitter_stat(hitter_2, 0) == 3 && selected_team.Get_hitter_stat(hitter_1, 0) == 5) selected_team.Set_hitter_position(hitter_1, 3);
+			if (selected_team.Get_hitter_stat(hitter_2, 0) == 5 && selected_team.Get_hitter_stat(hitter_1, 0) == 3) selected_team.Set_hitter_position(hitter_1, 5);
+
+			if (selected_team.Get_hitter_stat(hitter_2, 0) == 4 && selected_team.Get_hitter_stat(hitter_1, 0) == 6) selected_team.Set_hitter_position(hitter_1, 4);
+			if (selected_team.Get_hitter_stat(hitter_2, 0) == 6 && selected_team.Get_hitter_stat(hitter_1, 0) == 4) selected_team.Set_hitter_position(hitter_1, 6);
+		}
+
+		else
 			return;
-
-	int Save_index[10] = { 0, };
-
-
+		
+	}
 
 	if (hitter_1 < 9 && hitter_2 < 9)
 	{
@@ -1773,7 +1792,7 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 
 		for (int i = 0; i < 10; i++)
 		{
-			Sleep(20);
+			Sleep(Option.Get_sleep_time());
 
 			if (_kbhit())
 			{
@@ -1815,24 +1834,24 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 		cur(60, line * 2 + 19);
 		switch (result) {
 		case 1: cout << "  [ 삼진 ]";
-			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time()); cout << " [ 공수교대 ] "; } break;
 		case 2: cout << "  [ 볼넷 ]"; break;
 		case 5: cout << "  [ 땅볼 ]";
-			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time()); cout << " [ 공수교대 ] "; } break;
 		case 6: cout << "  [ 뜬공 ]";
-			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
+			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time()); cout << " [ 공수교대 ] "; } break;
 		case 10: cout << "  [ 안타 ]"; break;
 		case 20: cout << "  [ 2루타 ]"; break;
 		case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
 		case 52: cout << "  [ 병살 ]";
-			if (Scoreboard.Get_out_count() == 1) { cur(49, line * 2 + 21); Sleep(200); cout << " [ 공수교대 ] "; } break;
+			if (Scoreboard.Get_out_count() == 1) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time()); cout << " [ 공수교대 ] "; } break;
 
 		}
 
 
 		for (int i = 0; i < 10; i++)
 		{
-			Sleep(20);
+			Sleep(Option.Get_sleep_time());
 
 			if (_kbhit() || check_getch == 49 || check_getch == 51)
 			{
@@ -2366,7 +2385,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 144)
+	while (game < 14400)
 	{
 		initialize = true;
 
@@ -2684,7 +2703,7 @@ void Initialize_member_name(vector <pair<string, bool>>& All_hitter_name, vector
 	All_hitter_name[12].first = "강한울";
 	All_hitter_name[13].first = "김동진";
 	All_hitter_name[14].first = "김영웅";
-	All_hitter_name[15].first = "김태군";
+	All_hitter_name[15].first = "안주형";
 	All_hitter_name[16].first = "김호재";
 
 	All_hitter_name[30].first = "안권수";
