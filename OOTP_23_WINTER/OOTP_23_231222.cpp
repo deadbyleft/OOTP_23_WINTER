@@ -40,7 +40,7 @@ void cur(short x, short y);
 int All_hitter_stat[300][10] = {
 {4, 3, 75, 70, 40, 85, 60, 60, 60, 60}, // 삼성
 {9, 3, 46, 88, 52, 70, 60, 60, 60, 60},
-{9, 3, 68, 90, 63, 65, 60, 60, 60, 60},
+{9, 3, 68, 88, 63, 65, 60, 60, 60, 60},
 {7, 3, 56, 70, 66, 52, 60, 60, 60, 60},
 {2, 3, 71, 68, 67, 48, 60, 60, 60, 60},
 {3, 3, 53, 37, 78, 45, 60, 60, 60, 60},
@@ -1927,6 +1927,7 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 		case 30: cout << "  [ 3루타 ]"; break;
 		case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
 		case 52: cout << "  [ 병살 ]";
+		case 61: cout << "  [ 희플 ]";
 			if (Scoreboard.Get_out_count() == 1) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time() * 15); cout << " [ 공수교대 ] "; } break;
 
 		}
@@ -2020,7 +2021,7 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 
 	}
 
-	if (line > 9)
+	if (line > 8)
 	{
 		line = 0;
 		for (int i = 19; i <= 50; i++) // 칸 지우기
@@ -2224,7 +2225,7 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 	{
 		if (result > 0)
 		{
-			if (Scoreboard.Get_base_3_spd() > rand() % 250 + 31) return 61;
+			if (Scoreboard.Get_base_3_spd() > rand() % 250 + 31 && Scoreboard.Get_out_count() != 2) return 61;
 			else return 6;
 		}
 			
