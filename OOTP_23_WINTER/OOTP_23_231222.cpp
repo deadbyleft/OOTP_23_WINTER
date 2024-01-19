@@ -1508,7 +1508,7 @@ private:
 	bool recording = false;
 	bool music = true;
 	bool condition = true;
-	bool auto_play = true;
+	bool auto_play = false;
 	int my_team = 0;
 	int sleep_time = 60;
 
@@ -1940,8 +1940,8 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 		case 20: cout << "  [ 2루타 ]"; break;
 		case 30: cout << "  [ 3루타 ]"; break;
 		case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
-		case 52: cout << "  [ 병살 ]";
-		case 61: cout << "  [ 희플 ]";
+		case 52: cout << "  [ 병살 ]"; break;
+		case 61: cout << "  [ 희플 ]"; break;
 			if (Scoreboard.Get_out_count() == 1) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time() * 15); cout << " [ 공수교대 ] "; } break;
 
 		}
@@ -2515,7 +2515,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 14400)
+	while (game < 1)
 	{
 		initialize = true;
 
