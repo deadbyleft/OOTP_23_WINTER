@@ -1508,7 +1508,7 @@ private:
 	bool recording = false;
 	bool music = true;
 	bool condition = true;
-	bool auto_play = true;
+	bool auto_play = false;
 	int my_team = 0;
 	int sleep_time = 60;
 
@@ -1609,8 +1609,10 @@ void change_hitter(bool Isingame, team& selected_team)
 	if (hitter_1 < 9 && hitter_2 < 9 && Isingame) return;
 	if (Isingame && (selected_team.Get_hitter_today_record(hitter_1, 20) == -1 || selected_team.Get_hitter_today_record(hitter_2, 20))) return;
 
-	if ((selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0)) && (hitter_1 < 9 || hitter_2 < 9))
+	if ((selected_team.Get_hitter_stat(hitter_1, 0) != selected_team.Get_hitter_stat(hitter_2, 0)) && (hitter_1 < 9 || hitter_2 < 9)
+		&& !(selected_team.Isdominated(hitter_1)) && !(selected_team.Isdominated(hitter_2)))
 	{
+
 		if (hitter_1 < 9 && hitter_2 >= 9)
 		{
 			if (selected_team.Get_hitter_stat(hitter_1, 0) == 3 && selected_team.Get_hitter_stat(hitter_2, 0) == 5) selected_team.Set_hitter_position(hitter_2, 3);
@@ -1640,6 +1642,8 @@ void change_hitter(bool Isingame, team& selected_team)
 
 			else return;
 		}
+
+		else return;
 	}
 
 	if (hitter_1 < 9 && hitter_2 < 9)
@@ -2515,7 +2519,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 14400)
+	while (game < 1)
 	{
 		initialize = true;
 
