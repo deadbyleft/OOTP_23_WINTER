@@ -78,7 +78,7 @@ int All_hitter_stat[300][10] = {
 {6, 3, 64, 54, 63, 60, 60, 60, 60, 60},
 {9, 3, 50, 71, 51, 60, 60, 60, 60, 60},
 {4, 3, 60, 60, 60, 60, 60, 60, 60, 60}, // 롯데 벤치
-{3, 3, 60, 60, 60, 60, 60, 60, 60, 60}, 
+{3, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {2, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {5, 3, 60, 60, 60, 60, 60, 60, 60, 60},
 {7, 3, 60, 60, 60, 60, 60, 60, 60, 60},
@@ -504,6 +504,22 @@ public:
 			Set_Isfull_2(true);
 
 			break;
+
+		case 30:
+			Set_now_hit(1);
+			
+			if (Get_Isfull_1()) { Set_now_scoreboard(1); RBI++; }
+			if (Get_Isfull_2()) { Set_now_scoreboard(1); RBI++; }
+			if (Get_Isfull_3()) { Set_now_scoreboard(1); RBI++; }
+
+			Set_Isfull_1(false);
+			Set_Isfull_2(false);
+			Set_Isfull_3(false);
+
+			Set_Base_spd(3, now_hitter_spd);
+			Set_Isfull_3(true);
+			break;
+
 		case 40:
 			Set_now_hit(1);
 			Set_now_scoreboard(1); RBI++;
@@ -878,7 +894,7 @@ public:
 			cout << fixed;
 			cout.precision(1);
 			cur(10, 6);
-			
+
 			Show_myteam(false, team_sigvalue);
 			cout << right << setw(12) << win + draw + lose << setw(12) << win << setw(12) << draw << setw(12) << lose << setw(13)
 				<< (win * 100) / (double)(win + lose) << " %" << setw(13);
@@ -902,11 +918,11 @@ public:
 				{
 					cout << '\n' << '\n' << "          ";
 					cout << "VS"; Show_myteam(false, i);
-					cout << setw(6) << win_team[i]  << " 승 " << setw(6) << draw_team[i] << " 무 " << setw(6) << lose_team[i] << " 패 ";
+					cout << setw(6) << win_team[i] << " 승 " << setw(6) << draw_team[i] << " 무 " << setw(6) << lose_team[i] << " 패 ";
 				}
 			}
 		}
-		
+
 	}
 
 	void Show_hitter_stat(int situation, bool Isingame, bool show_name, bool show_direction, bool show_value)
@@ -1018,7 +1034,7 @@ public:
 		{
 			for (int i = 0; i < hitter.size(); i++)
 			{
-				
+
 				if (show_value)
 				{
 					if (i % 30 < 9) cout << " [  " << i + 1 << " 번  ] ";
@@ -1059,9 +1075,9 @@ public:
 				cout << "\n\n";
 			}
 
-			
 
-			
+
+
 
 			return;
 		}
@@ -1591,7 +1607,7 @@ void change_hitter(bool Isingame, team& selected_team)
 			else if (selected_team.Get_hitter_stat(hitter_2, 0) == 9 && selected_team.Get_hitter_stat(hitter_1, 0) > 6) selected_team.Set_hitter_position(hitter_1, 9);
 
 			else return;
-		}	
+		}
 	}
 
 	if (hitter_1 < 9 && hitter_2 < 9)
@@ -1752,7 +1768,7 @@ void show_team_manage(bool Isingame, int value, team& selected_team)
 		if (Isingame)
 		{
 			cur(1, 1);
-			cout << " [ Backspace : 나가기 ] [ [4] : 타자 교체 ]   [ 현재 타자 : " << selected_team.Get_now_hitter() + 1 << "번 타자 "; 
+			cout << " [ Backspace : 나가기 ] [ [4] : 타자 교체 ]   [ 현재 타자 : " << selected_team.Get_now_hitter() + 1 << "번 타자 ";
 			selected_team.Show_hitter_name(selected_team.Get_now_hitter()); cout << " ] ";
 			cur(9, 4);
 			cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ]  [ 안타 / 타수 ] " << '\n' << '\n';
@@ -1890,6 +1906,7 @@ int show_hit_result(bool Initializing, bool Show_name, int change_line, int resu
 			if (Scoreboard.Get_out_count() == 2) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time() * 15); cout << " [ 공수교대 ] "; } break;
 		case 10: cout << "  [ 안타 ]"; break;
 		case 20: cout << "  [ 2루타 ]"; break;
+		case 30: cout << "  [ 3루타 ]"; break;
 		case 40: cout << "  [ 홈런 ]  [ "; cout << attack_team.Get_now_hitter_hr(); cout << "호 ]"; break;
 		case 52: cout << "  [ 병살 ]";
 			if (Scoreboard.Get_out_count() == 1) { cur(49, line * 2 + 21); Sleep(Option.Get_sleep_time() * 15); cout << " [ 공수교대 ] "; } break;
@@ -2172,7 +2189,16 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 	{
 		if (result > 30) return 40;
 		if (get_hitter_rand_stat(0, 4, Save_hitter_index) -
-			(get_pitcher_rand_stat(10, 3, Save_pitcher_index)) >= 10) return 20;
+			(get_pitcher_rand_stat(10, 3, Save_pitcher_index)) >= 10)
+		{
+			if (get_hitter_rand_stat(0, 5, Save_hitter_index) + get_hitter_rand_stat(0, 5, Save_hitter_index) + get_hitter_rand_stat(0, 5, Save_hitter_index)
+			> rand() % 600 + 111) return 30;
+
+			else return 20;
+		}
+
+			
+			
 		return 10;
 	}
 
@@ -2267,6 +2293,10 @@ int update_game_record(int value, bool update_value, int& now_pitcher_hp, option
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 1, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
 		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 0, 0, 0, 0, 0, 0, /**/  0, 1, 0, 0, 0, 0, 0);
 		now_pitcher_hp -= 5; break;
+	case 30:
+		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 1, 0, /**/  0, 0, 0, 0, 0, 0, 0);
+		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 0, 0, 0, 0, 0, 0, /**/  0, 0, 1, 0, 0, 0, 0);
+		now_pitcher_hp -= 7; break;
 	case 40:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 0, 1, /**/  0, 0, 0, 0, 0, 0, 0);
 		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 0, 0, 0, 0, 0, 0, /**/  0, 0, 0, 1, 0, 0, 0);
@@ -2444,7 +2474,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 144)
+	while (game < 14400)
 	{
 		initialize = true;
 
