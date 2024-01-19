@@ -1508,7 +1508,7 @@ private:
 	bool recording = false;
 	bool music = true;
 	bool condition = true;
-	bool auto_play = false;
+	bool auto_play = true;
 	int my_team = 0;
 	int sleep_time = 60;
 
@@ -2325,19 +2325,19 @@ int update_game_record(int value, bool update_value, int& now_pitcher_hp, option
 	case 10:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
 		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 0, 0, 0, 0, 0, 0, /**/  1, 0, 0, 0, 0, 0, 0);
-		now_pitcher_hp -= 3; break;
+		now_pitcher_hp -= 2; break;
 	case 20:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 1, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
 		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 0, 0, 0, 0, 0, 0, /**/  0, 1, 0, 0, 0, 0, 0);
-		now_pitcher_hp -= 5; break;
+		now_pitcher_hp -= 4; break;
 	case 30:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 1, 0, /**/  0, 0, 0, 0, 0, 0, 0);
 		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 0, 0, 0, 0, 0, 0, /**/  0, 0, 1, 0, 0, 0, 0);
-		now_pitcher_hp -= 7; break;
+		now_pitcher_hp -= 5; break;
 	case 40:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 1, 0, 0, 1, /**/  0, 0, 0, 0, 0, 0, 0);
 		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 0, 0, 0, 0, 0, 0, /**/  0, 0, 0, 1, 0, 0, 0);
-		now_pitcher_hp -= 10; break;
+		now_pitcher_hp = now_pitcher_hp - 8; break;
 	case 52:
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 1, 0);
 		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 2, 0, 0, 0, 1, 0, /**/  0, 0, 0, 0, 1, 0, 0);
@@ -2515,7 +2515,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 1)
+	while (game < 14400)
 	{
 		initialize = true;
 
