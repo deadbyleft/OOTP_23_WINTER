@@ -407,21 +407,7 @@ public:
 
 			break;
 
-		case 52:
-		{
-			if (Get_Isfull_3() && out_count != 1)
-			{
-				Set_now_scoreboard(1);
-				RBI++;
-				Set_Isfull_3(false);
-			}
-
-			if (Get_Isfull_2() && out_count != 1)
-				Set_Isfull_3(true);
-
-			Set_Isfull_1(false);
-			break;
-		}
+		
 
 		case 10:
 			Set_now_hit(1);
@@ -434,7 +420,7 @@ public:
 
 			if (Get_Isfull_2()) // 2루가 차있다면
 			{
-				if (base_2_spd >= rand() % 240 + 1)
+				if (base_2_spd >= rand() % 240 + 26)
 				{
 					Set_now_scoreboard(1);
 					RBI++;
@@ -452,7 +438,7 @@ public:
 
 			if (Get_Isfull_1())
 			{
-				if (base_1_spd >= rand() % 240 + 1)
+				if (base_1_spd >= rand() % 240 + 26)
 				{
 					Set_now_scoreboard(1);
 					RBI++;
@@ -494,7 +480,7 @@ public:
 
 			if (Get_Isfull_1())
 			{
-				if (base_1_spd >= rand() % 240 + 1)
+				if (base_1_spd >= rand() % 240 + 26)
 				{
 					Set_now_scoreboard(1);
 					RBI++;
@@ -540,6 +526,28 @@ public:
 			Set_Isfull_1(false);
 			Set_Isfull_2(false);
 			Set_Isfull_3(false);
+			break;
+		
+
+		case 52:		
+			if (Get_Isfull_3() && out_count != 1)
+			{
+				Set_now_scoreboard(1);
+				RBI++;
+				Set_Isfull_3(false);
+			}
+
+			if (Get_Isfull_2() && out_count != 1)
+				Set_Isfull_3(true);
+
+			Set_Isfull_1(false);
+			break;
+		
+		case 61:				
+			Set_now_scoreboard(1);
+			RBI++;
+			Set_Isfull_3(false);
+
 			break;
 		}
 
@@ -2215,7 +2223,11 @@ int battle_hit_power_result(bool hit, int Save_hitter_index[], int Save_pitcher_
 	else
 	{
 		if (result > 0)
-			return 6;
+		{
+			if (Scoreboard.Get_base_3_spd() > rand() % 250 + 31) return 61;
+			else return 6;
+		}
+			
 		else
 		{
 			if (get_hitter_rand_stat(0, 5, Save_hitter_index) + get_hitter_rand_stat(0, 5, Save_hitter_index)
@@ -2315,6 +2327,10 @@ int update_game_record(int value, bool update_value, int& now_pitcher_hp, option
 		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 1, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 1, 0);
 		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 2, 0, 0, 0, 1, 0, /**/  0, 0, 0, 0, 1, 0, 0);
 		out = 2; break;
+	case 61:
+		attack_team.Set_hitter_record(attack_team.Get_now_hitter(), 0, 1, 0, 0, 0, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
+		defence_team.Set_pitcher_record(defence_team.Get_now_pitcher(), 0, 1, 0, 0, 1, 0, 0, /**/  0, 0, 0, 0, 0, 0, 0);
+		out = 1; now_pitcher_hp -= 2; break;
 	}
 
 	update_result(value, true, Option, attack_team, defence_team, Scoreboard);
@@ -2484,7 +2500,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 1)
+	while (game < 14400)
 	{
 		initialize = true;
 
