@@ -1604,6 +1604,19 @@ void change_hitter(bool Isingame, team& selected_team)
 	int hitter_1 = sel(12, 6, 2, 18) - 1; if (hitter_1 == 17) return;
 	int hitter_2 = sel(12, 6, 2, 18) - 1; if (hitter_2 == 17) return;
 
+	if (hitter_1 < 9 && hitter_2 < 9)
+	{
+		if (selected_team.Isdominated(hitter_1) || selected_team.Isdominated(hitter_2))
+			if (selected_team.Isdominated(hitter_1)) selected_team.Set_dominated_hitter(hitter_2);
+			else if (selected_team.Isdominated(hitter_2)) selected_team.Set_dominated_hitter(hitter_1);
+
+		selected_team.Change_hitter_stat(hitter_1, hitter_2);
+		selected_team.Change_hitter_record(hitter_1, hitter_2);
+		return;
+	}
+
+	
+
 
 	if (hitter_1 == hitter_2) return;
 	if (hitter_1 < 9 && hitter_2 < 9 && Isingame) return;
@@ -1646,11 +1659,7 @@ void change_hitter(bool Isingame, team& selected_team)
 		else return;
 	}
 
-	if (hitter_1 < 9 && hitter_2 < 9)
-	{
-		if (selected_team.Isdominated(hitter_1)) selected_team.Set_dominated_hitter(hitter_2);
-		else if (selected_team.Isdominated(hitter_2)) selected_team.Set_dominated_hitter(hitter_1);
-	}
+	
 
 	selected_team.Change_hitter_stat(hitter_1, hitter_2);
 	selected_team.Change_hitter_record(hitter_1, hitter_2);
