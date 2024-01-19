@@ -409,6 +409,16 @@ public:
 
 		case 52:
 		{
+			if (Get_Isfull_3() && out_count != 1)
+			{
+				Set_now_scoreboard(1);
+				RBI++;
+				Set_Isfull_3(false);
+			}
+
+			if (Get_Isfull_2() && out_count != 1)
+				Set_Isfull_3(true);
+
 			Set_Isfull_1(false);
 			break;
 		}
@@ -2474,7 +2484,7 @@ void playball(team& home_team, team& away_team, scoreboard& Scoreboard, option O
 
 	system("cls");
 
-	while (game < 14400)
+	while (game < 1)
 	{
 		initialize = true;
 
