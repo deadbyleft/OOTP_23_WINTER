@@ -747,7 +747,7 @@ public:
 			for (int j = 0; j < 10; j++)
 				hitter_stat[i][j] = All_hitter_stat[i + team_sigvalue * 30][j];
 
-			hitter_stat[i][7] = (hitter_stat[i][2] * 1.2 + hitter_stat[i][3] * 1.4 + hitter_stat[i][4] * 0.9 + hitter_stat[i][5] * 0.8 + hitter_stat[i][6] * 0.7) / 5;
+			hitter_stat[i][7] = (hitter_stat[i][2] * 1.4 + hitter_stat[i][3] * 2 + hitter_stat[i][4] * 0.7 + hitter_stat[i][5] * 0.4 + hitter_stat[i][6] * 0.5) / 5;
 		}
 
 		for (int i = 0; i < pitcher.size(); i++)
@@ -763,10 +763,20 @@ public:
 
 	void Set_stat_FontColor(int value)
 	{
-		if (value >= 90) Set_FontColor(12);
+		if (value >= 95) Set_FontColor(14);
+		else if (value >= 90) Set_FontColor(12);
 		else if (value >= 80) Set_FontColor(9);
 		else if (value >= 70) Set_FontColor(10);
 		else if (value <= 50) Set_FontColor(8);
+	}
+
+	void Set_ovr_FontColor(int value)
+	{
+		if (value >= 85) Set_FontColor(14);
+		else if (value >= 80) Set_FontColor(12);
+		else if (value >= 70) Set_FontColor(9);
+		else if (value >= 65) Set_FontColor(10);
+		else if (value <= 54) Set_FontColor(8);
 	}
 
 	void Show_hitter_name(int value) { cout << hitter[value].first; return; }
@@ -999,7 +1009,11 @@ public:
 
 				cout << right << setw(10) << hitter_record[i][6] << setw(12);
 
-				cout << hitter_record[i][15] << setw(11);
+				Set_ovr_FontColor(Get_hitter_stat(i, 7));
+				cout << Get_hitter_stat(i, 7);
+				Set_FontColor(15);
+
+				cout << setw(11);
 
 				if (Isingame) cout << hitter_today_record[i][3] << "  /  " << hitter_today_record[i][2];
 
@@ -1081,7 +1095,7 @@ public:
 
 				cout << hitter_record[i][12] << setw(12);
 
-				Set_stat_FontColor(Get_hitter_stat(i, 7));
+				Set_ovr_FontColor(Get_hitter_stat(i, 7));
 				cout << Get_hitter_stat(i, 7);
 				Set_FontColor(15);
 
@@ -1789,11 +1803,11 @@ void show_team_manage(bool Isingame, int value, team& selected_team)
 			cout << " [ Backspace : 나가기 ] [ [4] : 타자 교체 ]   [ 현재 타자 : " << selected_team.Get_now_hitter() + 1 << "번 타자 ";
 			selected_team.Show_hitter_name(selected_team.Get_now_hitter()); cout << " ] ";
 			cur(9, 4);
-			cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ]  [ 안타 / 타수 ] " << '\n' << '\n';
+			cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 오버롤 ]  [ 안타 / 타수 ] " << '\n' << '\n';
 		}
 
 		else
-			cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 타  점 ] " << '\n' << '\n';
+			cout << "     [ 이 름 ]  [ 투  타 ]  [ 포지션 ]  [ 컨디션 ]  [ 선구안 ]  [ 정확도 ]  [ 파  워 ]  [ 스피드 ]  [ 수  비 ]   [ 타  율 ]  [ 홈  런 ]  [ 오버롤 ] " << '\n' << '\n';
 		cur(0, 6);
 		selected_team.Show_hitter_stat(1, Isingame, true, true, true);
 	}
