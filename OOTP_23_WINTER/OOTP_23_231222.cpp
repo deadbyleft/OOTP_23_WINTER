@@ -747,7 +747,7 @@ public:
 			for (int j = 0; j < 10; j++)
 				hitter_stat[i][j] = All_hitter_stat[i + team_sigvalue * 30][j];
 
-			hitter_stat[i][7] = (hitter_stat[i][2] + hitter_stat[i][3] + hitter_stat[i][4] + hitter_stat[i][5] + hitter_stat[i][6]) / 5;
+			hitter_stat[i][7] = (hitter_stat[i][2] * 1.2 + hitter_stat[i][3] * 1.4 + hitter_stat[i][4] * 0.9 + hitter_stat[i][5] * 0.8 + hitter_stat[i][6] * 0.7) / 5;
 		}
 
 		for (int i = 0; i < pitcher.size(); i++)
